@@ -35,9 +35,9 @@ export default async function SignUp(props: {
           {/* Main Message */}
           <div className="space-y-2">
             <h1 className="text-2xl font-bold text-primary">Check Your Email</h1>
-            <p className="text-lg text-muted-foreground">
-              We've sent you a confirmation email
-            </p>
+                         <p className="text-lg text-muted-foreground">
+               We&apos;ve sent you a confirmation email
+             </p>
           </div>
 
           {/* Instructions */}
@@ -47,13 +47,13 @@ export default async function SignUp(props: {
               <ol className="list-decimal list-inside space-y-2 text-sm text-green-700">
                 <li>Check your email inbox for a message from CoreBrief</li>
                 <li>Click the confirmation link in the email</li>
-                <li>You'll be redirected to your account dashboard</li>
+                                 <li>You&apos;ll be redirected to your account dashboard</li>
               </ol>
             </div>
             
             <div className="pt-3 border-t border-green-200">
               <p className="text-xs text-green-600">
-                <strong>Don't see the email?</strong> Check your spam folder or wait a few minutes. 
+                                 <strong>Don&apos;t see the email?</strong> Check your spam folder or wait a few minutes. 
                 The email should arrive within 5 minutes.
               </p>
             </div>

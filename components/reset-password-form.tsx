@@ -175,7 +175,7 @@ export default function ResetPasswordForm() {
       <div className="text-center mb-8">
         <h1 className="text-2xl font-medium mb-2">Reset Your Password</h1>
         <p className="text-sm text-muted-foreground">
-          Enter your new password below. Make sure it's secure and memorable.
+          Enter your new password below. Make sure it&apos;s secure and memorable.
         </p>
       </div>
       

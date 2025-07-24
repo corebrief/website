@@ -36,7 +36,7 @@ export default async function ForgotPassword(props: {
           <div className="space-y-2">
             <h1 className="text-2xl font-bold text-primary">Check Your Email</h1>
             <p className="text-muted-foreground">
-              We've sent you a password reset link
+              We&apos;ve sent you a password reset link
             </p>
           </div>
 
@@ -45,14 +45,14 @@ export default async function ForgotPassword(props: {
             <h3 className="font-medium text-blue-800">Next Steps:</h3>
             <ol className="list-decimal list-inside space-y-2 text-sm text-blue-700">
               <li>Check your email inbox for a message from CoreBrief</li>
-              <li>Click the "Reset Password" link in the email</li>
+                             <li>Click the &quot;Reset Password&quot; link in the email</li>
               <li>Enter your new password</li>
               <li>Sign in with your new password</li>
             </ol>
             
             <div className="pt-3 border-t border-blue-200">
               <p className="text-xs text-blue-600">
-                <strong>Don't see the email?</strong> Check your spam folder. The link will expire in 1 hour.
+                <strong>Don&apos;t see the email?</strong> Check your spam folder. The link will expire in 1 hour.
               </p>
             </div>
           </div>
@@ -96,7 +96,7 @@ export default async function ForgotPassword(props: {
       <div className="text-center mb-8">
         <h1 className="text-2xl font-medium mb-2">Forgot Password?</h1>
         <p className="text-sm text-muted-foreground">
-          Enter your email address and we'll send you a link to reset your password.
+          Enter your email address and we&apos;ll send you a link to reset your password.
         </p>
       </div>
       
@@ -128,7 +128,7 @@ export default async function ForgotPassword(props: {
             ← Back to Sign In
           </Link>
           <div className="text-muted-foreground">
-            Don't have an account?{" "}
+            Don&apos;t have an account?{" "}
             <Link href="/sign-up" className="text-primary hover:underline">
               Sign up
             </Link>
