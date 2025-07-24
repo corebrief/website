@@ -36,6 +36,12 @@ export default async function SignIn(props: {
         <Input name="email" placeholder="you@example.com" required />
         <div className="flex justify-between items-center">
           <Label htmlFor="password">Password</Label>
+          <Link 
+            href="/forgot-password" 
+            className="text-xs text-primary hover:underline"
+          >
+            Forgot password?
+          </Link>
         </div>
         <Input
           type="password"
