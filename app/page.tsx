@@ -1,103 +1,92 @@
-import Image from "next/image";
+import NextLogo from "@/components/next-logo";
+import { Button } from "@/components/ui/button";
+import UpdateLogo from "@/components/update-logo";
+import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
+    <div className="flex flex-col items-center justify-center px-4 py-16">
+      <div className="mx-auto max-w-xl flex flex-col">
+        <div className="flex gap-8 justify-start w-full items-center">
           <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
+            href="https://update.dev/?utm_source=create-update-app&utm_medium=template&utm_term=nextjs"
             target="_blank"
-            rel="noopener noreferrer"
+            rel="noreferrer"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
+            <UpdateLogo className="w-[128px]" />
           </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
+          <span className="border-l rotate-45 h-6" />
+          <a href="https://nextjs.org/" target="_blank" rel="noreferrer">
+            <NextLogo />
           </a>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+        <p className="text-3xl lg:text-4xl !leading-tight mt-4">
+          Build software faster with{" "}
+          <a
+            href="https://update.dev/?utm_source=create-update-app&utm_medium=template&utm_term=nextjs"
+            target="_blank"
+            className="font-bold hover:underline"
+            rel="noreferrer"
+          >
+            Update
+          </a>{" "}
+          and{" "}
+          <a
+            href="https://nextjs.org/"
+            target="_blank"
+            className="font-bold hover:underline"
+            rel="noreferrer"
+          >
+            Next.js
+          </a>
+        </p>
+        <p className="text-muted-foreground mt-4">
+          To see your account, plans, and more, sign in or sign up to gain
+          access to the protected page. Make sure to set your .env file before
+          signing in.
+        </p>
+        <div className="flex gap-[8px] mt-4">
+          <Button asChild className="mt-4 w-fit">
+            <Link href="/sign-in">Sign in</Link>
+          </Button>
+          <Button variant="outline" asChild className="mt-4 w-fit">
+            <Link href="/sign-up">Sign up</Link>
+          </Button>
+        </div>
+        <div className="h-[1px] w-full bg-border my-12" />
+        <div className="grid grid-cols-2 gap-4">
+          <div className="border rounded-lg p-4">
+            <h3 className="font-medium mb-2">Join Our Community</h3>
+            <p className="text-sm text-muted-foreground mb-3">
+              Get help, share your work, and connect with other developers.
+            </p>
+            <Button variant="secondary" asChild size="sm">
+              <a
+                href="https://discord.gg/Guege5tXFK"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Join Discord
+              </a>
+            </Button>
+          </div>
+          <div className="border rounded-lg p-4">
+            <h3 className="font-medium mb-2">Read the Docs</h3>
+            <p className="text-sm text-muted-foreground mb-3">
+              Learn how to build amazing apps with our documentation.
+            </p>
+            <Button variant="secondary" asChild size="sm">
+              <a
+                href="https://update.dev/docs"
+                target="_blank"
+                rel="noreferrer"
+              >
+                View Documentation
+              </a>
+            </Button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
