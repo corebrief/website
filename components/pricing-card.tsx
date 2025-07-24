@@ -1,12 +1,12 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { ProductWithPrices } from "@updatedev/js";
-import { createUpdateClient } from "@/utils/update/client";
+import { Product } from "@/utils/stripe/subscription";
+import { createSupabaseClient } from "@/utils/supabase/client";
 import { useState } from "react";
 
 interface PricingCardProps {
-  product: ProductWithPrices;
+  product: Product;
   isCurrentPlan: boolean;
   interval: "month" | "year" | "one-time";
 }
@@ -20,7 +20,7 @@ export default function PricingCard({
 
   function getCurrencySymbol(currency_id: string) {
     // This is just an example, and doesn't cover all currencies
-    // supported by Update
+    // supported by Stripe
     switch (currency_id) {
       case "usd":
         return "$";
@@ -39,26 +39,45 @@ export default function PricingCard({
 
   async function handleSelectPlan(priceId: string) {
     setIsLoading(true);
-    const client = createUpdateClient();
-    const redirectUrl = `http://localhost:3000/protected/subscription`;
-    const { data, error } = await client.billing.createCheckoutSession(
-      priceId,
-      {
-        redirect_url: redirectUrl,
+    
+    try {
+      const supabase = createSupabaseClient();
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) {
+        setIsLoading(false);
+        return;
       }
-    );
-    if (error) {
-      setIsLoading(false);
-      return;
-    }
 
-    window.location.href = data.url;
+      // Call our API to create checkout session
+      const response = await fetch('/api/create-checkout-session', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+          priceId,
+          redirectUrl: `${window.location.origin}/protected/subscription`,
+          userId: user.id
+        }),
+      });
+
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to create checkout session');
+      }
+
+      window.location.href = data.url;
+    } catch (error) {
+      console.error('Error creating checkout session:', error);
+      setIsLoading(false);
+    }
   }
 
   const productPrice = product.prices?.find(
     price =>
-      price.interval === interval ||
-      (price.type === "one-time" && interval === "one-time")
+      price.interval_type === interval
   );
 
   if (!productPrice) {
@@ -69,7 +88,7 @@ export default function PricingCard({
 
   const currency = productPrice.currency;
   const symbol = getCurrencySymbol(currency);
-  const priceString = productPrice.unit_amount
+  const priceString = productPrice?.unit_amount
     ? `${symbol}${(productPrice.unit_amount / 100).toFixed(2)}`
     : "Custom";
 
@@ -80,7 +99,7 @@ export default function PricingCard({
         <div className="flex items-baseline gap-1">
           <span className="text-3xl font-bold">{priceString}</span>
           {productPrice?.unit_amount && (
-            <span className="text-muted-foreground">/month</span>
+            <span className="text-muted-foreground">/{productPrice.interval_type}</span>
           )}
         </div>
         <p className="text-sm text-muted-foreground">{description}</p>

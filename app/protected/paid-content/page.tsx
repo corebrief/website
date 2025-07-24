@@ -1,11 +1,11 @@
-import { createUpdateClient } from "@/utils/update/server";
+import { checkEntitlement } from "@/utils/supabase/entitlements";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import PaidContentCard from "@/components/paid-content-card";
+import Link from "next/link";
 
 export default async function PaidContent() {
-  const client = await createUpdateClient();
-  const { data, error } = await client.entitlements.check("premium");
+  const { data, error } = await checkEntitlement("premium");
 
   if (error) {
     return (
@@ -20,7 +20,7 @@ export default async function PaidContent() {
     );
   }
 
-  if (!data.hasAccess) {
+  if (!data?.hasAccess) {
     return (
       <div className="flex min-h-[400px] items-center justify-center">
         <Card className="p-6">
@@ -28,9 +28,11 @@ export default async function PaidContent() {
           <p className="mt-2 text-muted-foreground">
             You don&apos;t have access to any paid content.
           </p>
-          <Button className="mt-4" variant="outline">
-            Upgrade Now
-          </Button>
+          <Link href="/protected/pricing">
+            <Button className="mt-4" variant="outline">
+              Upgrade Now
+            </Button>
+          </Link>
         </Card>
       </div>
     );

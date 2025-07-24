@@ -24,13 +24,18 @@ export const signInAction = async (formData: FormData) => {
 export const signUpAction = async (formData: FormData) => {
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
+  
+  if (!email || !password) {
+    return encodedRedirect("error", "/sign-up", "Email and password are required");
+  }
+
   const client = await createSupabaseClient();
 
   const url = process.env.VERCEL_URL
     ? `${process.env.VERCEL_URL}/protected`
     : "http://localhost:3000/protected";
 
-  const { error } = await client.auth.signUp({
+  const { data, error } = await client.auth.signUp({
     email,
     password,
     options: {
@@ -39,7 +44,14 @@ export const signUpAction = async (formData: FormData) => {
   });
 
   if (error) {
+    console.error("Sign-up error:", error);
     return encodedRedirect("error", "/sign-up", error.message);
+  }
+
+  // If email confirmation is disabled, redirect to protected
+  // If email confirmation is enabled, show success message
+  if (data.user && !data.user.email_confirmed_at) {
+    return encodedRedirect("success", "/sign-up", "Please check your email to confirm your account");
   }
 
   return redirect("/protected");

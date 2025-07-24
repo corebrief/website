@@ -1,9 +1,8 @@
 import InPageSidebar from "@/components/in-page-sidebar";
-import { createUpdateClient } from "@/utils/update/server";
+import { checkEntitlement } from "@/utils/supabase/entitlements";
 
 export default async function ProtectedSidebar() {
-  const client = await createUpdateClient();
-  const { data } = await client.entitlements.check("premium");
+  const { data } = await checkEntitlement("premium");
 
   return (
     <InPageSidebar
@@ -24,7 +23,7 @@ export default async function ProtectedSidebar() {
         {
           label: "Paid Content",
           href: "/paid-content",
-          disabled: data != null && !data.hasAccess,
+          disabled: !data?.hasAccess,
         },
       ]}
     />

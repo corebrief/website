@@ -1,52 +1,34 @@
-<a href="https://nextjs-supabase-stripe-update.vercel.app">
-  <img alt="Update – Vercel Next.js Template" src="https://images.update.dev/nextjs-supabase-stripe-update-template-thumbnail.png">
-  <h1 align="center">Update + Next.js Template</h1>
-</a>
+# SaaS Starter with Stripe + Supabase
 
-<p align="center">
-  A full-featured SaaS starter with auth, billing, and entitlements—powered by <a href="https://update.dev">Update</a> and <a href="https://nextjs.org/">Next.js</a>.
-</p>
+A full-featured SaaS starter with authentication, subscription billing, and access control—powered by **Stripe** and **Supabase**.
 
-<p align="center">
-  <a href="#features"><strong>Features</strong></a> ·
-  <a href="#demo"><strong>Demo</strong></a> ·
-  <a href="#deploy-to-vercel"><strong>Deploy to Vercel</strong></a> ·
-  <a href="#local-setup"><strong>Local Setup</strong></a> ·
-  <a href="#support"><strong>Support</strong></a>
-</p>
+## Features
 
----
+- 🔐 **Authentication** — Sign up, sign in, and manage users with Supabase Auth
+- 💳 **Subscription Billing** — Stripe Checkout for subscription plans with webhooks
+- 🔓 **Access Control** — Feature gating based on subscription status stored in Supabase
+- 🗄️ **Database** — PostgreSQL with Supabase for user profiles and subscription data
+- 🎨 **UI Components** — Built with Tailwind CSS and Radix UI
+- 📱 **Responsive** — Mobile-first design
+- 🚀 **Production Ready** — Optimized for deployment
 
-## ⚡ Features
+## Tech Stack
 
-- 💳 **Subscriptions** — Stripe billing with checkout, portals, trials, and failed payment recovery
-- 🔐 **Authentication** — Supabase auth with Update-powered extensions (e.g., magic links, redirects)
-- 🔓 **Entitlements** — Easy access control by plan, org, or user role
-- ⚙️ **Full-stack ready** — App Router, Middleware, Client, and Server usage supported
-- 🎨 **UI** — Built with [Tailwind CSS](https://tailwindcss.com) and [shadcn/ui](https://ui.shadcn.com)
+- **Framework**: Next.js 15 with App Router
+- **Database**: Supabase (PostgreSQL)
+- **Authentication**: Supabase Auth
+- **Payments**: Stripe Checkout & Billing
+- **Styling**: Tailwind CSS
+- **UI Components**: Radix UI
+- **Language**: TypeScript
 
----
+## Quick Start
 
-## 🔗 Demo
-
-Live demo: [nextjs-supabase-stripe-update.vercel.app](https://nextjs-supabase-stripe-update.vercel.app/)
-
----
-
-## 🚀 Deploy to Vercel
-
-Click the button below to instantly deploy the template and set up Update and Supabase:
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fupdatedotdev%2Fnextjs-supabase-stripe-update&project-name=update-nextjs-template&repository-name=update-nextjs-template&demo-title=Update%20SaaS%20Starter&demo-description=A%20Next.js%20starter%20with%20Update%20for%20auth%2C%20billing%2C%20and%20orgs&demo-url=https%3A%2F%2Fvercel-update-template.vercel.app&external-id=https%3A%2F%2Fupdate.dev)
-
----
-
-## 🛠️ Local Setup
-
-### 1. Clone the project
+### 1. Clone the repository
 
 ```bash
-git clone https://github.com/updatedotdev/nextjs-supabase-stripe-update.git cd nextjs-supabase-stripe-update
+git clone <your-repo-url>
+cd website
 ```
 
 ### 2. Install dependencies
@@ -55,74 +37,123 @@ git clone https://github.com/updatedotdev/nextjs-supabase-stripe-update.git cd n
 npm install
 ```
 
-# or
+### 3. Set up environment variables
 
-```bash
-pnpm install
-```
-
-### 3. Configure environment variables
-
-Create a `.env.local` file based on the provided example:
+Copy the environment variables:
 
 ```bash
 cp .env.example .env.local
 ```
 
-Fill in values from:
+Fill in your environment variables:
 
-- [Update dashboard](https://update.dev)
-- [Supabase project settings](https://app.supabase.com/project/_/settings/api)
+```env
+# Supabase
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 
-```bash
-NEXT_PUBLIC_UPDATE_PUBLIC_KEY=...
-NEXT_PUBLIC_SUPABASE_URL=...
-NEXT_PUBLIC_SUPABASE_ANON_KEY=...
+# Stripe
+STRIPE_SECRET_KEY=sk_test_your_stripe_secret_key
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_your_stripe_publishable_key
+STRIPE_WEBHOOK_SECRET=whsec_your_webhook_secret
+
+# Application
+NEXT_PUBLIC_APP_URL=http://localhost:3000
 ```
 
-### 4. Run the dev server
+### 4. Set up the database
+
+Run the SQL schema in your Supabase dashboard:
+
+```bash
+# Apply the schema from sql/schema.sql in Supabase SQL Editor
+```
+
+### 5. Configure Stripe
+
+1. Create products and prices in your Stripe dashboard
+2. Set up a webhook endpoint pointing to `/api/stripe-webhook`
+3. Configure webhook events: `customer.created`, `checkout.session.completed`, `customer.subscription.*`, `invoice.payment_*`
+
+### 6. Sync Stripe products to Supabase
+
+```bash
+# You can create an admin script or use the syncStripeProducts function
+```
+
+### 7. Run the development server
 
 ```bash
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser to view the app.
+Open [http://localhost:3000](http://localhost:3000) to see your application.
 
----
+## Project Structure
 
-## 📦 What's Included
+```
+├── app/                    # Next.js App Router
+│   ├── (auth)/            # Authentication pages
+│   ├── api/               # API routes
+│   │   ├── stripe-webhook/    # Stripe webhook handler
+│   │   ├── create-checkout-session/  # Checkout session creation
+│   │   └── manage-subscription/      # Subscription management
+│   ├── protected/         # Protected pages requiring auth
+│   └── globals.css        # Global styles
+├── components/            # Reusable UI components
+├── utils/                 # Utility functions
+│   ├── stripe/           # Stripe utilities
+│   └── supabase/         # Supabase utilities and entitlements
+├── sql/                  # Database schema
+└── README.md
+```
 
-- 🔌 **Update Client Setup**:
-  - `utils/update/client.ts` — for browser-side usage
-  - `utils/update/server.ts` — for server-side usage
-- 🧠 **Entitlements Checks**:
-  - Example usage of `client.entitlements.check()` to conditionally render UI
-- 💳 **Billing Integration**:
-  - Stripe Checkout & Customer Portal
-  - Cancel/reactivate subscriptions
-  - Usage-based plans (coming soon)
+## Key Features
 
----
+### 🔓 **Access Control**
+- Check user entitlements with `checkEntitlement("premium")`
+- Store subscription status in Supabase user profiles
+- Automatic access updates via Stripe webhooks
 
-## 🧩 Tech Stack
+### 💳 **Subscription Management**
+- Stripe Checkout integration for subscription sign-up
+- Cancel/reactivate subscriptions
+- Handle payment failures and subscription updates
+- Support for multiple pricing plans and intervals
 
-- [Next.js](https://nextjs.org)
-- [Update](https://update.dev)
-- [Supabase](https://supabase.com)
-- [Stripe](https://stripe.com)
-- [Tailwind CSS](https://tailwindcss.com)
-- [shadcn/ui](https://ui.shadcn.com)
+### 🔐 **Authentication Flow**
+- Supabase Auth for secure user management
+- Automatic user profile creation on sign-up
+- Session management with middleware
 
----
+### 📊 **Database Schema**
+- User profiles with subscription data
+- Products and pricing from Stripe
+- Entitlements and access control
+- Row Level Security (RLS) policies
 
-## 🤝 Support
+## API Routes
 
-- 📚 [Full documentation](https://update.dev/docs)
-- 💬 [Join our Discord](https://discord.gg/Guege5tXFK)
-- 🐛 Found a bug? [Open an issue](https://github.com/updatedotdev/nextjs-supabase-stripe-update/issues)
+- `POST /api/stripe-webhook` - Handle Stripe webhook events
+- `POST /api/create-checkout-session` - Create Stripe checkout sessions
+- `POST /api/manage-subscription` - Cancel/reactivate subscriptions
+- `POST /api/generator` - Example protected API endpoint
 
----
+## Deployment
 
-## 📄 License
+### Environment Variables
 
-MIT
+Ensure all environment variables are set in your production environment:
+
+- Supabase: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- Stripe: `STRIPE_SECRET_KEY`, `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`, `STRIPE_WEBHOOK_SECRET`
+- App: `NEXT_PUBLIC_APP_URL`
+
+### Webhook Configuration
+
+Configure your Stripe webhook endpoint to point to your deployed application:
+`https://your-domain.com/api/stripe-webhook`
+
+## License
+
+MIT License - see [LICENSE](LICENSE) for details.

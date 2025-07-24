@@ -1,16 +1,33 @@
 import SubscriptionActions from "@/components/subcription-actions";
 import { Card } from "@/components/ui/card";
 import { cn } from "@/utils/styles";
-import { createUpdateClient } from "@/utils/update/server";
+import { getUserSubscriptions } from "@/utils/stripe/subscription";
+import { createSupabaseClient } from "@/utils/supabase/server";
 
 export default async function Page() {
-  const client = await createUpdateClient();
-  const { data, error } = await client.billing.getSubscriptions();
+  const supabase = await createSupabaseClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  
+  if (!user) {
+    return <div>Please log in to view your subscriptions.</div>;
+  }
 
-  if (error) {
+  const subscriptions = await getUserSubscriptions(user.id);
+
+  if (!subscriptions || subscriptions.length === 0) {
     return (
-      <div>
-        There was an error loading your subscriptions. Please try again.
+      <div className="space-y-8">
+        <div className="flex items-center justify-between">
+          <div className="flex flex-col">
+            <h1 className="text-2xl font-medium">Subscriptions</h1>
+            <p className="text-muted-foreground mt-2">
+              Manage your subscription plans
+            </p>
+          </div>
+        </div>
+        <div className="text-center">
+          <p className="text-muted-foreground">No active subscriptions found.</p>
+        </div>
       </div>
     );
   }
@@ -26,7 +43,7 @@ export default async function Page() {
         </div>
       </div>
       <div className="space-y-6">
-        {data.subscriptions.map((subscription, index) => (
+        {subscriptions.map((subscription, index) => (
           <Card key={index}>
             <h2 className="font-medium">{subscription.product.name}</h2>
             <div className="grid gap-2 mt-2 text-sm">
@@ -71,7 +88,7 @@ export default async function Page() {
       <div>
         <h3 className="text-lg font-medium">Raw Data</h3>
         <div className="mt-2 border p-4 rounded-lg">
-          <pre>{JSON.stringify(data.subscriptions, null, 2)}</pre>
+          <pre>{JSON.stringify(subscriptions, null, 2)}</pre>
         </div>
       </div>
     </div>

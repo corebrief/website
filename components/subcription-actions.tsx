@@ -2,10 +2,10 @@
 
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
-import { createUpdateClient } from "@/utils/update/client";
-import { Subscription } from "@updatedev/js";
+import { Subscription } from "@/utils/stripe/subscription";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+
 export default function SubscriptionActions({
   subscription,
 }: {
@@ -16,22 +16,56 @@ export default function SubscriptionActions({
 
   async function handleCancelSubscription(id: string) {
     setIsLoading(true);
-    const client = createUpdateClient();
-    await client.billing.updateSubscription(id, {
-      cancel_at_period_end: true,
-    });
-    setIsLoading(false);
-    router.refresh();
+    
+    try {
+      const response = await fetch('/api/manage-subscription', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          subscriptionId: id,
+          action: 'cancel'
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to cancel subscription');
+      }
+
+      router.refresh();
+    } catch (error) {
+      console.error('Error cancelling subscription:', error);
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   async function handleReactivateSubscription(id: string) {
     setIsLoading(true);
-    const client = createUpdateClient();
-    await client.billing.updateSubscription(id, {
-      cancel_at_period_end: false,
-    });
-    setIsLoading(false);
-    router.refresh();
+    
+    try {
+      const response = await fetch('/api/manage-subscription', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          subscriptionId: id,
+          action: 'reactivate'
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to reactivate subscription');
+      }
+
+      router.refresh();
+    } catch (error) {
+      console.error('Error reactivating subscription:', error);
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (

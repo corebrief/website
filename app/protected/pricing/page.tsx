@@ -1,20 +1,21 @@
-import { createUpdateClient } from "@/utils/update/server";
+import { getProducts } from "@/utils/stripe/subscription";
+import { getUserProfile } from "@/utils/supabase/entitlements";
 import PricingContent from "@/components/pricing-content";
 
 export default async function PricingPage() {
-  const client = await createUpdateClient();
-  const { data, error } = await client.billing.getProducts();
-  const { data: subscriptionData } = await client.billing.getSubscriptions();
+  const { data: products, error } = await getProducts().then(
+    (products) => ({ data: products, error: null }),
+    (error) => ({ data: null, error })
+  );
+  
+  const { data: profile } = await getUserProfile();
 
   if (error) {
     return <div>There was an error loading products. Please try again.</div>;
   }
 
-  const currentProductId =
-    subscriptionData.subscriptions == null ||
-    subscriptionData.subscriptions.length === 0
-      ? null
-      : subscriptionData.subscriptions[0].product.id;
+  // Determine current product from user's subscription
+  const currentProductId = profile?.subscription_plan_id || null;
 
   return (
     <>
@@ -26,7 +27,7 @@ export default async function PricingPage() {
       </div>
 
       <PricingContent
-        products={data.products}
+        products={products || []}
         currentProductId={currentProductId}
       />
     </>

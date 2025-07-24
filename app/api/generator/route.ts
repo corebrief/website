@@ -1,14 +1,13 @@
-import { createUpdateClient } from "@/utils/update/server";
+import { checkEntitlement } from "@/utils/supabase/entitlements";
 
 export async function POST() {
-  const client = await createUpdateClient();
-  const { data, error } = await client.entitlements.check("premium");
+  const { data, error } = await checkEntitlement("premium");
 
-  if (error || !data.hasAccess) {
-    return new Response("Error fetching subscriptions", { status: 500 });
+  if (error) {
+    return new Response("Error checking entitlements", { status: 500 });
   }
 
-  if (!data.hasAccess) {
+  if (!data?.hasAccess) {
     return new Response("Subscription not active", { status: 403 });
   }
 
