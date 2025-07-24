@@ -9,10 +9,10 @@ export default async function Header() {
   } = await client.auth.getUser();
 
   return (
-    <nav className="border-b w-full h-16 shrink-0 flex items-center">
+    <nav className="border-b w-full h-20 shrink-0 flex items-center bg-background">
       <div className="px-6 w-full flex items-center justify-between mx-auto">
-        <Link href="/" className="text-sm font-medium">
-          Next.js + Update Starter Template
+        <Link href="/" className="text-2xl md:text-3xl font-extrabold tracking-tight text-primary">
+          CoreBrief
         </Link>
         <div className="flex items-center gap-2">
           {user == null && (

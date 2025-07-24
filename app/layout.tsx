@@ -12,8 +12,8 @@ const defaultUrl = process.env.VERCEL_URL
 
 export const metadata: Metadata = {
   metadataBase: new URL(defaultUrl),
-  title: "Next.js and Update Starter Kit",
-  description: "The fastest way to build apps with Next.js and Update",
+  title: "CoreBrief - Institutional-Quality Equity Analysis",
+  description: "Multi-agent AI delivers Goldman Sachs-level investment intelligence for conservative allocators in 24 hours instead of 3 weeks",
 };
 
 export default function RootLayout({
