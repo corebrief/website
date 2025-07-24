@@ -13,22 +13,22 @@ export default function Home() {
         </h1>
         
         <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mb-12 leading-relaxed">
-          Multi-agent AI system inspired by institutional research methods, providing analytical summaries for conservative allocators in 24 hours instead of weeks
+          Multi-agent AI system inspired by institutional research methods, providing analytical summaries for defensive, income-focused allocators in 24 hours instead of weeks
         </p>
 
         <Button size="lg" className="text-lg px-8 py-6 mb-24" asChild>
-          <Link href="/sign-up">Request Alpha Access</Link>
+          <Link href="/sign-up">Sign Up for Early Access</Link>
         </Button>
       </div>
 
       {/* Problem Section */}
       <div className="mx-auto max-w-4xl flex flex-col items-center text-center">
         <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-primary mb-8">
-          The Conservative Investor&apos;s Challenge
+          The Defensive Investor&apos;s Challenge
         </h2>
         
         <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mb-16 leading-relaxed">
-          Family offices and RIAs need defensible investment analysis, but current solutions fall short
+          Family offices and RIAs focused on income generation and downside protection need defensible investment analysis, but current solutions fall short
         </p>
 
         {/* Problem Comparison */}
@@ -41,7 +41,7 @@ export default function Home() {
             <ul className="space-y-2 text-muted-foreground">
               <li>• Costs over $5,000 per report</li>
               <li>• Takes weeks to deliver</li>
-              <li>• Often lacks conservative perspective</li>
+              <li>• Often lacks defensive perspective</li>
             </ul>
           </div>
 
@@ -66,7 +66,7 @@ export default function Home() {
             Multi-Agent AI Intelligence System
           </h2>
           <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-            Three specialized AI agents analyze 5+ years of SEC filings to deliver analytical summaries for conservative allocators.
+            Three specialized AI agents analyze 5+ years of SEC filings to deliver analytical summaries for defensive, income-focused allocators.
           </p>
           <p className="text-sm text-muted-foreground max-w-2xl mx-auto mt-4">
             Reports are generated using AI tools and reviewed by qualified analysts for quality assurance. AI-driven analysis is subject to human validation and oversight.
@@ -95,7 +95,7 @@ export default function Home() {
             </div>
             <h3 className="font-semibold text-lg mb-3 text-primary">Management Credibility</h3>
             <p className="text-muted-foreground text-sm leading-relaxed">
-              Leadership quality assessment and execution track record evaluation for conservative allocator confidence
+              Leadership quality assessment and execution track record evaluation for defensive investor confidence
             </p>
           </div>
 
@@ -116,7 +116,7 @@ export default function Home() {
         <div className="bg-primary rounded-lg p-8 w-full max-w-4xl mb-24">
           <h3 className="text-2xl font-semibold mb-4 text-primary-foreground">Final Synthesis</h3>
           <p className="text-primary-foreground/90 text-lg leading-relaxed">
-            Clear investment research, built to mirror the depth and structure of institutional reports, designed specifically for conservative allocators
+            Clear investment research, built to mirror the depth and structure of institutional reports, designed specifically for defensive, income-focused allocators
           </p>
         </div>
 
@@ -126,7 +126,7 @@ export default function Home() {
             Purpose-Built for Your Asset Class
           </h2>
           <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed mb-16">
-            Specialized analysis frameworks tailored to conservative institutional investment strategies
+            Specialized analysis frameworks tailored to defensive, income-focused institutional investment strategies
           </p>
 
           {/* Asset Class Options */}

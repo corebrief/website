@@ -5,6 +5,7 @@ import { Card } from "@/components/ui/card";
 import WaitlistForm from "@/components/waitlist-form";
 import WaitlistStatus from "@/components/waitlist-status";
 
+
 export default async function WaitlistPage() {
   const client = await createSupabaseClient();
   const {

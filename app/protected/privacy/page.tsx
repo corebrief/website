@@ -5,6 +5,8 @@ import { Card } from "@/components/ui/card";
 import PrivacyPreferences from "@/components/privacy-preferences";
 import DataExportSection from "@/components/data-export-section";
 import PrivacyRequestHistory from "@/components/privacy-request-history";
+import AccountDeletionSection from "@/components/account-deletion-section";
+
 
 export default async function PrivacyDashboard() {
   const client = await createSupabaseClient();
@@ -77,12 +79,7 @@ export default async function PrivacyDashboard() {
             <p className="text-sm text-muted-foreground mb-4">
               Permanently delete your account and all associated data. This action cannot be undone.
             </p>
-            <Button variant="destructive" className="w-full">
-              Request Account Deletion
-            </Button>
-            <p className="text-xs text-muted-foreground mt-2">
-              We&apos;ll send you a confirmation email before processing your deletion request.
-            </p>
+            <AccountDeletionSection />
           </Card>
         </div>
 

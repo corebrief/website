@@ -24,11 +24,11 @@ export default async function SignUp(props: {
       className="flex-1 flex flex-col w-full max-w-lg mx-auto mt-16 mb-16"
       action={signUpAction}
     >
-      <h1 className="text-2xl font-medium mb-2">Request Alpha Access</h1>
+      <h1 className="text-2xl font-medium mb-2">Sign Up for Early Access</h1>
       <p className="text-sm text-foreground mb-8">
-        Join select family offices and RIAs using CoreBrief for institutional-quality analysis.{" "}
+        Create your account to join the early access waitlist. After signing up, you can submit your waitlist request.{" "}
         <Link className="text-foreground font-medium underline" href="/sign-in">
-          Already have access?
+          Already have an account?
         </Link>
       </p>
       
@@ -169,7 +169,7 @@ export default async function SignUp(props: {
         </div>
 
         <AuthSubmitButton pendingText="Submitting request...">
-          Request Alpha Access
+                        Create Account
         </AuthSubmitButton>
         
         {/* Marketing Consent */}
