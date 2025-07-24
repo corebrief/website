@@ -1,10 +1,8 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-// @ts-nocheck - Webhook integration with complex external types
 import { headers } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { stripe } from '@/utils/stripe/client';
-import { createClient } from '@supabase/supabase-js';
+import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 
 const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET!;
 
@@ -18,8 +16,7 @@ export async function POST(req: NextRequest) {
   try {
     event = stripe.webhooks.constructEvent(body, sig, endpointSecret);
   } catch (err) {
-    const error = err as Error;
-    console.error('Webhook signature verification failed:', error.message);
+    console.error('Webhook signature verification failed:', (err as Error).message);
     return NextResponse.json({ error: 'Webhook signature verification failed' }, { status: 400 });
   }
 
@@ -130,7 +127,11 @@ export async function POST(req: NextRequest) {
   }
 }
 
-async function updateUserSubscription(supabase: ReturnType<typeof createClient>, subscription: Stripe.Subscription) {
+async function updateUserSubscription(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  supabase: SupabaseClient<any, 'public', any>,
+  subscription: Stripe.Subscription
+) {
   const customerId = subscription.customer as string;
   const priceId = subscription.items.data[0]?.price.id;
 
