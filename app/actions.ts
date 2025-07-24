@@ -29,8 +29,13 @@ export const forgotPasswordAction = async (formData: FormData) => {
     return encodedRedirect("error", "/forgot-password", "Email is required");
   }
 
+  // Use the same URL logic as signup
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 
+                  (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : null) ||
+                  "http://localhost:3000";
+  
   const { error } = await client.auth.resetPasswordForEmail(email, {
-    redirectTo: `${process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000"}/reset-password`,
+    redirectTo: `${baseUrl}/reset-password`,
   });
 
   if (error) {
@@ -103,15 +108,23 @@ export const signUpAction = async (formData: FormData) => {
 
   const client = await createSupabaseClient();
 
-  const url = process.env.VERCEL_URL
-    ? `https://${process.env.VERCEL_URL}/protected`
-    : "http://localhost:3000/protected";
+  // Try multiple sources for the production URL
+  const url = process.env.NEXT_PUBLIC_APP_URL || 
+               (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : null) ||
+               "http://localhost:3000";
+  
+  const redirectUrl = `${url}/protected`;
+  
+  // Debug logging to see what URL is being used
+  console.log("Email redirect URL:", redirectUrl);
+  console.log("VERCEL_URL:", process.env.VERCEL_URL);
+  console.log("NEXT_PUBLIC_APP_URL:", process.env.NEXT_PUBLIC_APP_URL);
 
   const { data, error } = await client.auth.signUp({
     email,
     password,
     options: {
-      emailRedirectTo: url,
+      emailRedirectTo: redirectUrl,
       data: {
         full_name: fullName,
         organization_name: organizationName,
