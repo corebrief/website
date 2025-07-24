@@ -7,14 +7,13 @@ export default function Home() {
       {/* Hero Section */}
       <div className="mx-auto max-w-4xl flex flex-col items-center text-center">
         <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-primary !leading-tight mb-8">
-          Institutional-Quality Equity
+          Equity Research Modeled After Institutional Frameworks
           <br />
-          Analysis Delivered in Hours
+          Delivered in Hours
         </h1>
         
         <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mb-12 leading-relaxed">
-          Multi-agent AI delivers Goldman Sachs-level investment intelligence for 
-          conservative allocators in 24 hours instead of 3 weeks
+          Multi-agent AI system inspired by institutional research methods, providing analytical summaries for conservative allocators in 24 hours instead of weeks
         </p>
 
         <Button size="lg" className="text-lg px-8 py-6 mb-24" asChild>
@@ -67,7 +66,10 @@ export default function Home() {
             Multi-Agent AI Intelligence System
           </h2>
           <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-            Three specialized AI agents analyze 5+ years of SEC filings to deliver institutional-grade insights
+            Three specialized AI agents analyze 5+ years of SEC filings to deliver analytical summaries for conservative allocators.
+          </p>
+          <p className="text-sm text-muted-foreground max-w-2xl mx-auto mt-4">
+            Reports are generated using AI tools and reviewed by qualified analysts for quality assurance. AI-driven analysis is subject to human validation and oversight.
           </p>
         </div>
 
@@ -103,9 +105,9 @@ export default function Home() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
               </svg>
             </div>
-            <h3 className="font-semibold text-lg mb-3 text-primary">Predictive Intelligence</h3>
+            <h3 className="font-semibold text-lg mb-3 text-primary">Forward-Looking Analysis</h3>
             <p className="text-muted-foreground text-sm leading-relaxed">
-              Forward scenarios and comprehensive risk forecasting to protect against downside volatility
+              Forward scenarios and comprehensive risk assessments to help identify potential downside risks. All outputs are reviewed by analysts.
             </p>
           </div>
         </div>
@@ -114,7 +116,7 @@ export default function Home() {
         <div className="bg-primary rounded-lg p-8 w-full max-w-4xl mb-24">
           <h3 className="text-2xl font-semibold mb-4 text-primary-foreground">Final Synthesis</h3>
           <p className="text-primary-foreground/90 text-lg leading-relaxed">
-            Clear investment decisions with portfolio allocation guidance, delivered in institutional-quality format designed specifically for conservative allocators
+            Clear investment research, built to mirror the depth and structure of institutional reports, designed specifically for conservative allocators
           </p>
         </div>
 
@@ -139,7 +141,7 @@ export default function Home() {
               <div className="flex-1">
                 <h3 className="text-xl font-semibold mb-3 text-primary">CoreBrief Equities</h3>
                 <p className="text-muted-foreground mb-4 leading-relaxed">
-                  Dividend durability assessment, capital allocation quality evaluation, and multi-cycle downside protection analysis
+                  Dividend durability assessment, capital allocation quality evaluation, and multi-cycle downside risk research (proprietary research signal, not a guarantee)
                 </p>
                 <div className="flex flex-wrap gap-2">
                   <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm">Dividend Safety</span>
@@ -235,15 +237,7 @@ export default function Home() {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                     </svg>
                   </div>
-                  <span className="text-muted-foreground">Clear buy/hold/avoid guidance</span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <div className="w-6 h-6 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
-                    <svg className="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                  </div>
-                  <span className="text-muted-foreground">Conservative suitability rating</span>
+                  <span className="text-muted-foreground">Conservative suitability assessment (framework-based, not financial advice)</span>
                 </li>
               </ul>
             </div>
@@ -290,9 +284,8 @@ export default function Home() {
               </ul>
             </div>
 
-            <p className="text-primary-foreground/90 text-center mb-8">
-              Response within 24 hours
-            </p>
+            <div className="text-primary-foreground/90 text-center mb-8">
+            </div>
 
             <div className="text-center">
               <Button 
@@ -317,6 +310,14 @@ export default function Home() {
           </div>
         </div>
       </div>
+      {/* Disclaimer */}
+      <footer className="w-full py-8 px-4 bg-muted/60 border-t mt-16">
+        <div className="max-w-4xl mx-auto text-center text-xs text-muted-foreground">
+          CoreBrief does not provide personalized investment advice and is not a registered investment advisor. All content is for informational purposes only. Suitability assessments are framework-based and do not constitute financial advice.<br />
+          AI methodologies are continually evaluated for accuracy and limitations. All research is subject to human review.<br />
+          CoreBrief ratings are proprietary research signals and do not constitute investment recommendations.
+        </div>
+      </footer>
     </div>
   );
 }
