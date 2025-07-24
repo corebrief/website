@@ -34,6 +34,8 @@ export const forgotPasswordAction = async (formData: FormData) => {
                   (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : null) ||
                   "http://localhost:3000";
   
+  console.log("PASSWORD RESET URL:", `${baseUrl}/reset-password`);
+  
   const { error } = await client.auth.resetPasswordForEmail(email, {
     redirectTo: `${baseUrl}/reset-password`,
   });
@@ -108,6 +110,17 @@ export const signUpAction = async (formData: FormData) => {
 
   const client = await createSupabaseClient();
 
+  // Debug all environment variables first
+  console.log("=== ENVIRONMENT DEBUG ===");
+  console.log("NEXT_PUBLIC_APP_URL:", process.env.NEXT_PUBLIC_APP_URL);
+  console.log("VERCEL_URL:", process.env.VERCEL_URL);
+  console.log("NODE_ENV:", process.env.NODE_ENV);
+  console.log("All env vars starting with NEXT_PUBLIC:", 
+    Object.keys(process.env)
+      .filter(key => key.startsWith('NEXT_PUBLIC'))
+      .reduce((obj, key) => ({ ...obj, [key]: process.env[key] }), {})
+  );
+  
   // Try multiple sources for the production URL
   const url = process.env.NEXT_PUBLIC_APP_URL || 
                (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : null) ||
@@ -116,9 +129,8 @@ export const signUpAction = async (formData: FormData) => {
   const redirectUrl = `${url}/protected`;
   
   // Debug logging to see what URL is being used
-  console.log("Email redirect URL:", redirectUrl);
-  console.log("VERCEL_URL:", process.env.VERCEL_URL);
-  console.log("NEXT_PUBLIC_APP_URL:", process.env.NEXT_PUBLIC_APP_URL);
+  console.log("FINAL EMAIL REDIRECT URL:", redirectUrl);
+  console.log("=== END DEBUG ===");
 
   const { data, error } = await client.auth.signUp({
     email,
@@ -165,6 +177,7 @@ export const signUpAction = async (formData: FormData) => {
       
       // Attempt to resend confirmation email
       try {
+        console.log("RESEND EMAIL REDIRECT URL:", redirectUrl);
         const resendResult = await client.auth.resend({
           type: 'signup',
           email: email,
