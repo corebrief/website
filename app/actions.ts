@@ -149,6 +149,27 @@ export const signUpAction = async (formData: FormData) => {
 
   if (error) {
     console.error("Sign-up error:", error);
+    
+    // Handle case where user already exists but hasn't confirmed email
+    if (error.message?.includes("User already registered")) {
+      // Attempt to resend confirmation email
+      try {
+        await client.auth.resend({
+          type: 'signup',
+          email: email,
+          options: {
+            emailRedirectTo: redirectUrl
+          }
+        });
+        
+        console.log("Resent confirmation email to:", email);
+        return encodedRedirect("success", "/sign-up", "A new confirmation email has been sent. Please check your email to confirm your account");
+      } catch (resendError) {
+        console.error("Error resending confirmation:", resendError);
+        return encodedRedirect("success", "/sign-up", "Please check your email for the confirmation link. If you don't see it, check your spam folder");
+      }
+    }
+    
     return encodedRedirect("error", "/sign-up", error.message);
   }
 
