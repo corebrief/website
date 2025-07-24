@@ -6,9 +6,18 @@ import { Label } from "@/components/ui/label";
 import Link from "next/link";
 
 export default async function SignIn(props: {
-  searchParams: Promise<Message>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
   const searchParams = await props.searchParams;
+  
+  // Convert searchParams to Message format
+  const message: Message | Record<string, never> = searchParams.error 
+    ? { error: Array.isArray(searchParams.error) ? searchParams.error[0] : searchParams.error }
+    : searchParams.success
+    ? { success: Array.isArray(searchParams.success) ? searchParams.success[0] : searchParams.success }
+    : searchParams.message
+    ? { message: Array.isArray(searchParams.message) ? searchParams.message[0] : searchParams.message }
+    : {};
 
   return (
     <form
@@ -35,7 +44,7 @@ export default async function SignIn(props: {
           required
         />
         <AuthSubmitButton />
-        <FormMessage message={searchParams} />
+        <FormMessage message={message} />
       </div>
     </form>
   );
