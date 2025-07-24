@@ -34,6 +34,8 @@ export const forgotPasswordAction = async (formData: FormData) => {
                   (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : null) ||
                   "http://localhost:3000";
   
+  console.log("PASSWORD RESET URL:", `${baseUrl}/reset-password`);
+  
   const { error } = await client.auth.resetPasswordForEmail(email, {
     redirectTo: `${baseUrl}/reset-password`,
   });
@@ -108,6 +110,17 @@ export const signUpAction = async (formData: FormData) => {
 
   const client = await createSupabaseClient();
 
+  // Debug all environment variables first
+  console.log("=== ENVIRONMENT DEBUG ===");
+  console.log("NEXT_PUBLIC_APP_URL:", process.env.NEXT_PUBLIC_APP_URL);
+  console.log("VERCEL_URL:", process.env.VERCEL_URL);
+  console.log("NODE_ENV:", process.env.NODE_ENV);
+  console.log("All env vars starting with NEXT_PUBLIC:", 
+    Object.keys(process.env)
+      .filter(key => key.startsWith('NEXT_PUBLIC'))
+      .reduce((obj, key) => ({ ...obj, [key]: process.env[key] }), {})
+  );
+  
   // Try multiple sources for the production URL
   const url = process.env.NEXT_PUBLIC_APP_URL || 
                (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : null) ||
@@ -116,9 +129,8 @@ export const signUpAction = async (formData: FormData) => {
   const redirectUrl = `${url}/protected`;
   
   // Debug logging to see what URL is being used
-  console.log("Email redirect URL:", redirectUrl);
-  console.log("VERCEL_URL:", process.env.VERCEL_URL);
-  console.log("NEXT_PUBLIC_APP_URL:", process.env.NEXT_PUBLIC_APP_URL);
+  console.log("FINAL EMAIL REDIRECT URL:", redirectUrl);
+  console.log("=== END DEBUG ===");
 
   const { data, error } = await client.auth.signUp({
     email,
@@ -149,12 +161,24 @@ export const signUpAction = async (formData: FormData) => {
 
   if (error) {
     console.error("Sign-up error:", error);
+    console.error("Error message:", error.message);
+    console.error("Error code:", error.code);
     
     // Handle case where user already exists but hasn't confirmed email
-    if (error.message?.includes("User already registered")) {
+    // Check for multiple possible error messages/codes
+    const isUserAlreadyExists = error.message?.includes("User already registered") ||
+                               error.message?.includes("already registered") ||
+                               error.message?.includes("already been registered") ||
+                               error.code === "user_already_exists" ||
+                               error.code === "email_address_already_confirmed";
+    
+    if (isUserAlreadyExists) {
+      console.log("Detected existing user, attempting to resend confirmation to:", email);
+      
       // Attempt to resend confirmation email
       try {
-        await client.auth.resend({
+        console.log("RESEND EMAIL REDIRECT URL:", redirectUrl);
+        const resendResult = await client.auth.resend({
           type: 'signup',
           email: email,
           options: {
@@ -162,11 +186,13 @@ export const signUpAction = async (formData: FormData) => {
           }
         });
         
-        console.log("Resent confirmation email to:", email);
+        console.log("Resend result:", resendResult);
+        console.log("Successfully resent confirmation email to:", email);
         return encodedRedirect("success", "/sign-up", "A new confirmation email has been sent. Please check your email to confirm your account");
       } catch (resendError) {
         console.error("Error resending confirmation:", resendError);
-        return encodedRedirect("success", "/sign-up", "Please check your email for the confirmation link. If you don't see it, check your spam folder");
+        console.error("Resend error details:", JSON.stringify(resendError, null, 2));
+        return encodedRedirect("success", "/sign-up", "Please check your email for the confirmation link. If you don't see it, check your spam folder or try signing up again in a few minutes");
       }
     }
     
