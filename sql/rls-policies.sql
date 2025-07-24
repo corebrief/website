@@ -6,11 +6,21 @@ ALTER TABLE public.user_profiles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.subscription_products ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.subscription_prices ENABLE ROW LEVEL SECURITY;
 
--- Drop existing policies if they exist (to avoid conflicts)
+-- Drop ALL existing policies if they exist (to avoid conflicts)
 DROP POLICY IF EXISTS "Users can view own profile" ON public.user_profiles;
 DROP POLICY IF EXISTS "Users can update own profile" ON public.user_profiles;
+DROP POLICY IF EXISTS "System can insert user profiles" ON public.user_profiles;
+DROP POLICY IF EXISTS "Service role full access to user profiles" ON public.user_profiles;
+
 DROP POLICY IF EXISTS "Anyone can view products" ON public.subscription_products;
+DROP POLICY IF EXISTS "Authenticated users can view products" ON public.subscription_products;
+DROP POLICY IF EXISTS "Public can view active products" ON public.subscription_products;
+DROP POLICY IF EXISTS "Service role full access to products" ON public.subscription_products;
+
 DROP POLICY IF EXISTS "Anyone can view prices" ON public.subscription_prices;
+DROP POLICY IF EXISTS "Authenticated users can view prices" ON public.subscription_prices;
+DROP POLICY IF EXISTS "Public can view active prices" ON public.subscription_prices;
+DROP POLICY IF EXISTS "Service role full access to prices" ON public.subscription_prices;
 
 -- ====================
 -- USER_PROFILES POLICIES

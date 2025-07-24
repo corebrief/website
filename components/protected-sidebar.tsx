@@ -1,9 +1,6 @@
 import InPageSidebar from "@/components/in-page-sidebar";
-import { checkEntitlement } from "@/utils/supabase/entitlements";
 
 export default async function ProtectedSidebar() {
-  const { data } = await checkEntitlement("premium");
-
   return (
     <InPageSidebar
       basePath="/protected"
@@ -13,17 +10,22 @@ export default async function ProtectedSidebar() {
           href: "/",
         },
         {
-          label: "Pricing",
-          href: "/pricing",
+          label: "Privacy",
+          href: "/privacy",
+        },
+        {
+          label: "Join Waitlist",
+          href: "/waitlist",
         },
         {
           label: "Subscription",
           href: "/subscription",
+          disabled: true,
         },
         {
           label: "Paid Content",
           href: "/paid-content",
-          disabled: !data?.hasAccess,
+          disabled: true,
         },
       ]}
     />

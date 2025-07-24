@@ -193,117 +193,91 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Private Alpha Access */}
-        <div className="mb-24">
-          <h2 className="text-3xl md:text-4xl font-bold text-primary mb-6">
-            Private Alpha Access
-          </h2>
-          <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed mb-16">
-            Currently serving select family offices and RIAs with manual report fulfillment
-          </p>
-
-          {/* Analysis Details */}
-          <div className="grid md:grid-cols-2 gap-12 w-full max-w-5xl">
-            <div>
-              <h3 className="text-2xl font-semibold mb-6 text-primary">Each Analysis Includes:</h3>
-              <ul className="space-y-4">
-                <li className="flex items-center gap-3">
-                  <div className="w-6 h-6 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
-                    <svg className="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                  </div>
-                  <span className="text-muted-foreground">5-year historical deep dive</span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <div className="w-6 h-6 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
-                    <svg className="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                  </div>
-                  <span className="text-muted-foreground">Management credibility scoring</span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <div className="w-6 h-6 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
-                    <svg className="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                  </div>
-                  <span className="text-muted-foreground">Forward-looking scenarios</span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <div className="w-6 h-6 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
-                    <svg className="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                  </div>
-                  <span className="text-muted-foreground">Conservative suitability assessment (framework-based, not financial advice)</span>
-                </li>
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="text-2xl font-semibold mb-6 text-primary">Quality Assurance</h3>
-              <p className="text-muted-foreground leading-relaxed">
-                Limited capacity ensures institutional quality. Each report undergoes rigorous validation 
-                and is delivered with the conservative perspective that family offices and RIAs 
-                require for defensible investment decisions.
-              </p>
-            </div>
-          </div>
-        </div>
-
         {/* Final CTA Section */}
         <div className="bg-primary rounded-lg p-12 w-full max-w-5xl">
           <h2 className="text-3xl md:text-4xl font-bold text-primary-foreground mb-6 text-center">
-            Request Alpha Access
+            Join the Early Access Waitlist
           </h2>
           <p className="text-lg text-primary-foreground/90 max-w-3xl mx-auto text-center mb-12 leading-relaxed">
-            Join select family offices and RIAs already using CoreBrief for institutional-quality equity analysis
+            Join select family offices and RIAs on our exclusive waitlist for priority access to CoreBrief&apos;s institutional research platform
           </p>
 
-          {/* Contact Information */}
+          {/* Waitlist Benefits */}
           <div className="bg-primary-foreground/10 rounded-lg p-8 mb-8">
             <h3 className="text-2xl font-semibold text-primary-foreground mb-6 text-center">
-              Contact Information
+              Early Access Benefits
             </h3>
             
-            <div className="flex items-center justify-center gap-3 mb-8">
-              <svg className="w-6 h-6 text-primary-foreground/80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-              </svg>
-              <span className="text-xl text-primary-foreground">info@corebrief.ai</span>
-            </div>
+            <div className="grid md:grid-cols-2 gap-6 mb-8">
+              <div className="flex items-start gap-3">
+                <div className="w-6 h-6 bg-primary-foreground/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                  <svg className="w-4 h-4 text-primary-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-primary-foreground mb-1">Priority Access</h4>
+                  <p className="text-primary-foreground/80 text-sm">First access when platform launches</p>
+                </div>
+              </div>
+              
+              <div className="flex items-start gap-3">
+                <div className="w-6 h-6 bg-primary-foreground/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                  <svg className="w-4 h-4 text-primary-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-primary-foreground mb-1">50% Discount</h4>
+                  <p className="text-primary-foreground/80 text-sm">Exclusive pricing for early adopters</p>
+                </div>
+              </div>
 
-            <div className="text-center mb-6">
-              <p className="text-primary-foreground/90 mb-4">Please include in your message:</p>
-              <ul className="text-left max-w-md mx-auto space-y-2 text-primary-foreground/80">
-                <li>• Organization type (Family Office, RIA, etc.)</li>
-                <li>• Portfolio focus and asset allocation</li>
-                <li>• Current research process challenges</li>
-              </ul>
-            </div>
+              <div className="flex items-start gap-3">
+                <div className="w-6 h-6 bg-primary-foreground/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                  <svg className="w-4 h-4 text-primary-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-primary-foreground mb-1">Feature Input</h4>
+                  <p className="text-primary-foreground/80 text-sm">Help shape the platform features</p>
+                </div>
+              </div>
 
-            <div className="text-primary-foreground/90 text-center mb-8">
+              <div className="flex items-start gap-3">
+                <div className="w-6 h-6 bg-primary-foreground/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                  <svg className="w-4 h-4 text-primary-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-primary-foreground mb-1">Direct Support</h4>
+                  <p className="text-primary-foreground/80 text-sm">Priority onboarding and support</p>
+                </div>
+              </div>
             </div>
 
             <div className="text-center">
               <Button 
                 size="lg" 
                 variant="secondary"
-                className="text-lg px-8 py-6"
+                className="text-lg px-8 py-6 mb-4"
                 asChild
               >
-                <a href="mailto:info@corebrief.ai?subject=Alpha Access Request">
-                  Send Alpha Access Request
-                </a>
+                <Link href="/sign-up">
+                  Join Early Access Waitlist
+                </Link>
               </Button>
+              <p className="text-primary-foreground/70 text-sm">
+                Complete signup takes less than 3 minutes
+              </p>
             </div>
           </div>
 
           {/* Alternative Sign In */}
           <div className="text-center">
-            <p className="text-primary-foreground/70 mb-4">Already have access?</p>
+            <p className="text-primary-foreground/70 mb-4">Already have an account?</p>
             <Button variant="outline" size="lg" className="bg-transparent border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10" asChild>
               <Link href="/sign-in">Sign In</Link>
             </Button>
@@ -312,10 +286,19 @@ export default function Home() {
       </div>
       {/* Disclaimer */}
       <footer className="w-full py-8 px-4 bg-muted/60 border-t mt-16">
-        <div className="max-w-4xl mx-auto text-center text-xs text-muted-foreground">
-          CoreBrief does not provide personalized investment advice and is not a registered investment advisor. All content is for informational purposes only. Suitability assessments are framework-based and do not constitute financial advice.<br />
-          AI methodologies are continually evaluated for accuracy and limitations. All research is subject to human review.<br />
-          CoreBrief ratings are proprietary research signals and do not constitute investment recommendations.
+        <div className="max-w-4xl mx-auto text-center text-xs text-muted-foreground space-y-4">
+          <div>
+            CoreBrief does not provide personalized investment advice and is not a registered investment advisor. All content is for informational purposes only. Suitability assessments are framework-based and do not constitute financial advice.<br />
+            AI methodologies are continually evaluated for accuracy and limitations. All research is subject to human review.<br />
+            CoreBrief ratings are proprietary research signals and do not constitute investment recommendations.
+          </div>
+          <div className="flex justify-center items-center gap-4 text-xs">
+            <Link href="/privacy" className="hover:text-primary transition-colors">Privacy Policy</Link>
+            <span>•</span>
+            <Link href="/terms" className="hover:text-primary transition-colors">Terms of Service</Link>
+            <span>•</span>
+            <span>© {new Date().getFullYear()} CoreBrief. All rights reserved.</span>
+          </div>
         </div>
       </footer>
     </div>
