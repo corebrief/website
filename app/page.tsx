@@ -140,7 +140,7 @@ export default function Home() {
           Beyond Generic AI File Upload Tools
           </h2>
           <p className="text-base md:text-lg text-muted-foreground max-w-3xl mx-auto text-center mb-8 md:mb-12 leading-relaxed px-2">
-            Generic "upload to an LLM" tools hit token limits and give inconsistent results. 
+            Generic &quot;upload to an LLM&quot; tools hit token limits and give inconsistent results. 
             CoreBrief processes complete filings into structured, comparable research—specialized for dividend & distribution-paying companies.
           </p>
 
