@@ -112,6 +112,22 @@ export default async function SignUp(props: {
           <FormMessage message={message} />
         )}
 
+        {/* Research Tool Disclaimer */}
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-sm text-blue-800">
+          <div className="flex items-start gap-3">
+            <div className="w-5 h-5 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+              <svg className="w-3 h-3 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <div>
+              <strong>Research Tool Only:</strong> CoreBrief provides research and analysis tools for professionals. 
+              We do not provide investment advice, recommendations, or personalized guidance. 
+              This information helps us customize your research dashboard experience.
+            </div>
+          </div>
+        </div>
+
         {/* Basic Information */}
         <div className="space-y-4">
           <h3 className="text-lg font-medium text-primary border-b pb-2">Contact Information</h3>
@@ -144,8 +160,9 @@ export default async function SignUp(props: {
           <h3 className="text-lg font-medium text-primary border-b pb-2">Organization</h3>
           
           <div>
-            <Label htmlFor="organization_name">Organization Name *</Label>
-            <Input name="organization_name" placeholder="Acme Family Office" required />
+            <Label htmlFor="organization_name">Organization Name</Label>
+            <Input name="organization_name" placeholder="Your company/firm name (or leave blank if individual)" />
+            <p className="text-xs text-muted-foreground mt-1">Optional for individual professionals</p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -157,27 +174,31 @@ export default async function SignUp(props: {
                 className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
               >
                 <option value="">Select type</option>
+                <option value="individual_investor">Individual Professional</option>
+                <option value="financial_advisor">Financial Advisor</option>
                 <option value="family_office">Family Office</option>
                 <option value="ria">RIA (Registered Investment Advisor)</option>
                 <option value="asset_manager">Asset Manager</option>
-                <option value="individual">Individual Investor</option>
+                <option value="hedge_fund">Hedge Fund</option>
                 <option value="other">Other</option>
               </select>
             </div>
             <div>
-              <Label htmlFor="role_title">Your Role/Title *</Label>
-              <Input name="role_title" placeholder="Chief Investment Officer" required />
+              <Label htmlFor="role_title">Your Role/Title</Label>
+              <Input name="role_title" placeholder="e.g., Portfolio Manager, Individual Professional, CIO" />
+              <p className="text-xs text-muted-foreground mt-1">Optional for individual professionals</p>
             </div>
           </div>
           
           <div>
-            <Label htmlFor="aum_range">Assets Under Management</Label>
+            <Label htmlFor="aum_range">Investment Portfolio Size</Label>
             <select 
               name="aum_range"
               className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
             >
-              <option value="">Select AUM range</option>
-              <option value="under_10m">Under $10M</option>
+              <option value="">Select portfolio size (optional)</option>
+              <option value="under_1m">Under $1M</option>
+              <option value="1m_10m">$1M - $10M</option>
               <option value="10m_50m">$10M - $50M</option>
               <option value="50m_250m">$50M - $250M</option>
               <option value="250m_1b">$250M - $1B</option>
@@ -187,27 +208,27 @@ export default async function SignUp(props: {
           </div>
         </div>
 
-        {/* Investment Profile */}
+        {/* Research Profile */}
         <div className="space-y-4">
-          <h3 className="text-lg font-medium text-primary border-b pb-2">Investment Profile</h3>
+          <h3 className="text-lg font-medium text-primary border-b pb-2">Research Profile</h3>
           
           <div>
-            <Label htmlFor="investment_focus">Primary Investment Focus</Label>
+            <Label htmlFor="investment_focus">Primary Research Focus</Label>
             <select 
               name="investment_focus"
               className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
             >
-              <option value="">Select focus</option>
-              <option value="conservative_income">Conservative Income</option>
-              <option value="balanced">Balanced</option>
-              <option value="growth">Growth</option>
-              <option value="value">Value</option>
+              <option value="">Select research focus</option>
+              <option value="dividend_income_analysis">Dividend/Income Analysis</option>
+              <option value="diversified_research">Diversified Portfolio Research</option>
+              <option value="growth_company_research">Growth Company Research</option>
+              <option value="value_oriented_analysis">Value-Oriented Analysis</option>
               <option value="other">Other</option>
             </select>
           </div>
           
           <div>
-            <Label htmlFor="primary_asset_classes">Asset Classes of Interest</Label>
+            <Label htmlFor="primary_asset_classes">Asset Classes You Research</Label>
             <Input 
               name="primary_asset_classes" 
               placeholder="e.g., Dividend Stocks, REITs, MLPs, Fixed Income" 
@@ -247,12 +268,24 @@ export default async function SignUp(props: {
           </div>
         </div>
 
-        <AuthSubmitButton pendingText="Creating account...">
-          Create Account
-        </AuthSubmitButton>
-        
-        {/* Marketing Consent */}
-        <div className="border-t pt-4">
+        {/* Consent & Confirmation */}
+        <div className="border-t pt-6 space-y-4">
+          {/* Professional Use Confirmation - Required */}
+          <div className="flex items-start space-x-3">
+            <input 
+              type="checkbox" 
+              name="professional_use" 
+              id="professional_use"
+              required
+              className="mt-1 h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+            />
+            <label htmlFor="professional_use" className="text-sm text-muted-foreground leading-relaxed">
+              I confirm this account is for professional research purposes and understand that CoreBrief provides 
+              analytical tools, not investment advice. *
+            </label>
+          </div>
+
+          {/* Marketing Consent - Optional */}
           <div className="flex items-start space-x-3">
             <input 
               type="checkbox" 
@@ -265,12 +298,18 @@ export default async function SignUp(props: {
               You can withdraw this consent at any time through your account settings or by contacting us.
             </label>
           </div>
-          <p className="text-xs text-muted-foreground mt-2">
+
+          {/* Terms & Privacy */}
+          <p className="text-xs text-muted-foreground pt-2 border-t">
             By submitting this form, you agree to our{" "}
             <Link href="/privacy" className="text-primary hover:underline">Privacy Policy</Link> and{" "}
             <Link href="/terms" className="text-primary hover:underline">Terms of Service</Link>.
           </p>
         </div>
+
+        <AuthSubmitButton pendingText="Creating account...">
+          Create Account
+        </AuthSubmitButton>
       </div>
     </form>
   );

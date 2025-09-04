@@ -8,13 +8,13 @@ export default function Home() {
       <div className="w-full px-4 py-8 md:py-16 bg-gradient-to-b from-background to-muted/20">
         <div className="mx-auto max-w-4xl flex flex-col items-center text-center">
           <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold text-primary !leading-tight mb-6 md:mb-8 animate-in fade-in duration-700">
-            Equity Research Modeled After Institutional Frameworks
+            Longitudinal Equity Intelligence,
             <br />
             Delivered in Hours
           </h1>
           
           <p className="text-base md:text-lg lg:text-xl text-muted-foreground max-w-3xl mb-8 md:mb-12 leading-relaxed px-2 animate-in fade-in duration-700 delay-200">
-            Multi-agent AI system inspired by institutional research methods, providing analytical summaries for defensive, income-focused allocators in 24 hours instead of weeks
+            CoreBrief’s Agential AI turns five years of SEC filings per issuer into structured, comparable dashboards—deep research in hours, not weeks.
           </p>
 
           <Button size="lg" className="text-base md:text-lg px-6 md:px-8 py-4 md:py-6 mb-12 md:mb-24 animate-in fade-in duration-700 delay-300 hover:scale-105 transition-all duration-200" asChild>
@@ -27,62 +27,185 @@ export default function Home() {
       <div className="w-full px-4 py-8 md:py-16 bg-muted/30 border-y">
         <div className="mx-auto max-w-4xl flex flex-col items-center text-center">
           <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-primary mb-6 md:mb-8 animate-in slide-in-from-bottom duration-600">
-            The Defensive Investor&apos;s Challenge
+            The Fundamental Analysis Dilemma
           </h2>
           
           <p className="text-base md:text-lg lg:text-xl text-muted-foreground max-w-3xl mb-8 md:mb-16 leading-relaxed px-2 animate-in slide-in-from-bottom duration-600 delay-100">
-            Family offices and RIAs focused on income generation and downside protection need defensible investment analysis, but current solutions fall short
+            Family offices, RIAs, and independent professionals need deep, narrative-driven insights, but are forced to choose between slow, costly reports and time-intensive manual analysis that rarely scales.
           </p>
 
           {/* Problem Comparison */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 w-full max-w-4xl">
             <div className="bg-card border rounded-lg p-4 md:p-6 shadow-sm animate-in slide-in-from-left duration-600 delay-200 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group">
-              <div className="w-10 h-10 md:w-12 md:h-12 bg-red-50 rounded-lg flex items-center justify-center mb-3 md:mb-4 transition-all duration-200 group-hover:scale-110">
+              <div className="w-10 h-10 md:w-12 md:h-12 bg-red-50 rounded-lg flex items-center justify-center mb-3 md:mb-4 transition-all duration-200 group-hover:scale-110 mx-auto">
                 <span className="text-red-600 font-bold text-base md:text-lg">$</span>
               </div>
-              <h3 className="font-semibold text-base md:text-lg mb-3 md:mb-4 text-primary">Wall Street Research</h3>
+              <h3 className="font-semibold text-base md:text-lg mb-3 md:mb-4 text-primary">Traditional Research Reporting</h3>
               <ul className="space-y-1 md:space-y-2 text-sm md:text-base text-muted-foreground">
-                <li>• Costs over $5,000 per report</li>
-                <li>• Takes weeks to deliver</li>
-                <li>• Often lacks defensive perspective</li>
+                <li>• Costs thousands per report</li>
+                <li>• Takes weeks to commission</li>
+                <li>• Often omits the multi-year narrative</li>
               </ul>
             </div>
 
             <div className="bg-card border rounded-lg p-4 md:p-6 shadow-sm animate-in slide-in-from-right duration-600 delay-300 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group">
-              <div className="w-10 h-10 md:w-12 md:h-12 bg-orange-50 rounded-lg flex items-center justify-center mb-3 md:mb-4 transition-all duration-200">
+              <div className="w-10 h-10 md:w-12 md:h-12 bg-orange-50 rounded-lg flex items-center justify-center mb-3 md:mb-4 transition-all duration-200 group-hover:scale-110 mx-auto">
                 <svg className="w-5 h-5 md:w-6 md:h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
               <h3 className="font-semibold text-base md:text-lg mb-3 md:mb-4 text-primary">DIY Analysis</h3>
               <ul className="space-y-1 md:space-y-2 text-sm md:text-base text-muted-foreground">
-                <li>• Lacks institutional depth</li>
-                <li>• Takes over 30 hours per company</li>
-                <li>• Inconsistent methodology</li>
+                <li>• Requires 30+ hours per issuer</li>
+                <li>• Inconsistent methodology across names</li>
+                <li>• Difficult to scale across companies</li>
               </ul>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Multi-Agent AI Section */}
+      {/* Agential AI Section */}
       <div className="w-full px-4 py-8 md:py-16 bg-primary/5">
         <div className="mx-auto max-w-4xl flex flex-col items-center text-center">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary mb-4 md:mb-6 animate-in fade-in duration-600">
-            Multi-Agent AI Intelligence System
+            Domain-Aware Agential AI, Multi-Year Context
           </h2>
+
           <p className="text-base md:text-lg lg:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed px-2 animate-in fade-in duration-600 delay-100">
-            Three specialized AI agents analyze 5+ years of SEC filings to deliver analytical summaries for defensive, income-focused allocators.
+            CoreBrief’s Agential AI reads ~5 years of SEC filings per issuer and converts them into structured, multi-year signals and dashboards—filings-only, delivered in hours.
           </p>
+
           <p className="text-xs md:text-sm text-muted-foreground max-w-2xl mx-auto mt-3 md:mt-4 px-2 animate-in fade-in duration-600 delay-200">
-            Reports are generated using AI tools and reviewed by qualified analysts for quality assurance. AI-driven analysis is subject to human validation and oversight.
+            Historical-disclosure research only. CoreBrief can make mistakes. Always verify information independently and consult qualified professionals before making investment decisions. For informational purposes; not investment advice.
           </p>
-          
-          <div className="bg-card border rounded-lg p-3 md:p-4 mt-6 md:mt-8 max-w-2xl mx-auto animate-in fade-in duration-600 delay-300">
-            <p className="text-xs md:text-sm text-muted-foreground leading-relaxed">
-              <span className="font-medium text-primary">Built by research professionals</span> with PhD-level training, university faculty experience in AI and data science, and 10+ years of enterprise AI implementation
-            </p>
+
+          <div className="mt-6 md:mt-8 max-w-4xl mx-auto animate-in fade-in duration-600 delay-300">
+            <div className="text-center mb-6">
+              <h3 className="text-lg md:text-xl font-semibold text-primary mb-2">Specialized Agents by Asset Class</h3>
+              <p className="text-sm text-muted-foreground">Domain-specific schemas for consistent, multi-year analysis.</p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+              {/* General Equities */}
+              <div className="bg-card border rounded-lg p-4 text-center hover:shadow-md transition-all duration-200 group">
+                <div className="w-12 h-12 bg-green-50 rounded-lg flex items-center justify-center mx-auto mb-3 transition-all duration-200 group-hover:bg-green-100 group-hover:scale-105">
+                  <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                  </svg>
+                </div>
+                <h4 className="font-medium text-primary text-sm mb-2">General Equities</h4>
+                <div className="space-y-1 text-xs text-muted-foreground">
+                  <div>• Payout coverage</div>
+                  <div>• Capital allocation</div>
+                </div>
+              </div>
+
+              {/* REITs */}
+              <div className="bg-card border rounded-lg p-4 text-center hover:shadow-md transition-all duration-200 group">
+                <div className="w-12 h-12 bg-blue-50 rounded-lg flex items-center justify-center mx-auto mb-3 transition-all duration-200 group-hover:bg-blue-100 group-hover:scale-105">
+                  <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                  </svg>
+                </div>
+                <h4 className="font-medium text-primary text-sm mb-2">REITs</h4>
+                <div className="space-y-1 text-xs text-muted-foreground">
+                  <div>• AFFO/FFO analysis</div>
+                  <div>• Lease/tenant risks</div>
+                </div>
+              </div>
+
+              {/* MLPs */}
+              <div className="bg-card border rounded-lg p-4 text-center hover:shadow-md transition-all duration-200 group">
+                <div className="w-12 h-12 bg-purple-50 rounded-lg flex items-center justify-center mx-auto mb-3 transition-all duration-200 group-hover:bg-purple-100 group-hover:scale-105">
+                  <svg className="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                </div>
+                <h4 className="font-medium text-primary text-sm mb-2">MLPs</h4>
+                <div className="space-y-1 text-xs text-muted-foreground">
+                  <div>• DCF coverage</div>
+                  <div>• Contract/throughput quality</div>
+                </div>
+              </div>
+            </div>
           </div>
+        </div>
+      </div>
+
+            {/* Comparison: Not Just Uploading to an LLM */}
+      <div className="w-full px-4 py-8 md:py-16 bg-muted/30 border-y">
+        <div className="mx-auto max-w-5xl">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary mb-4 md:mb-6 text-center">
+          Beyond Generic AI File Upload Tools
+          </h2>
+          <p className="text-base md:text-lg text-muted-foreground max-w-3xl mx-auto text-center mb-8 md:mb-12 leading-relaxed px-2">
+            Generic "upload to an LLM" tools hit token limits and give inconsistent results. 
+            CoreBrief processes complete filings into structured, comparable research—specialized for dividend & distribution-paying companies.
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+            {/* Generic File-Chat */}
+            <div className="bg-card border-2 border-red-100 rounded-lg p-4 md:p-6 shadow-sm">
+              <div className="flex items-center gap-2 mb-3 md:mb-4">
+                <div className="w-6 h-6 bg-red-100 rounded-full flex items-center justify-center">
+                  <svg className="w-4 h-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </div>
+                <h3 className="font-semibold text-base md:text-lg text-primary">Standard AI File Upload</h3>
+              </div>
+              <ul className="space-y-2 text-sm md:text-base text-muted-foreground">
+                <li className="flex items-start gap-2">
+                  <span className="text-red-500 mt-1">✗</span>
+                  <span>Partial filing coverage (lossy ingestion, token limits)</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-red-500 mt-1">✗</span>
+                  <span>Inconsistent outputs by company</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-red-500 mt-1">✗</span>
+                  <span>Ad-hoc chat responses</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-red-500 mt-1">✗</span>
+                  <span>No structured export</span>
+                </li>
+              </ul>
+            </div>
+
+            {/* CoreBrief Agential AI */}
+            <div className="bg-card border-2 border-green-100 rounded-lg p-4 md:p-6 shadow-sm">
+              <div className="flex items-center gap-2 mb-3 md:mb-4">
+                <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center">
+                  <svg className="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+                <h3 className="font-semibold text-base md:text-lg text-primary">CoreBrief Agential AI</h3>
+              </div>
+              <ul className="space-y-2 text-sm md:text-base text-muted-foreground">
+                <li className="flex items-start gap-2">
+                  <span className="text-green-600 mt-1">✓</span>
+                  <span>Complete 10-K processing</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-green-600 mt-1">✓</span>
+                  <span>Dividend/distribution-focused metrics (AFFO, DCF, payout ratios)</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-green-600 mt-1">✓</span>
+                  <span>Multi-year comparable dashboards</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-green-600 mt-1">✓</span>
+                  <span>Structured JSON</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+
         </div>
       </div>
 
@@ -98,7 +221,8 @@ export default function Home() {
               </div>
               <h3 className="font-semibold text-base md:text-lg mb-2 md:mb-3 text-primary">Multi-Year Trend Analysis</h3>
               <p className="text-muted-foreground text-sm leading-relaxed">
-                Historical patterns and business evolution analysis to identify long-term investment themes and cyclical risks
+              Distills five filing years into dashboards of growth, margin trajectory, cash conversion, leverage, and payout coverage 
+              (AFFO/FFO, SSNOI, DCF where applicable)—separating cyclical swings from structural change.
               </p>
             </div>
 
@@ -110,7 +234,8 @@ export default function Home() {
               </div>
               <h3 className="font-semibold text-base md:text-lg mb-2 md:mb-3 text-primary">Management Credibility</h3>
               <p className="text-muted-foreground text-sm leading-relaxed">
-                Leadership quality assessment and execution track record evaluation for defensive investor confidence
+              Assesses promise–follow-through, disclosure hygiene, risk candor, guidance consistency, and capital allocation discipline—yielding clear, backward-looking credibility signals.
+
               </p>
             </div>
 
@@ -122,23 +247,26 @@ export default function Home() {
               </div>
               <h3 className="font-semibold text-base md:text-lg mb-2 md:mb-3 text-primary">Forward-Looking Analysis</h3>
               <p className="text-muted-foreground text-sm leading-relaxed">
-                Forward scenarios and comprehensive risk assessments to help identify potential downside risks. All outputs are reviewed by analysts.
+              Calibrated Base/Up/Down cases derived from multi-year signals, detailing outcomes for growth, margin, cash, capex, leverage, diversification, 
+              and dividend/distribution stance—plus falsifiers and leading indicators. CoreBrief can make mistakes. Always verify information independently and consult qualified professionals before making investment decisions. Not investment advice.
               </p>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Final Synthesis */}
+      {/* Synthesis / Output */}
       <div className="w-full px-4 py-8 md:py-16 bg-primary">
         <div className="mx-auto max-w-4xl">
           <div className="text-center animate-in fade-in duration-600">
-            <h3 className="text-xl md:text-2xl font-semibold mb-3 md:mb-4 text-primary-foreground">Final Synthesis</h3>
+            <h3 className="text-xl md:text-2xl font-semibold mb-3 md:mb-4 text-primary-foreground">
+              Executive Synthesis
+            </h3>
             <p className="text-primary-foreground/90 text-base md:text-lg leading-relaxed mb-4 md:mb-6 px-2">
-              Clear investment research, built to mirror the depth and structure of institutional reports, designed specifically for defensive, income-focused allocators
+              One consolidated dashboard from filing-sourced signals: multi-year trends, management credibility, and Base/Up/Down scenarios—with one-click export to structured JSON for your workflow.
             </p>
             <p className="text-primary-foreground/70 text-xs md:text-sm max-w-2xl mx-auto px-2">
-              Built by research professionals with PhD-level training, university faculty experience in AI and data science, and 10+ years of enterprise AI implementation
+              Filings-only research. CoreBrief can make mistakes. Always verify information independently and consult qualified professionals before making investment decisions. For informational purposes; not investment advice.
             </p>
           </div>
         </div>
@@ -151,7 +279,7 @@ export default function Home() {
             Purpose-Built for Your Asset Class
           </h2>
           <p className="text-base md:text-lg lg:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed mb-8 md:mb-16 px-2 animate-in slide-in-from-bottom duration-600 delay-100">
-            Specialized analysis frameworks tailored to defensive, income-focused institutional investment strategies
+            Domain-tuned agents and schemas for dividend & distribution-paying companies—covering general equities, REITs, and MLPs.
           </p>
 
           {/* Asset Class Options */}
@@ -166,12 +294,13 @@ export default function Home() {
               <div className="flex-1">
                 <h3 className="text-lg md:text-xl font-semibold mb-2 md:mb-3 text-primary">CoreBrief Equities</h3>
                 <p className="text-muted-foreground mb-3 md:mb-4 leading-relaxed text-sm md:text-base">
-                  Dividend durability assessment, capital allocation quality evaluation, and multi-cycle downside risk research (proprietary research signal, not a guarantee)
+                  Evaluates payout durability, capital allocation discipline, disclosure consistency, and multi-cycle downside patterns—turning filings into consistent, comparable dashboards.
                 </p>
                 <div className="flex flex-wrap gap-2">
-                  <span className="px-2 md:px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs md:text-sm transition-all duration-200 hover:bg-green-200">Dividend Safety</span>
+                  <span className="px-2 md:px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs md:text-sm transition-all duration-200 hover:bg-green-200">Payout Coverage</span>
                   <span className="px-2 md:px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs md:text-sm transition-all duration-200 hover:bg-green-200">Capital Allocation</span>
-                  <span className="px-2 md:px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs md:text-sm transition-all duration-200 hover:bg-green-200">Downside Protection</span>
+                  <span className="px-2 md:px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs md:text-sm transition-all duration-200 hover:bg-green-200">Downside Patterns</span>
+                  <span className="px-2 md:px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs md:text-sm transition-all duration-200 hover:bg-green-200">Disclosure Quality</span>
                 </div>
               </div>
             </div>
@@ -186,12 +315,13 @@ export default function Home() {
               <div className="flex-1">
                 <h3 className="text-lg md:text-xl font-semibold mb-2 md:mb-3 text-primary">CoreBrief REITs</h3>
                 <p className="text-muted-foreground mb-3 md:mb-4 leading-relaxed text-sm md:text-base">
-                  AFFO coverage analysis, lease risk assessment, and tenant diversification evaluation with comprehensive safety indicators
+                  Maps AFFO/FFO coverage, lease profile (WALT & rollover), tenant concentration, SSNOI trend, and rate/refinancing sensitivity—built for property-level nuance.
                 </p>
                 <div className="flex flex-wrap gap-2">
-                  <span className="px-2 md:px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs md:text-sm transition-all duration-200 hover:bg-blue-200">AFFO Coverage</span>
-                  <span className="px-2 md:px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs md:text-sm transition-all duration-200 hover:bg-blue-200">Lease Risks</span>
-                  <span className="px-2 md:px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs md:text-sm transition-all duration-200 hover:bg-blue-200">Tenant Diversification</span>
+                  <span className="px-2 md:px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs md:text-sm transition-all duration-200 hover:bg-blue-200">AFFO/FFO Coverage</span>
+                  <span className="px-2 md:px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs md:text-sm transition-all duration-200 hover:bg-blue-200">Lease Profile (WALT)</span>
+                  <span className="px-2 md:px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs md:text-sm transition-all duration-200 hover:bg-blue-200">SSNOI Trend</span>
+                  <span className="px-2 md:px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs md:text-sm transition-all duration-200 hover:bg-blue-200">Tenant Mix</span>
                 </div>
               </div>
             </div>
@@ -206,12 +336,13 @@ export default function Home() {
               <div className="flex-1">
                 <h3 className="text-lg md:text-xl font-semibold mb-2 md:mb-3 text-primary">CoreBrief MLPs</h3>
                 <p className="text-muted-foreground mb-3 md:mb-4 leading-relaxed text-sm md:text-base">
-                  DCF coverage evaluation, energy transition risk analysis, and infrastructure quality assessment for energy allocators
+                  Assesses DCF coverage, fee-based exposure, contract quality (MVC & tenor), basin momentum, and leverage/liquidity—tailored to midstream structures.
                 </p>
                 <div className="flex flex-wrap gap-2">
                   <span className="px-2 md:px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-xs md:text-sm transition-all duration-200 hover:bg-purple-200">DCF Coverage</span>
-                  <span className="px-2 md:px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-xs md:text-sm transition-all duration-200 hover:bg-purple-200">Transition Risks</span>
-                  <span className="px-2 md:px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-xs md:text-sm transition-all duration-200 hover:bg-purple-200">Infrastructure Quality</span>
+                  <span className="px-2 md:px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-xs md:text-sm transition-all duration-200 hover:bg-purple-200">Fee-Based Mix</span>
+                  <span className="px-2 md:px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-xs md:text-sm transition-all duration-200 hover:bg-purple-200">Contract Quality (MVC)</span>
+                  <span className="px-2 md:px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-xs md:text-sm transition-all duration-200 hover:bg-purple-200">Leverage & Liquidity</span>
                 </div>
               </div>
             </div>
@@ -222,11 +353,17 @@ export default function Home() {
       {/* Final CTA Section */}
       <div className="w-full px-4 py-8 md:py-16 bg-primary">
         <div className="mx-auto max-w-5xl animate-in fade-in duration-600">
+          <div className="text-center mb-4">
+            <div className="inline-flex items-center gap-2 bg-primary-foreground/20 text-primary-foreground text-xs md:text-sm px-3 py-1 rounded-full mb-4">
+              <div className="w-2 h-2 bg-primary-foreground rounded-full animate-pulse"></div>
+              Limited Early Access • 50% Discount Ending Soon
+            </div>
+          </div>
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary-foreground mb-4 md:mb-6 text-center">
             Join the Early Access Waitlist
           </h2>
           <p className="text-base md:text-lg text-primary-foreground/90 max-w-3xl mx-auto text-center mb-8 md:mb-12 leading-relaxed px-2">
-            Join select family offices and RIAs on our exclusive waitlist for priority access to CoreBrief&apos;s institutional research platform
+            Join family offices, RIAs, and independent professionals on our waitlist for priority access to CoreBrief&apos;s professional research platform.
           </p>
 
           {/* Waitlist Benefits */}
@@ -293,11 +430,11 @@ export default function Home() {
                 asChild
               >
                 <Link href="/sign-up">
-                  Join Early Access Waitlist
+                  Secure Your Early Access Spot
                 </Link>
               </Button>
               <p className="text-primary-foreground/70 text-xs md:text-sm">
-                Complete signup takes less than 3 minutes
+                Only 3 minutes to signup • Limited spots remaining
               </p>
             </div>
           </div>
@@ -316,8 +453,8 @@ export default function Home() {
       <footer className="w-full py-6 md:py-8 px-4 bg-muted/60 border-t">
         <div className="max-w-4xl mx-auto text-center text-xs text-muted-foreground space-y-3 md:space-y-4">
           <div className="leading-relaxed">
-            CoreBrief does not provide personalized investment advice and is not a registered investment advisor. All content is for informational purposes only. Suitability assessments are framework-based and do not constitute financial advice.<br />
-            AI methodologies are continually evaluated for accuracy and limitations. All research is subject to human review.<br />
+            CoreBrief does not provide personalized investment advice and is not a registered investment advisor. All content is for informational purposes only. Assessments are framework-based and do not constitute financial advice.<br />
+            AI methodologies are continually evaluated for accuracy and limitations. CoreBrief can make mistakes. Always verify information independently and consult qualified professionals before making investment decisions.<br />
             CoreBrief ratings are proprietary research signals and do not constitute investment recommendations.
           </div>
           <div className="flex flex-col sm:flex-row justify-center items-center gap-2 sm:gap-4 text-xs">
