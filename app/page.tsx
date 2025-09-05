@@ -14,7 +14,7 @@ export default function Home() {
           </h1>
           
           <p className="text-base md:text-lg lg:text-xl text-muted-foreground max-w-3xl mb-8 md:mb-12 leading-relaxed px-2 animate-in fade-in duration-700 delay-200">
-            CoreBrief’s parsing system and AI agent fleet turns five years of SEC filings per issuer into structured, comparable dashboards—deep research in hours, not weeks.
+            CoreBrief’s parsing system and AI agent fleet turns five years of 10-K filings into structured dashboards. Rigorous, detailed research in hours, not weeks.
           </p>
 
           <Button size="lg" className="text-base md:text-lg px-6 md:px-8 py-4 md:py-6 mb-12 md:mb-24 animate-in fade-in duration-700 delay-300 hover:scale-105 transition-all duration-200" asChild>
@@ -31,7 +31,7 @@ export default function Home() {
           </h2>
           
           <p className="text-base md:text-lg lg:text-xl text-muted-foreground max-w-3xl mb-8 md:mb-16 leading-relaxed px-2 animate-in slide-in-from-bottom duration-600 delay-100">
-            Family offices, RIAs, and independent professionals need deep, narrative-driven insights, but are forced to choose between slow, costly reports and time-intensive manual analysis that rarely scales.
+            Family offices, RIAs, and independent professionals need deep, narrative-driven insights, but are forced to choose between slow, costly reports and time-intensive manual analysis.
           </p>
 
           {/* Problem Comparison */}
@@ -57,7 +57,7 @@ export default function Home() {
               <h3 className="font-semibold text-base md:text-lg mb-3 md:mb-4 text-primary">DIY Analysis</h3>
               <ul className="space-y-1 md:space-y-2 text-sm md:text-base text-muted-foreground">
                 <li>• Requires 30+ hours per issuer</li>
-                <li>• Inconsistent methodology across names</li>
+                <li>• Inconsistent methodology across businesses</li>
                 <li>• Difficult to scale across companies</li>
               </ul>
             </div>
@@ -73,7 +73,7 @@ export default function Home() {
           </h2>
           <p className="text-base md:text-lg text-muted-foreground max-w-3xl mx-auto text-center mb-8 md:mb-12 leading-relaxed px-2">
             Generic &quot;upload to an LLM&quot; tools hit token limits and give inconsistent results. 
-            CoreBrief processes complete filings into structured, comparable research—specialized for dividend & distribution-paying companies.
+            CoreBrief processes complete filings into structured, comparable research—with niche specialties in dividend & distribution-paying companies.
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
@@ -148,7 +148,7 @@ export default function Home() {
           </h2>
 
           <p className="text-base md:text-lg lg:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed px-2 animate-in fade-in duration-600 delay-100">
-            CoreBrief’s AI system reads 5 years of 10-K filings per issuer and converts them into structured, multi-year signals and dashboards—filings-sourced, delivered in hours.
+            CoreBrief’s AI system reads 5 years of 10-K filings per issuer and converts them into structured, multi-year signals and dashboards.
           </p>
 
           <div className="mt-6 md:mt-8 max-w-4xl mx-auto animate-in fade-in duration-600 delay-300">
@@ -208,58 +208,210 @@ export default function Home() {
       <div className="w-full px-4 py-8 md:py-16 bg-background border-y border-primary/10">
         <div className="mx-auto max-w-6xl">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 w-full">
-            <div className="bg-card border rounded-lg p-4 md:p-6 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 animate-in slide-in-from-bottom duration-600 delay-100 group">
-              <div className="w-10 h-10 md:w-12 md:h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-3 md:mb-4 transition-all duration-200 group-hover:bg-primary/20 group-hover:scale-110">
-                <svg className="w-5 h-5 md:w-6 md:h-6 text-primary transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+            <div className="bg-card border border-blue-500/20 rounded-lg p-4 md:p-6 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 animate-in slide-in-from-bottom duration-600 delay-100 group">
+              <div className="w-10 h-10 md:w-12 md:h-12 bg-blue-500/10 rounded-lg flex items-center justify-center mb-3 md:mb-4 transition-all duration-200 group-hover:bg-blue-500/20 group-hover:scale-110">
+                <svg className="w-5 h-5 md:w-6 md:h-6 text-blue-500 transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
                 </svg>
               </div>
-              <h3 className="font-semibold text-base md:text-lg mb-2 md:mb-3 text-primary">Multi-Year Trend Analysis</h3>
-              <p className="text-muted-foreground text-sm leading-relaxed">
-              Distills five filing years into dashboards of growth, margin trajectory, cash conversion, leverage, and payout coverage 
-              (AFFO/FFO, SSNOI, DCF where applicable)—separating cyclical swings from structural change.
+              <h3 className="font-semibold text-base md:text-lg mb-3 md:mb-4 text-blue-600">Multi-Year Trend Analysis</h3>
+              <p className="text-muted-foreground text-sm leading-relaxed mb-3">
+                Distills five filing years into comprehensive dashboards:
               </p>
+              <ul className="space-y-1 text-sm text-muted-foreground">
+                <li className="flex items-center gap-2">
+                  <div className="w-1 h-1 bg-blue-500 rounded-full flex-shrink-0"></div>
+                  Growth & margin trajectory
+                </li>
+                <li className="flex items-center gap-2">
+                  <div className="w-1 h-1 bg-blue-500 rounded-full flex-shrink-0"></div>
+                  Cash conversion & leverage
+                </li>
+                <li className="flex items-center gap-2">
+                  <div className="w-1 h-1 bg-blue-500 rounded-full flex-shrink-0"></div>
+                  Payout coverage (AFFO/FFO, SSNOI, DCF)
+                </li>
+                <li className="flex items-center gap-2">
+                  <div className="w-1 h-1 bg-blue-500 rounded-full flex-shrink-0"></div>
+                  Cyclical vs. structural change patterns
+                </li>
+              </ul>
             </div>
 
-            <div className="bg-card border rounded-lg p-4 md:p-6 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 animate-in slide-in-from-bottom duration-600 delay-200 group">
-              <div className="w-10 h-10 md:w-12 md:h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-3 md:mb-4 transition-all duration-200 group-hover:bg-primary/20 group-hover:scale-110">
-                <svg className="w-5 h-5 md:w-6 md:h-6 text-primary transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="bg-card border border-emerald-500/20 rounded-lg p-4 md:p-6 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 animate-in slide-in-from-bottom duration-600 delay-200 group">
+              <div className="w-10 h-10 md:w-12 md:h-12 bg-emerald-500/10 rounded-lg flex items-center justify-center mb-3 md:mb-4 transition-all duration-200 group-hover:bg-emerald-500/20 group-hover:scale-110">
+                <svg className="w-5 h-5 md:w-6 md:h-6 text-emerald-500 transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                 </svg>
               </div>
-              <h3 className="font-semibold text-base md:text-lg mb-2 md:mb-3 text-primary">Management Credibility</h3>
-              <p className="text-muted-foreground text-sm leading-relaxed">
-              Assesses promise–follow-through, disclosure hygiene, risk candor, guidance consistency, and capital allocation discipline—yielding clear, backward-looking credibility signals.
-
+              <h3 className="font-semibold text-base md:text-lg mb-3 md:mb-4 text-emerald-600">Management Credibility</h3>
+              <p className="text-muted-foreground text-sm leading-relaxed mb-3">
+                Backward-looking credibility assessment across key dimensions:
               </p>
+              <ul className="space-y-1 text-sm text-muted-foreground">
+                <li className="flex items-center gap-2">
+                  <div className="w-1 h-1 bg-emerald-500 rounded-full flex-shrink-0"></div>
+                  Promise–follow-through tracking
+                </li>
+                <li className="flex items-center gap-2">
+                  <div className="w-1 h-1 bg-emerald-500 rounded-full flex-shrink-0"></div>
+                  Disclosure hygiene & risk candor
+                </li>
+                <li className="flex items-center gap-2">
+                  <div className="w-1 h-1 bg-emerald-500 rounded-full flex-shrink-0"></div>
+                  Guidance consistency patterns
+                </li>
+                <li className="flex items-center gap-2">
+                  <div className="w-1 h-1 bg-emerald-500 rounded-full flex-shrink-0"></div>
+                  Capital allocation discipline
+                </li>
+              </ul>
             </div>
 
-            <div className="bg-card border rounded-lg p-4 md:p-6 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 animate-in slide-in-from-bottom duration-600 delay-300 group">
-              <div className="w-10 h-10 md:w-12 md:h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-3 md:mb-4 transition-all duration-200 group-hover:bg-primary/20 group-hover:scale-110">
-                <svg className="w-5 h-5 md:w-6 md:h-6 text-primary transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="bg-card border border-amber-500/20 rounded-lg p-4 md:p-6 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 animate-in slide-in-from-bottom duration-600 delay-300 group">
+              <div className="w-10 h-10 md:w-12 md:h-12 bg-amber-500/10 rounded-lg flex items-center justify-center mb-3 md:mb-4 transition-all duration-200 group-hover:bg-amber-500/20 group-hover:scale-110">
+                <svg className="w-5 h-5 md:w-6 md:h-6 text-amber-500 transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
                 </svg>
               </div>
-              <h3 className="font-semibold text-base md:text-lg mb-2 md:mb-3 text-primary">Forward-Looking Analysis</h3>
-              <p className="text-muted-foreground text-sm leading-relaxed">
-              Calibrated Base/Up/Down cases derived from multi-year signals, detailing outcomes for growth, margin, cash, capex, leverage, diversification, 
-              and dividend/distribution stance—plus falsifiers and leading indicators.
+              <h3 className="font-semibold text-base md:text-lg mb-3 md:mb-4 text-amber-600">Forward-Looking Analysis</h3>
+              <p className="text-muted-foreground text-sm leading-relaxed mb-3">
+                Calibrated Base/Up/Down scenarios with detailed outcome modeling:
               </p>
+              <ul className="space-y-1 text-sm text-muted-foreground">
+                <li className="flex items-center gap-2">
+                  <div className="w-1 h-1 bg-amber-500 rounded-full flex-shrink-0"></div>
+                  Growth, margin & cash projections
+                </li>
+                <li className="flex items-center gap-2">
+                  <div className="w-1 h-1 bg-amber-500 rounded-full flex-shrink-0"></div>
+                  Capex, leverage & diversification paths
+                </li>
+                <li className="flex items-center gap-2">
+                  <div className="w-1 h-1 bg-amber-500 rounded-full flex-shrink-0"></div>
+                  Dividend/distribution stance scenarios
+                </li>
+                <li className="flex items-center gap-2">
+                  <div className="w-1 h-1 bg-amber-500 rounded-full flex-shrink-0"></div>
+                  Falsifiers & leading indicators
+                </li>
+              </ul>
             </div>
           </div>
         </div>
       </div>
 
       {/* Synthesis / Output */}
-      <div className="w-full px-4 py-8 md:py-16 bg-primary">
+      <div className="w-full px-4 py-8 md:py-16 bg-background">
         <div className="mx-auto max-w-4xl">
-          <div className="text-center animate-in fade-in duration-600">
-            <h3 className="text-xl md:text-2xl font-semibold mb-3 md:mb-4 text-primary-foreground">
-              Executive Synthesis
-            </h3>
-            <p className="text-primary-foreground/90 text-base md:text-lg leading-relaxed mb-4 md:mb-6 px-2">
-              One consolidated dashboard from filing-sourced signals: multi-year trends, management credibility, and Base/Up/Down scenarios—with one-click export to structured JSON for your workflow.
-            </p>
+          <div className="bg-primary rounded-lg p-6 md:p-8 shadow-lg animate-in fade-in duration-600">
+            {/* Data Ingestion Layer */}
+            <div className="mb-6 md:mb-8">
+              <div className="text-center mb-4">
+                <div className="text-xs md:text-sm text-primary-foreground/70 mb-2">Data Ingestion</div>
+                <div className="text-sm md:text-base font-medium text-primary-foreground">5 Years × Complete 10-K Filings</div>
+              </div>
+              
+              {/* Visual representation of massive data */}
+              <div className="relative bg-primary-foreground/5 rounded-lg p-4 mb-4 overflow-hidden">
+                <div className="grid grid-cols-8 md:grid-cols-12 gap-1 opacity-60">
+                  {Array.from({length: 96}).map((_, i) => (
+                    <div key={i} className={`h-1 rounded-full bg-primary-foreground/20 ${i % 7 === 0 ? 'bg-primary-foreground/40' : ''} ${i % 13 === 0 ? 'h-2' : ''}`}></div>
+                  ))}
+                </div>
+                <div className="absolute inset-0 bg-gradient-to-r from-primary-foreground/10 via-transparent to-primary-foreground/10 pointer-events-none"></div>
+                <div className="absolute top-2 left-2 right-2 flex justify-between text-xs text-primary-foreground/50">
+                  <span>2019</span>
+                  <span>2020</span>
+                  <span>2021</span>
+                  <span>2022</span>
+                  <span>2023</span>
+                </div>
+              </div>
+
+              {/* Processing indicator */}
+              <div className="flex justify-center items-center gap-2 text-xs text-primary-foreground/60">
+                <div className="flex gap-1">
+                  <div className="w-1 h-1 bg-primary-foreground/40 rounded-full animate-pulse"></div>
+                  <div className="w-1 h-1 bg-primary-foreground/40 rounded-full animate-pulse" style={{animationDelay: '0.2s'}}></div>
+                  <div className="w-1 h-1 bg-primary-foreground/40 rounded-full animate-pulse" style={{animationDelay: '0.4s'}}></div>
+                </div>
+                <span>Processing complete filings</span>
+                <div className="flex gap-1">
+                  <div className="w-1 h-1 bg-primary-foreground/40 rounded-full animate-pulse" style={{animationDelay: '0.6s'}}></div>
+                  <div className="w-1 h-1 bg-primary-foreground/40 rounded-full animate-pulse" style={{animationDelay: '0.8s'}}></div>
+                  <div className="w-1 h-1 bg-primary-foreground/40 rounded-full animate-pulse" style={{animationDelay: '1s'}}></div>
+                </div>
+              </div>
+            </div>
+
+            {/* Arrow Down to Analysis */}
+            <div className="flex justify-center mb-4 md:mb-6">
+              <div className="flex flex-col items-center gap-1">
+                <div className="w-px h-3 md:h-4 bg-primary-foreground/30"></div>
+                <svg className="w-4 h-4 md:w-5 md:h-5 text-primary-foreground/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                </svg>
+                <div className="w-px h-3 md:h-4 bg-primary-foreground/30"></div>
+              </div>
+            </div>
+
+            {/* Input Sources */}
+            <div className="flex flex-wrap justify-center gap-4 md:gap-8 mb-4 md:mb-6">
+              <div className="flex items-center gap-2 bg-blue-500/10 border border-blue-500/20 rounded-full px-3 py-1 text-xs md:text-sm text-blue-100">
+                <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
+                Multi-Year Trends
+              </div>
+              <div className="flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/20 rounded-full px-3 py-1 text-xs md:text-sm text-emerald-100">
+                <div className="w-2 h-2 bg-emerald-400 rounded-full"></div>
+                Management Credibility
+              </div>
+              <div className="flex items-center gap-2 bg-amber-500/10 border border-amber-500/20 rounded-full px-3 py-1 text-xs md:text-sm text-amber-100">
+                <div className="w-2 h-2 bg-amber-400 rounded-full"></div>
+                Forward-Looking Analysis
+              </div>
+            </div>
+
+            {/* Arrow Down */}
+            <div className="flex justify-center mb-4 md:mb-6">
+              <div className="flex flex-col items-center gap-1">
+                <div className="w-px h-4 md:h-6 bg-primary-foreground/30"></div>
+                <svg className="w-5 h-5 md:w-6 md:h-6 text-primary-foreground/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                </svg>
+                <div className="w-px h-4 md:h-6 bg-primary-foreground/30"></div>
+              </div>
+            </div>
+
+            {/* Synthesis Output */}
+            <div className="text-center">
+              <h3 className="text-xl md:text-2xl font-semibold mb-3 md:mb-4 text-primary-foreground">
+                Multi-Agent Business Thesis Synthesis
+              </h3>
+              <p className="text-primary-foreground/90 text-base md:text-lg leading-relaxed mb-4 md:mb-6 px-2">
+                A synthesis agent reconciles findings from all three analyses into executive-level business intelligence with quantified confidence, scenario bridges, and operational watchlists.
+              </p>
+              
+              {/* Output Features */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mt-6">
+                <div className="bg-primary-foreground/10 border border-primary-foreground/20 rounded-lg p-3 text-center">
+                  <div className="text-xs md:text-sm font-medium text-primary-foreground mb-1">Viability Assessment</div>
+                  <div className="text-xs text-primary-foreground/80">Quantified scoring</div>
+                </div>
+                <div className="bg-primary-foreground/10 border border-primary-foreground/20 rounded-lg p-3 text-center">
+                  <div className="text-xs md:text-sm font-medium text-primary-foreground mb-1">Scenario Bridges</div>
+                  <div className="text-xs text-primary-foreground/80">Base/Up/Down cases</div>
+                </div>
+                <div className="bg-primary-foreground/10 border border-primary-foreground/20 rounded-lg p-3 text-center">
+                  <div className="text-xs md:text-sm font-medium text-primary-foreground mb-1">Operational Watchlist</div>
+                  <div className="text-xs text-primary-foreground/80">Leading indicators</div>
+                </div>
+                <div className="bg-primary-foreground/10 border border-primary-foreground/20 rounded-lg p-3 text-center">
+                  <div className="text-xs md:text-sm font-medium text-primary-foreground mb-1">Consensus Mapping</div>
+                  <div className="text-xs text-primary-foreground/80">Agreement & tensions</div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -271,7 +423,7 @@ export default function Home() {
             Purpose-Built for Your Asset Class
           </h2>
           <p className="text-base md:text-lg lg:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed mb-8 md:mb-16 px-2 animate-in slide-in-from-bottom duration-600 delay-100">
-            Domain-tuned agents and schemas for dividend & distribution-paying companies—covering general equities, REITs, and MLPs.
+            Domain-tuned agents and schemas for dividend & distribution-paying companies, including general equities, REITs, and MLPs.
           </p>
 
           {/* Asset Class Options */}
@@ -286,7 +438,7 @@ export default function Home() {
               <div className="flex-1">
                 <h3 className="text-lg md:text-xl font-semibold mb-2 md:mb-3 text-primary">CoreBrief Equities</h3>
                 <p className="text-muted-foreground mb-3 md:mb-4 leading-relaxed text-sm md:text-base">
-                  Evaluates payout durability, capital allocation discipline, disclosure consistency, and multi-cycle downside patterns—turning filings into consistent, comparable dashboards.
+                  Evaluates payout durability, capital allocation discipline, disclosure consistency, and multi-cycle downside patterns.
                 </p>
                 <div className="flex flex-wrap gap-2">
                   <span className="px-2 md:px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs md:text-sm transition-all duration-200 hover:bg-green-200">Payout Coverage</span>
@@ -307,7 +459,7 @@ export default function Home() {
               <div className="flex-1">
                 <h3 className="text-lg md:text-xl font-semibold mb-2 md:mb-3 text-primary">CoreBrief REITs</h3>
                 <p className="text-muted-foreground mb-3 md:mb-4 leading-relaxed text-sm md:text-base">
-                  Maps AFFO/FFO coverage, lease profile (WALT & rollover), tenant concentration, SSNOI trend, and rate/refinancing sensitivity—built for property-level nuance.
+                  Maps AFFO/FFO coverage, lease profile (WALT & rollover), tenant concentration, SSNOI trend, and rate/refinancing sensitivity. Built for property-level nuance.
                 </p>
                 <div className="flex flex-wrap gap-2">
                   <span className="px-2 md:px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs md:text-sm transition-all duration-200 hover:bg-blue-200">AFFO/FFO Coverage</span>
@@ -328,7 +480,7 @@ export default function Home() {
               <div className="flex-1">
                 <h3 className="text-lg md:text-xl font-semibold mb-2 md:mb-3 text-primary">CoreBrief MLPs</h3>
                 <p className="text-muted-foreground mb-3 md:mb-4 leading-relaxed text-sm md:text-base">
-                  Assesses DCF coverage, fee-based exposure, contract quality (MVC & tenor), basin momentum, and leverage/liquidity—tailored to midstream structures.
+                  Assesses DCF coverage, fee-based exposure, contract quality (MVC & tenor), basin momentum, and leverage/liquidity. Tailored to midstream structures.
                 </p>
                 <div className="flex flex-wrap gap-2">
                   <span className="px-2 md:px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-xs md:text-sm transition-all duration-200 hover:bg-purple-200">DCF Coverage</span>
@@ -348,7 +500,7 @@ export default function Home() {
           <div className="text-center mb-4">
             <div className="inline-flex items-center gap-2 bg-primary-foreground/20 text-primary-foreground text-xs md:text-sm px-3 py-1 rounded-full mb-4">
               <div className="w-2 h-2 bg-primary-foreground rounded-full animate-pulse"></div>
-              Limited Early Access • 50% Discount Ending Soon
+              Limited Early Access • Discount Pricing Ending Soon
             </div>
           </div>
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary-foreground mb-4 md:mb-6 text-center">
@@ -384,7 +536,7 @@ export default function Home() {
                   </svg>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-primary-foreground mb-1 text-sm md:text-base">50% Discount</h4>
+                  <h4 className="font-semibold text-primary-foreground mb-1 text-sm md:text-base">Discount Pricing</h4>
                   <p className="text-primary-foreground/80 text-xs md:text-sm">Exclusive pricing for early adopters</p>
                 </div>
               </div>
