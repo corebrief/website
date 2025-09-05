@@ -97,6 +97,7 @@ export const signUpAction = async (formData: FormData) => {
   // Privacy preferences
   const marketingConsent = formData.get("marketing_consent") === "on";
   const termsAgreement = formData.get("terms_agreement") === "on";
+  const professionalUse = formData.get("professional_use") === "on";
   
   // Basic validation - check required fields
   if (!email || !password || !fullName || !organizationType) {
@@ -106,6 +107,11 @@ export const signUpAction = async (formData: FormData) => {
   // Check terms agreement
   if (!termsAgreement) {
     return encodedRedirect("error", "/sign-up", "You must agree to the Terms of Service and Privacy Policy");
+  }
+
+  // Check professional use confirmation
+  if (!professionalUse) {
+    return encodedRedirect("error", "/sign-up", "You must confirm this account is for professional research purposes");
   }
 
   const client = await createSupabaseClient();
@@ -145,6 +151,7 @@ export const signUpAction = async (formData: FormData) => {
         referral_code: referralCode || null,
         marketing_consent: marketingConsent,
         terms_agreement: termsAgreement,
+        professional_use: professionalUse,
         communication_preferences: {
           email_updates: true,
           research_reports: true,
