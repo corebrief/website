@@ -7,8 +7,8 @@ export default function PrivacyPolicy() {
         <h1 className="text-4xl font-bold text-primary mb-8">Privacy Policy</h1>
         
         <p className="text-muted-foreground mb-8">
-          <strong>Effective Date:</strong> {new Date().toLocaleDateString()}<br />
-          <strong>Last Updated:</strong> {new Date().toLocaleDateString()}
+          <strong>Effective Date:</strong> September 4, 2025<br />
+          <strong>Last Updated:</strong> September 4, 2025
         </p>
 
         <div className="space-y-8 text-sm leading-relaxed">
@@ -35,10 +35,11 @@ export default function PrivacyPolicy() {
             <p>When you register for alpha access or use our services, we collect:</p>
             <ul className="list-disc ml-6 mt-2 space-y-1">
               <li><strong>Contact Information:</strong> Full name, email address, phone number</li>
-              <li><strong>Organization Details:</strong> Organization name, organization type (including single-family office, multi-family office, RIA, asset manager, or individual investor), your role/title</li>
-              <li><strong>Business Information:</strong> Assets under management range, investment focus, current research providers</li>
+              <li><strong>Organization Details:</strong> Organization name, organization type (including family office, RIA, asset manager, individual professional, or financial advisor), your role/title</li>
+              <li><strong>Business Information:</strong> Investment portfolio size, research focus areas, current research providers</li>
               <li><strong>Referral Information:</strong> How you heard about us, referral codes from partners</li>
               <li><strong>Account Information:</strong> Login credentials, subscription preferences, service configurations</li>
+              <li><strong>Professional Use Confirmation:</strong> Acknowledgment that services are used for professional research purposes</li>
               <li><strong>Communications:</strong> Messages, inquiries, and feedback you send to us</li>
             </ul>
 
@@ -223,10 +224,10 @@ export default function PrivacyPolicy() {
           <section>
             <h2 className="text-2xl font-semibold text-primary mb-4">9. Children&apos;s Privacy</h2>
             <p>
-              Our services are designed exclusively for professional investors and financial advisors. We do not knowingly 
-              collect personal information from individuals under 18 years of age (or the applicable age of majority in 
-              their jurisdiction). If we become aware that we have collected information from a minor, we will take 
-              immediate steps to delete such information.
+              Our services are designed exclusively for investment professionals, financial advisors, and individual 
+              professionals conducting research. We do not knowingly collect personal information from 
+              individuals under 18 years of age (or the applicable age of majority in their jurisdiction). If we become 
+              aware that we have collected information from a minor, we will take immediate steps to delete such information.
             </p>
           </section>
 

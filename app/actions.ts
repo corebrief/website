@@ -104,7 +104,7 @@ export const signUpAction = async (formData: FormData) => {
   const marketingConsent = formData.get("marketing_consent") === "on";
   
   // Basic validation - check required fields
-  if (!email || !password || !fullName || !organizationName || !organizationType || !roleTitle) {
+  if (!email || !password || !fullName || !organizationType) {
     return encodedRedirect("error", "/sign-up", "Please fill in all required fields (marked with *)");
   }
 

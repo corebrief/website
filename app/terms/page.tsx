@@ -7,8 +7,8 @@ export default function TermsOfService() {
         <h1 className="text-4xl font-bold text-primary mb-8">Terms of Service</h1>
         
         <p className="text-muted-foreground mb-8">
-          <strong>Effective Date:</strong> {new Date().toLocaleDateString()}<br />
-          <strong>Last Updated:</strong> {new Date().toLocaleDateString()}
+          <strong>Effective Date:</strong> September 4, 2025<br />
+          <strong>Last Updated:</strong> September 4, 2025
         </p>
 
         <div className="space-y-12 text-sm leading-relaxed">
@@ -32,7 +32,7 @@ export default function TermsOfService() {
               <strong>&ldquo;Services&rdquo;</strong> refers to CoreBrief&apos;s equity research tools, content, and platform, including all analysis, reports, and related features.
             </p>
             <p className="mt-2">
-              <strong>&ldquo;User&rdquo;</strong> means any person or entity accessing or using the Services, including authorized representatives of institutional clients.
+              <strong>&ldquo;User&rdquo;</strong> means any person or entity accessing or using the Services, including authorized representatives of institutional clients and independent professionals conducting research.
             </p>
           </section>
 
@@ -41,13 +41,13 @@ export default function TermsOfService() {
             <h2 className="text-2xl font-semibold text-primary mb-4">3. Service Description</h2>
             <p>
               CoreBrief provides institutional-quality equity analysis and research services designed for family offices, 
-              registered investment advisors (RIAs), and professional investors. Our services include:
+              registered investment advisors (RIAs), and independent professionals. Our services include:
             </p>
             <ul className="list-disc ml-6 mt-2 space-y-1">
               <li>Multi-agent AI-powered equity analysis</li>
               <li>Investment research reports and summaries</li>
               <li>Historical trend analysis and forward-looking scenarios</li>
-              <li>Conservative suitability assessments</li>
+              <li>Research frameworks and analysis tools</li>
             </ul>
             <p className="mt-4">
               <strong>Important:</strong> Our services are for informational purposes only and do not constitute investment advice, 
@@ -77,8 +77,8 @@ export default function TermsOfService() {
                 future results. You should consult with qualified financial professionals before making investment decisions.
               </li>
               <li>
-                <strong>AI Limitations:</strong> Our AI methodologies are continually evaluated for accuracy and limitations. 
-                All research is subject to human review but may contain errors or omissions.
+                <strong>AI Limitations:</strong> Our AI methodologies are continually evaluated for accuracy and limitations 
+                but may contain errors or omissions. CoreBrief can make mistakes. Always verify information independently and consult qualified professionals before making investment decisions.
               </li>
             </ul>
           </section>
