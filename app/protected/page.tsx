@@ -30,40 +30,31 @@ export default async function ProtectedPage() {
   const formatOrgType = (type: string | null) => {
     if (!type) return "Not provided";
     const typeMap: Record<string, string> = {
+      'individual_investor': 'Individual Professional',
+      'financial_advisor': 'Financial Advisor',
       'family_office': 'Family Office',
       'ria': 'RIA (Registered Investment Advisor)',
       'asset_manager': 'Asset Manager',
-      'individual': 'Individual Investor',
+      'hedge_fund': 'Hedge Fund',
       'other': 'Other'
     };
     return typeMap[type] || type;
   };
 
-  // Helper function to format AUM range
-  const formatAumRange = (range: string | null) => {
-    if (!range) return "Not provided";
-    const rangeMap: Record<string, string> = {
-      'under_10m': 'Under $10M',
-      '10m_50m': '$10M - $50M',
-      '50m_250m': '$50M - $250M',
-      '250m_1b': '$250M - $1B',
-      'over_1b': 'Over $1B',
-      'prefer_not_to_say': 'Prefer not to say'
-    };
-    return rangeMap[range] || range;
-  };
-
-  // Helper function to format investment focus
-  const formatInvestmentFocus = (focus: string | null) => {
-    if (!focus) return "Not provided";
-    const focusMap: Record<string, string> = {
-      'conservative_income': 'Conservative Income',
-      'growth': 'Growth',
-      'balanced': 'Balanced',
-      'value': 'Value',
+  // Helper function to format referral source
+  const formatReferralSource = (source: string | null) => {
+    if (!source) return "Not provided";
+    const sourceMap: Record<string, string> = {
+      'google': 'Google Search',
+      'linkedin': 'LinkedIn',
+      'twitter': 'Twitter/X',
+      'social_media': 'Other Social Media',
+      'partner_referral': 'Partner/Integration',
+      'professional_referral': 'Professional Referral',
+      'direct': 'Direct/Website',
       'other': 'Other'
     };
-    return focusMap[focus] || focus;
+    return sourceMap[source] || source;
   };
 
   return (
@@ -91,10 +82,6 @@ export default async function ProtectedPage() {
               <div className="text-muted-foreground">Email</div>
               <div>{user?.email}</div>
             </div>
-            <div className="grid grid-cols-[140px_1fr]">
-              <div className="text-muted-foreground">Phone Number</div>
-              <div>{displayField(profile?.phone_number)}</div>
-            </div>
           </div>
         </div>
 
@@ -110,41 +97,16 @@ export default async function ProtectedPage() {
               <div className="text-muted-foreground">Organization Type</div>
               <div>{formatOrgType(profile?.organization_type)}</div>
             </div>
-            <div className="grid grid-cols-[140px_1fr]">
-              <div className="text-muted-foreground">Your Role/Title</div>
-              <div>{displayField(profile?.role_title)}</div>
-            </div>
-            <div className="grid grid-cols-[140px_1fr]">
-              <div className="text-muted-foreground">Assets Under Management</div>
-              <div>{formatAumRange(profile?.aum_range)}</div>
-            </div>
           </div>
         </div>
 
-        {/* Investment Profile */}
+        {/* Referral Information */}
         <div className="border rounded-lg p-6 space-y-4">
-          <h2 className="font-medium text-lg text-primary border-b pb-2">Investment Profile</h2>
+          <h2 className="font-medium text-lg text-primary border-b pb-2">Referral Information</h2>
           <div className="grid gap-3 text-sm">
             <div className="grid grid-cols-[140px_1fr]">
-              <div className="text-muted-foreground">Investment Focus</div>
-              <div>{formatInvestmentFocus(profile?.investment_focus)}</div>
-            </div>
-            <div className="grid grid-cols-[140px_1fr]">
-              <div className="text-muted-foreground">Asset Classes</div>
-              <div>
-                {profile?.primary_asset_classes && profile.primary_asset_classes.length > 0 
-                  ? profile.primary_asset_classes.join(', ')
-                  : <span className="text-muted-foreground italic">Not provided</span>
-                }
-              </div>
-            </div>
-            <div className="grid grid-cols-[140px_1fr]">
-              <div className="text-muted-foreground">Research Providers</div>
-              <div>{displayField(profile?.current_research_providers)}</div>
-            </div>
-            <div className="grid grid-cols-[140px_1fr]">
               <div className="text-muted-foreground">How You Found Us</div>
-              <div>{displayField(profile?.referral_source)}</div>
+              <div>{formatReferralSource(profile?.referral_source)}</div>
             </div>
             <div className="grid grid-cols-[140px_1fr]">
               <div className="text-muted-foreground">Referral Code</div>
@@ -192,10 +154,27 @@ export default async function ProtectedPage() {
           <h2 className="font-medium text-lg text-primary border-b pb-2">Privacy & Data Management</h2>
           <div className="grid gap-3 text-sm">
             <div className="grid grid-cols-[140px_1fr]">
+              <div className="text-muted-foreground">Terms Agreement</div>
+              <div className="flex items-center gap-2">
+                <div className={`w-2 h-2 rounded-full ${profile?.terms_agreement ? 'bg-green-500' : 'bg-red-500'}`}></div>
+                {profile?.terms_agreement ? 'Agreed' : 'Not Agreed'}
+                {profile?.terms_agreed_at && (
+                  <span className="text-xs text-muted-foreground ml-2">
+                    ({new Date(profile.terms_agreed_at).toLocaleDateString()})
+                  </span>
+                )}
+              </div>
+            </div>
+            <div className="grid grid-cols-[140px_1fr]">
               <div className="text-muted-foreground">Marketing Consent</div>
               <div className="flex items-center gap-2">
                 <div className={`w-2 h-2 rounded-full ${profile?.marketing_consent ? 'bg-green-500' : 'bg-gray-400'}`}></div>
                 {profile?.marketing_consent ? 'Enabled' : 'Disabled'}
+                {profile?.marketing_consent_date && (
+                  <span className="text-xs text-muted-foreground ml-2">
+                    ({new Date(profile.marketing_consent_date).toLocaleDateString()})
+                  </span>
+                )}
               </div>
             </div>
             <div className="grid grid-cols-[140px_1fr]">
@@ -236,9 +215,10 @@ export default async function ProtectedPage() {
               </div>
             </div>
             <div className="grid grid-cols-[140px_1fr]">
-              <div className="text-muted-foreground">Position</div>
+              <div className="text-muted-foreground">Status</div>
               <div>
-                {profile?.waitlist_position ? `#${profile.waitlist_position}` : 'TBD'}
+                {profile?.waitlist_status === 'approved' ? 'Approved for Early Access' :
+                 profile?.waitlist_status === 'pending' ? 'On Waitlist' : 'Not Requested'}
               </div>
             </div>
             <div className="grid grid-cols-[140px_1fr] items-start">

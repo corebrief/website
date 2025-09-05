@@ -70,13 +70,7 @@ export default function WaitlistStatus({ profile, requests }: WaitlistStatusProp
           </div>
         </div>
         
-        <div className="grid md:grid-cols-3 gap-4 text-sm">
-          <div>
-            <p className="text-muted-foreground">Position</p>
-            <p className="font-medium text-lg">
-              {profile.waitlist_position ? `#${profile.waitlist_position}` : 'TBD'}
-            </p>
-          </div>
+        <div className="grid md:grid-cols-2 gap-4 text-sm">
           <div>
             <p className="text-muted-foreground">Joined</p>
             <p className="font-medium">
@@ -114,11 +108,10 @@ export default function WaitlistStatus({ profile, requests }: WaitlistStatusProp
           </div>
         )}
 
-        {profile.waitlist_status === 'pending' && profile.waitlist_position && (
+        {profile.waitlist_status === 'pending' && (
           <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
             <p className="text-sm text-blue-800">
-              <strong>Good news!</strong> You&apos;re #{profile.waitlist_position} on our waitlist. 
-              We&apos;ll notify you as we expand access to more users.
+              <strong>You&apos;re on the waitlist!</strong> We&apos;ll notify you as we expand access to more users based on your organization type and use case.
             </p>
           </div>
         )}
