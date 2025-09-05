@@ -8,13 +8,13 @@ export default function Home() {
       <div className="w-full px-4 py-8 md:py-16 bg-gradient-to-b from-background to-muted/20">
         <div className="mx-auto max-w-4xl flex flex-col items-center text-center">
           <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold text-primary !leading-tight mb-6 md:mb-8 animate-in fade-in duration-700">
-            Longitudinal Equity Intelligence,
+            Multi-Year Equity Intelligence,
             <br />
             Delivered in Hours
           </h1>
           
           <p className="text-base md:text-lg lg:text-xl text-muted-foreground max-w-3xl mb-8 md:mb-12 leading-relaxed px-2 animate-in fade-in duration-700 delay-200">
-            CoreBrief’s Agential AI turns five years of SEC filings per issuer into structured, comparable dashboards—deep research in hours, not weeks.
+            CoreBrief’s parsing system and AI agent fleet turns five years of SEC filings per issuer into structured, comparable dashboards—deep research in hours, not weeks.
           </p>
 
           <Button size="lg" className="text-base md:text-lg px-6 md:px-8 py-4 md:py-6 mb-12 md:mb-24 animate-in fade-in duration-700 delay-300 hover:scale-105 transition-all duration-200" asChild>
@@ -65,19 +65,90 @@ export default function Home() {
         </div>
       </div>
 
+            {/* Comparison: Not Just Uploading to an LLM */}
+      <div className="w-full px-4 py-8 md:py-16 bg-muted/30 border-y">
+        <div className="mx-auto max-w-5xl">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary mb-4 md:mb-6 text-center">
+          Beyond Generic AI File Upload Tools
+          </h2>
+          <p className="text-base md:text-lg text-muted-foreground max-w-3xl mx-auto text-center mb-8 md:mb-12 leading-relaxed px-2">
+            Generic &quot;upload to an LLM&quot; tools hit token limits and give inconsistent results. 
+            CoreBrief processes complete filings into structured, comparable research—specialized for dividend & distribution-paying companies.
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+            {/* Generic File-Chat */}
+            <div className="bg-card border-2 border-red-100 rounded-lg p-4 md:p-6 shadow-sm">
+              <div className="flex items-center gap-2 mb-3 md:mb-4">
+                <div className="w-6 h-6 bg-red-100 rounded-full flex items-center justify-center">
+                  <svg className="w-4 h-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </div>
+                <h3 className="font-semibold text-base md:text-lg text-primary">Standard AI File Upload</h3>
+              </div>
+              <ul className="space-y-2 text-sm md:text-base text-muted-foreground">
+                <li className="flex items-start gap-2">
+                  <span className="text-red-500 mt-1">✗</span>
+                  <span>Partial filing coverage (lossy ingestion, token limits)</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-red-500 mt-1">✗</span>
+                  <span>Inconsistent outputs by company</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-red-500 mt-1">✗</span>
+                  <span>Ad-hoc chat responses</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-red-500 mt-1">✗</span>
+                  <span>No structured export</span>
+                </li>
+              </ul>
+            </div>
+
+            {/* CoreBrief's AI System*/}
+            <div className="bg-card border-2 border-green-100 rounded-lg p-4 md:p-6 shadow-sm">
+              <div className="flex items-center gap-2 mb-3 md:mb-4">
+                <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center">
+                  <svg className="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+                <h3 className="font-semibold text-base md:text-lg text-primary">CoreBrief's Structured AI Workflow</h3>
+              </div>
+              <ul className="space-y-2 text-sm md:text-base text-muted-foreground">
+                <li className="flex items-start gap-2">
+                  <span className="text-green-600 mt-1">✓</span>
+                  <span>Complete 10-K processing</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-green-600 mt-1">✓</span>
+                  <span>Dividend/distribution-focused metrics (AFFO, DCF, payout ratios)</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-green-600 mt-1">✓</span>
+                  <span>Multi-year comparable dashboards</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-green-600 mt-1">✓</span>
+                  <span>Structured JSON</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+        </div>
+      </div>
       {/* Agential AI Section */}
       <div className="w-full px-4 py-8 md:py-16 bg-primary/5">
         <div className="mx-auto max-w-4xl flex flex-col items-center text-center">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary mb-4 md:mb-6 animate-in fade-in duration-600">
-            Domain-Aware Agential AI, Multi-Year Context
+            Domain-Aware Prompt Routing, Multi-Year Context
           </h2>
 
           <p className="text-base md:text-lg lg:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed px-2 animate-in fade-in duration-600 delay-100">
-            CoreBrief’s Agential AI reads ~5 years of SEC filings per issuer and converts them into structured, multi-year signals and dashboards—filings-only, delivered in hours.
-          </p>
-
-          <p className="text-xs md:text-sm text-muted-foreground max-w-2xl mx-auto mt-3 md:mt-4 px-2 animate-in fade-in duration-600 delay-200">
-            Historical-disclosure research only. CoreBrief can make mistakes. Always verify information independently and consult qualified professionals before making investment decisions. For informational purposes; not investment advice.
+            CoreBrief’s AI system reads 5 years of 10-K filings per issuer and converts them into structured, multi-year signals and dashboards—filings-sourced, delivered in hours.
           </p>
 
           <div className="mt-6 md:mt-8 max-w-4xl mx-auto animate-in fade-in duration-600 delay-300">
@@ -133,82 +204,6 @@ export default function Home() {
         </div>
       </div>
 
-            {/* Comparison: Not Just Uploading to an LLM */}
-      <div className="w-full px-4 py-8 md:py-16 bg-muted/30 border-y">
-        <div className="mx-auto max-w-5xl">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary mb-4 md:mb-6 text-center">
-          Beyond Generic AI File Upload Tools
-          </h2>
-          <p className="text-base md:text-lg text-muted-foreground max-w-3xl mx-auto text-center mb-8 md:mb-12 leading-relaxed px-2">
-            Generic &quot;upload to an LLM&quot; tools hit token limits and give inconsistent results. 
-            CoreBrief processes complete filings into structured, comparable research—specialized for dividend & distribution-paying companies.
-          </p>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-            {/* Generic File-Chat */}
-            <div className="bg-card border-2 border-red-100 rounded-lg p-4 md:p-6 shadow-sm">
-              <div className="flex items-center gap-2 mb-3 md:mb-4">
-                <div className="w-6 h-6 bg-red-100 rounded-full flex items-center justify-center">
-                  <svg className="w-4 h-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </div>
-                <h3 className="font-semibold text-base md:text-lg text-primary">Standard AI File Upload</h3>
-              </div>
-              <ul className="space-y-2 text-sm md:text-base text-muted-foreground">
-                <li className="flex items-start gap-2">
-                  <span className="text-red-500 mt-1">✗</span>
-                  <span>Partial filing coverage (lossy ingestion, token limits)</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-red-500 mt-1">✗</span>
-                  <span>Inconsistent outputs by company</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-red-500 mt-1">✗</span>
-                  <span>Ad-hoc chat responses</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-red-500 mt-1">✗</span>
-                  <span>No structured export</span>
-                </li>
-              </ul>
-            </div>
-
-            {/* CoreBrief Agential AI */}
-            <div className="bg-card border-2 border-green-100 rounded-lg p-4 md:p-6 shadow-sm">
-              <div className="flex items-center gap-2 mb-3 md:mb-4">
-                <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center">
-                  <svg className="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                </div>
-                <h3 className="font-semibold text-base md:text-lg text-primary">CoreBrief Agential AI</h3>
-              </div>
-              <ul className="space-y-2 text-sm md:text-base text-muted-foreground">
-                <li className="flex items-start gap-2">
-                  <span className="text-green-600 mt-1">✓</span>
-                  <span>Complete 10-K processing</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-green-600 mt-1">✓</span>
-                  <span>Dividend/distribution-focused metrics (AFFO, DCF, payout ratios)</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-green-600 mt-1">✓</span>
-                  <span>Multi-year comparable dashboards</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-green-600 mt-1">✓</span>
-                  <span>Structured JSON</span>
-                </li>
-              </ul>
-            </div>
-          </div>
-
-        </div>
-      </div>
-
       {/* AI Features Grid */}
       <div className="w-full px-4 py-8 md:py-16 bg-background border-y border-primary/10">
         <div className="mx-auto max-w-6xl">
@@ -248,7 +243,7 @@ export default function Home() {
               <h3 className="font-semibold text-base md:text-lg mb-2 md:mb-3 text-primary">Forward-Looking Analysis</h3>
               <p className="text-muted-foreground text-sm leading-relaxed">
               Calibrated Base/Up/Down cases derived from multi-year signals, detailing outcomes for growth, margin, cash, capex, leverage, diversification, 
-              and dividend/distribution stance—plus falsifiers and leading indicators. CoreBrief can make mistakes. Always verify information independently and consult qualified professionals before making investment decisions. Not investment advice.
+              and dividend/distribution stance—plus falsifiers and leading indicators.
               </p>
             </div>
           </div>
@@ -264,9 +259,6 @@ export default function Home() {
             </h3>
             <p className="text-primary-foreground/90 text-base md:text-lg leading-relaxed mb-4 md:mb-6 px-2">
               One consolidated dashboard from filing-sourced signals: multi-year trends, management credibility, and Base/Up/Down scenarios—with one-click export to structured JSON for your workflow.
-            </p>
-            <p className="text-primary-foreground/70 text-xs md:text-sm max-w-2xl mx-auto px-2">
-              Filings-only research. CoreBrief can make mistakes. Always verify information independently and consult qualified professionals before making investment decisions. For informational purposes; not investment advice.
             </p>
           </div>
         </div>
