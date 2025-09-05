@@ -83,28 +83,6 @@ export default async function PrivacyDashboard() {
           </Card>
         </div>
 
-        {/* Marketing Consent Status */}
-        <Card className="p-6">
-          <h2 className="text-lg font-semibold mb-4 text-primary border-b pb-2">
-            Marketing Consent
-          </h2>
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium">
-                Marketing Communications: {profile?.marketing_consent ? 'Enabled' : 'Disabled'}
-              </p>
-              <p className="text-xs text-muted-foreground">
-                {profile?.marketing_consent 
-                  ? `Consent given on ${new Date(profile.marketing_consent_date).toLocaleDateString()}`
-                  : 'You have not consented to marketing communications'
-                }
-              </p>
-            </div>
-            <Button variant="outline" size="sm">
-              {profile?.marketing_consent ? 'Withdraw Consent' : 'Give Consent'}
-            </Button>
-          </div>
-        </Card>
 
         {/* Privacy Request History */}
         <Card className="p-6">
