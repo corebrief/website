@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { submitWaitlistRequest } from "@/app/waitlist-actions";
 
@@ -87,87 +86,6 @@ export default function WaitlistForm({ userId }: WaitlistFormProps) {
         />
       </div>
 
-      {/* Features of Interest */}
-      <div>
-        <Label htmlFor="requested_features">Which features are most important to you?</Label>
-        <div className="grid grid-cols-2 gap-2 mt-2">
-          {[
-            'AI-powered analysis',
-            'Risk assessment',
-            'Portfolio screening',
-            'Compliance reporting',
-            'API integration',
-            'Custom dashboards',
-            'ESG screening',
-            'Backtesting tools'
-          ].map((feature) => (
-            <label key={feature} className="flex items-center space-x-2 text-sm">
-              <input
-                type="checkbox"
-                name="requested_features"
-                value={feature}
-                className="rounded border-gray-300"
-              />
-              <span>{feature}</span>
-            </label>
-          ))}
-        </div>
-      </div>
-
-      {/* Team Size */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <Label htmlFor="team_size">Investment Team Size</Label>
-          <select
-            name="team_size"
-            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 mt-2"
-          >
-            <option value="">Select team size</option>
-            <option value="1">Solo practitioner</option>
-            <option value="2-5">2-5 people</option>
-            <option value="6-15">6-15 people</option>
-            <option value="16-50">16-50 people</option>
-            <option value="50+">50+ people</option>
-          </select>
-        </div>
-
-        <div>
-          <Label htmlFor="budget_range">Approximate Budget Range</Label>
-          <select
-            name="budget_range"
-            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 mt-2"
-          >
-            <option value="">Select budget range</option>
-            <option value="under_1k">Under $1,000/month</option>
-            <option value="1k_5k">$1,000 - $5,000/month</option>
-            <option value="5k_15k">$5,000 - $15,000/month</option>
-            <option value="15k_50k">$15,000 - $50,000/month</option>
-            <option value="over_50k">$50,000+/month</option>
-            <option value="enterprise">Enterprise pricing</option>
-          </select>
-        </div>
-      </div>
-
-      {/* Current Tools */}
-      <div>
-        <Label htmlFor="current_tools">Current Research Tools & Platforms</Label>
-        <Input
-          name="current_tools"
-          placeholder="e.g., Bloomberg Terminal, FactSet, Morningstar Direct, Internal Tools"
-          className="mt-2"
-        />
-      </div>
-
-      {/* Timeline */}
-      <div>
-        <Label htmlFor="timeline_urgency">Why is this timeline important to you?</Label>
-        <textarea
-          name="timeline_urgency"
-          rows={3}
-          placeholder="e.g., Expanding client base, replacing current tool, specific project deadline..."
-          className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 mt-2"
-        />
-      </div>
 
       {/* Submit Button */}
       <div className="pt-4">
