@@ -122,8 +122,7 @@ export default async function SignUp(props: {
             </div>
             <div>
               <strong>Research Tool Only:</strong> CoreBrief provides research and analysis tools for professionals. 
-              We do not provide investment advice, recommendations, or personalized guidance. 
-              This information helps us customize your research dashboard experience.
+              We do not provide investment advice, recommendations, or personalized guidance.
             </div>
           </div>
         </div>
