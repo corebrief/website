@@ -64,39 +64,39 @@ export default async function WaitlistPage() {
           </h2>
           <div className="grid md:grid-cols-2 gap-6">
             <div>
-              <h3 className="font-medium mb-2">🔬 AI-Powered Analysis</h3>
+              <h3 className="font-medium mb-2">🔬 Multi-Agent AI Research</h3>
               <ul className="text-sm text-muted-foreground space-y-1">
-                <li>• Multi-agent equity research reports</li>
-                <li>• Conservative suitability assessments</li>
-                <li>• Historical trend analysis</li>
+                <li>• 5-year 10-K filing analysis</li>
+                <li>• Multi-year trend dashboards</li>
+                <li>• Management credibility assessment</li>
                 <li>• Forward-looking scenario modeling</li>
               </ul>
             </div>
             <div>
-              <h3 className="font-medium mb-2">📊 Institutional Features</h3>
+              <h3 className="font-medium mb-2">📊 Specialized Asset Classes</h3>
               <ul className="text-sm text-muted-foreground space-y-1">
-                <li>• Custom portfolio screening</li>
-                <li>• Risk-adjusted performance metrics</li>
-                <li>• Regulatory compliance reporting</li>
-                <li>• API access for integration</li>
+                <li>• Dividend-paying equities analysis</li>
+                <li>• REIT-specific metrics (AFFO/FFO, WALT)</li>
+                <li>• MLP coverage (DCF, fee-based exposure)</li>
+                <li>• Structured JSON data export</li>
               </ul>
             </div>
             <div>
-              <h3 className="font-medium mb-2">🎯 Family Office Focus</h3>
+              <h3 className="font-medium mb-2">🎯 Domain-Aware Intelligence</h3>
               <ul className="text-sm text-muted-foreground space-y-1">
-                <li>• Conservative investment strategies</li>
-                <li>• Wealth preservation analysis</li>
-                <li>• ESG screening capabilities</li>
-                <li>• Multi-generational planning tools</li>
+                <li>• Payout coverage analysis</li>
+                <li>• Capital allocation tracking</li>
+                <li>• Disclosure quality assessment</li>
+                <li>• Multi-cycle pattern recognition</li>
               </ul>
             </div>
             <div>
               <h3 className="font-medium mb-2">⚡ Early Access Benefits</h3>
               <ul className="text-sm text-muted-foreground space-y-1">
-                <li>• 50% discount on first year</li>
+                <li>• Discount pricing for early adopters</li>
                 <li>• Priority feature requests</li>
                 <li>• Direct founder access</li>
-                <li>• Custom onboarding support</li>
+                <li>• Priority onboarding support</li>
               </ul>
             </div>
           </div>
