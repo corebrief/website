@@ -20,6 +20,25 @@ export interface PriceWithProduct {
   active: boolean;
 }
 
+// Database schema types for Supabase queries
+interface DatabaseProduct {
+  id: string;
+  name: string;
+  description: string | null;
+  active: boolean;
+  subscription_prices?: DatabasePrice[];
+}
+
+interface DatabasePrice {
+  id: string;
+  product_id: string;
+  currency: string;
+  unit_amount: number | null;
+  interval_type: 'month' | 'year' | 'one_time';
+  interval_count: number;
+  active: boolean;
+}
+
 export interface Subscription {
   id: string;
   status: string;
@@ -112,12 +131,12 @@ export async function getProducts(): Promise<Product[]> {
     throw error;
   }
 
-  return products.map((product: any) => ({
+  return products.map((product: DatabaseProduct) => ({
     id: product.id,
     name: product.name,
     description: product.description,
     active: product.active,
-    prices: product.subscription_prices?.map((price: any) => ({
+    prices: product.subscription_prices?.map((price: DatabasePrice) => ({
       id: price.id,
       product_id: price.product_id,
       currency: price.currency,

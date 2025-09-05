@@ -13,7 +13,7 @@ export interface UserProfile {
   subscription_current_period_end: string | null;
   subscription_cancel_at_period_end: boolean;
   has_paid: boolean;
-  entitlements: Record<string, any>;
+  entitlements: Record<string, boolean | string | number>;
   created_at: string;
   updated_at: string;
 }
