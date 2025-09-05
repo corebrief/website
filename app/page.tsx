@@ -165,10 +165,10 @@ export default function Home() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                   </svg>
                 </div>
-                <h4 className="font-medium text-primary text-sm mb-2">General Equities</h4>
+                <h4 className="font-medium text-primary text-sm mb-2">Equities</h4>
                 <div className="space-y-1 text-xs text-muted-foreground">
-                  <div>• Payout coverage</div>
-                  <div>• Capital allocation</div>
+                  <div>• Payout math, capital allocation</div>
+                  <div>• Tuned for general equities</div>
                 </div>
               </div>
 
@@ -181,8 +181,8 @@ export default function Home() {
                 </div>
                 <h4 className="font-medium text-primary text-sm mb-2">REITs</h4>
                 <div className="space-y-1 text-xs text-muted-foreground">
-                  <div>• AFFO/FFO analysis</div>
-                  <div>• Lease/tenant risks</div>
+                  <div>• Property statements, footnotes</div>
+                  <div>• Lease ladders, rollover</div>
                 </div>
               </div>
 
@@ -195,8 +195,8 @@ export default function Home() {
                 </div>
                 <h4 className="font-medium text-primary text-sm mb-2">MLPs</h4>
                 <div className="space-y-1 text-xs text-muted-foreground">
-                  <div>• DCF coverage</div>
-                  <div>• Contract/throughput quality</div>
+                  <div>• Midstream structures, obligations</div>
+                  <div>• Fee/volume exposure</div>
                 </div>
               </div>
             </div>
@@ -313,14 +313,14 @@ export default function Home() {
               </div>
               
               {/* Visual representation of massive data */}
-              <div className="relative bg-primary-foreground/5 rounded-lg p-4 mb-4 overflow-hidden">
-                <div className="grid grid-cols-6 md:grid-cols-12 gap-1 opacity-60">
+              <div className="relative bg-primary-foreground/5 rounded-lg px-4 pt-4 pb-2 mb-4 mt-6 overflow-hidden">
+                <div className="grid grid-cols-6 md:grid-cols-12 gap-1 opacity-60 pt-4">
                   {Array.from({length: 96}).map((_, i) => (
                     <div key={i} className={`h-1 rounded-full bg-primary-foreground/20 ${i % 7 === 0 ? 'bg-primary-foreground/40' : ''} ${i % 13 === 0 ? 'h-2' : ''}`}></div>
                   ))}
                 </div>
                 <div className="absolute inset-0 bg-gradient-to-r from-primary-foreground/10 via-transparent to-primary-foreground/10 pointer-events-none"></div>
-                <div className="absolute top-2 left-2 right-2 flex justify-between text-xs text-primary-foreground/50">
+                <div className="absolute top-1 left-4 right-4 flex justify-between text-xs text-primary-foreground/50">
                   <span>2019</span>
                   <span>2020</span>
                   <span>2021</span>
@@ -428,7 +428,7 @@ export default function Home() {
 
           {/* Asset Class Options */}
           <div className="space-y-6 md:space-y-8 w-full max-w-4xl">
-            {/* CoreBrief Equities */}
+            {/* Equities */}
             <div className="bg-card border rounded-lg p-4 md:p-6 flex flex-col sm:flex-row gap-4 md:gap-6 items-start shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 animate-in slide-in-from-left duration-600 delay-200 group">
               <div className="w-12 h-12 md:w-16 md:h-16 bg-green-50 rounded-lg flex items-center justify-center flex-shrink-0 shadow-sm transition-all duration-200 group-hover:bg-green-100 group-hover:scale-105">
                 <svg className="w-6 h-6 md:w-8 md:h-8 text-green-600 transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -436,7 +436,7 @@ export default function Home() {
                 </svg>
               </div>
               <div className="flex-1">
-                <h3 className="text-lg md:text-xl font-semibold mb-2 md:mb-3 text-primary">CoreBrief Equities</h3>
+                <h3 className="text-lg md:text-xl font-semibold mb-2 md:mb-3 text-primary">CoreBrief Equity Agent</h3>
                 <p className="text-muted-foreground mb-3 md:mb-4 leading-relaxed text-sm md:text-base">
                   Evaluates payout durability, capital allocation discipline, disclosure consistency, and multi-cycle downside patterns.
                 </p>
@@ -457,7 +457,7 @@ export default function Home() {
                 </svg>
               </div>
               <div className="flex-1">
-                <h3 className="text-lg md:text-xl font-semibold mb-2 md:mb-3 text-primary">CoreBrief REITs</h3>
+                <h3 className="text-lg md:text-xl font-semibold mb-2 md:mb-3 text-primary">CoreBrief REIT Agent</h3>
                 <p className="text-muted-foreground mb-3 md:mb-4 leading-relaxed text-sm md:text-base">
                   Maps AFFO/FFO coverage, lease profile (WALT & rollover), tenant concentration, SSNOI trend, and rate/refinancing sensitivity. Built for property-level nuance.
                 </p>
@@ -478,7 +478,7 @@ export default function Home() {
                 </svg>
               </div>
               <div className="flex-1">
-                <h3 className="text-lg md:text-xl font-semibold mb-2 md:mb-3 text-primary">CoreBrief MLPs</h3>
+                <h3 className="text-lg md:text-xl font-semibold mb-2 md:mb-3 text-primary">CoreBrief MLP Agent</h3>
                 <p className="text-muted-foreground mb-3 md:mb-4 leading-relaxed text-sm md:text-base">
                   Assesses DCF coverage, fee-based exposure, contract quality (MVC & tenor), basin momentum, and leverage/liquidity. Tailored to midstream structures.
                 </p>
