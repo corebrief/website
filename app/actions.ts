@@ -89,23 +89,23 @@ export const signUpAction = async (formData: FormData) => {
   // Organization information
   const organizationName = formData.get("organization_name") as string;
   const organizationType = formData.get("organization_type") as string;
-  const roleTitle = formData.get("role_title") as string;
-  const aumRange = formData.get("aum_range") as string;
-  const phoneNumber = formData.get("phone_number") as string;
   
-  // Investment profile
-  const investmentFocus = formData.get("investment_focus") as string;
-  const primaryAssetClasses = formData.get("primary_asset_classes") as string;
-  const currentResearchProviders = formData.get("current_research_providers") as string;
+  // Referral information
   const referralSource = formData.get("referral_source") as string;
   const referralCode = formData.get("referral_code") as string;
   
   // Privacy preferences
   const marketingConsent = formData.get("marketing_consent") === "on";
+  const termsAgreement = formData.get("terms_agreement") === "on";
   
   // Basic validation - check required fields
   if (!email || !password || !fullName || !organizationType) {
     return encodedRedirect("error", "/sign-up", "Please fill in all required fields (marked with *)");
+  }
+
+  // Check terms agreement
+  if (!termsAgreement) {
+    return encodedRedirect("error", "/sign-up", "You must agree to the Terms of Service and Privacy Policy");
   }
 
   const client = await createSupabaseClient();
@@ -139,17 +139,12 @@ export const signUpAction = async (formData: FormData) => {
       emailRedirectTo: redirectUrl,
       data: {
         full_name: fullName,
-        organization_name: organizationName,
+        organization_name: organizationName || null,
         organization_type: organizationType,
-        role_title: roleTitle,
-        aum_range: aumRange || null,
-        phone_number: phoneNumber || null,
-        investment_focus: investmentFocus || null,
-        primary_asset_classes: primaryAssetClasses ? primaryAssetClasses.split(',').map(s => s.trim()).filter(s => s) : [],
-        current_research_providers: currentResearchProviders || null,
         referral_source: referralSource || null,
         referral_code: referralCode || null,
         marketing_consent: marketingConsent,
+        terms_agreement: termsAgreement,
         communication_preferences: {
           email_updates: true,
           research_reports: true,

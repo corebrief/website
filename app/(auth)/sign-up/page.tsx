@@ -130,7 +130,6 @@ export default async function SignUp(props: {
 
         {/* Basic Information */}
         <div className="space-y-4">
-          <h3 className="text-lg font-medium text-primary border-b pb-2">Contact Information</h3>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
@@ -143,21 +142,25 @@ export default async function SignUp(props: {
             </div>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <Label htmlFor="phone_number">Phone Number</Label>
-              <Input name="phone_number" type="tel" placeholder="+1 (555) 123-4567" />
-            </div>
-            <div>
-              <Label htmlFor="password">Password *</Label>
-              <Input type="password" name="password" placeholder="Create password" required />
-            </div>
+          <div>
+            <Label htmlFor="password">Password *</Label>
+            <Input 
+              type="password" 
+              name="password" 
+              placeholder="Create password" 
+              required 
+              minLength={8}
+              pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
+              title="Password must be at least 8 characters and include: uppercase letter, lowercase letter, number, and special character"
+            />
+            <p className="text-xs text-muted-foreground mt-1">
+              At least 8 characters with uppercase, lowercase, number, and special character
+            </p>
           </div>
         </div>
 
         {/* Organization Information */}
         <div className="space-y-4">
-          <h3 className="text-lg font-medium text-primary border-b pb-2">Organization</h3>
           
           <div>
             <Label htmlFor="organization_name">Organization Name</Label>
@@ -165,98 +168,44 @@ export default async function SignUp(props: {
             <p className="text-xs text-muted-foreground mt-1">Optional for individual professionals</p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <Label htmlFor="organization_type">Organization Type *</Label>
-              <select 
-                name="organization_type" 
-                required
-                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
-              >
-                <option value="">Select type</option>
-                <option value="individual_investor">Individual Professional</option>
-                <option value="financial_advisor">Financial Advisor</option>
-                <option value="family_office">Family Office</option>
-                <option value="ria">RIA (Registered Investment Advisor)</option>
-                <option value="asset_manager">Asset Manager</option>
-                <option value="hedge_fund">Hedge Fund</option>
-                <option value="other">Other</option>
-              </select>
-            </div>
-            <div>
-              <Label htmlFor="role_title">Your Role/Title</Label>
-              <Input name="role_title" placeholder="e.g., Portfolio Manager, Individual Professional, CIO" />
-              <p className="text-xs text-muted-foreground mt-1">Optional for individual professionals</p>
-            </div>
-          </div>
-          
           <div>
-            <Label htmlFor="aum_range">Investment Portfolio Size</Label>
+            <Label htmlFor="organization_type">Organization Type *</Label>
             <select 
-              name="aum_range"
+              name="organization_type" 
+              required
               className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
             >
-              <option value="">Select portfolio size (optional)</option>
-              <option value="under_1m">Under $1M</option>
-              <option value="1m_10m">$1M - $10M</option>
-              <option value="10m_50m">$10M - $50M</option>
-              <option value="50m_250m">$50M - $250M</option>
-              <option value="250m_1b">$250M - $1B</option>
-              <option value="over_1b">Over $1B</option>
-              <option value="prefer_not_to_say">Prefer not to say</option>
+              <option value="">Select type</option>
+              <option value="individual_investor">Individual Professional</option>
+              <option value="financial_advisor">Financial Advisor</option>
+              <option value="family_office">Family Office</option>
+              <option value="ria">RIA (Registered Investment Advisor)</option>
+              <option value="asset_manager">Asset Manager</option>
+              <option value="hedge_fund">Hedge Fund</option>
+              <option value="other">Other</option>
             </select>
           </div>
+          
         </div>
 
-        {/* Research Profile */}
+        {/* Referral Information */}
         <div className="space-y-4">
-          <h3 className="text-lg font-medium text-primary border-b pb-2">Research Profile</h3>
-          
-          <div>
-            <Label htmlFor="investment_focus">Primary Research Focus</Label>
-            <select 
-              name="investment_focus"
-              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
-            >
-              <option value="">Select research focus</option>
-              <option value="dividend_income_analysis">Dividend/Income Analysis</option>
-              <option value="diversified_research">Diversified Portfolio Research</option>
-              <option value="growth_company_research">Growth Company Research</option>
-              <option value="value_oriented_analysis">Value-Oriented Analysis</option>
-              <option value="other">Other</option>
-            </select>
-          </div>
-          
-          <div>
-            <Label htmlFor="primary_asset_classes">Asset Classes You Research</Label>
-            <Input 
-              name="primary_asset_classes" 
-              placeholder="e.g., Dividend Stocks, REITs, MLPs, Fixed Income" 
-            />
-          </div>
-          
-          <div>
-            <Label htmlFor="current_research_providers">Current Research Providers</Label>
-            <Input 
-              name="current_research_providers" 
-              placeholder="e.g., Bloomberg, FactSet, Morningstar, Internal Team" 
-            />
-          </div>
-          
           <div>
             <Label htmlFor="referral_source">How did you hear about us?</Label>
-            <select 
-              name="referral_source"
-              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
-            >
-              <option value="">Select source</option>
-              <option value="google">Google Search</option>
-              <option value="linkedin">LinkedIn</option>
-              <option value="referral">Professional Referral</option>
-              <option value="conference">Industry Conference</option>
-              <option value="newsletter">Newsletter/Publication</option>
-              <option value="other">Other</option>
-            </select>
+                          <select 
+                name="referral_source"
+                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+              >
+                <option value="">Select source</option>
+                <option value="google">Google Search</option>
+                <option value="linkedin">LinkedIn</option>
+                <option value="twitter">Twitter/X</option>
+                <option value="social_media">Other Social Media</option>
+                <option value="partner_referral">Partner/Integration</option>
+                <option value="professional_referral">Professional Referral</option>
+                <option value="direct">Direct/Website</option>
+                <option value="other">Other</option>
+              </select>
           </div>
           
           <div>
@@ -299,12 +248,21 @@ export default async function SignUp(props: {
             </label>
           </div>
 
-          {/* Terms & Privacy */}
-          <p className="text-xs text-muted-foreground pt-2 border-t">
-            By submitting this form, you agree to our{" "}
-            <Link href="/privacy" className="text-primary hover:underline">Privacy Policy</Link> and{" "}
-            <Link href="/terms" className="text-primary hover:underline">Terms of Service</Link>.
-          </p>
+          {/* Terms & Privacy Agreement - Required */}
+          <div className="flex items-start space-x-3 pt-2 border-t">
+            <input 
+              type="checkbox" 
+              name="terms_agreement" 
+              id="terms_agreement"
+              required
+              className="mt-1 h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+            />
+            <label htmlFor="terms_agreement" className="text-sm text-muted-foreground leading-relaxed">
+              I agree to the{" "}
+              <Link href="/privacy" className="text-primary hover:underline">Privacy Policy</Link> and{" "}
+              <Link href="/terms" className="text-primary hover:underline">Terms of Service</Link>. *
+            </label>
+          </div>
         </div>
 
         <AuthSubmitButton pendingText="Creating account...">
