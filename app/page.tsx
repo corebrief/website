@@ -115,7 +115,7 @@ export default function Home() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
                 </div>
-                <h3 className="font-semibold text-base md:text-lg text-primary">CoreBrief's Structured AI Workflow</h3>
+                <h3 className="font-semibold text-base md:text-lg text-primary">CoreBrief&apos;s Structured AI Workflow</h3>
               </div>
               <ul className="space-y-2 text-sm md:text-base text-muted-foreground">
                 <li className="flex items-start gap-2">
