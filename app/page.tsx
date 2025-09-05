@@ -314,7 +314,7 @@ export default function Home() {
               
               {/* Visual representation of massive data */}
               <div className="relative bg-primary-foreground/5 rounded-lg p-4 mb-4 overflow-hidden">
-                <div className="grid grid-cols-8 md:grid-cols-12 gap-1 opacity-60">
+                <div className="grid grid-cols-6 md:grid-cols-12 gap-1 opacity-60">
                   {Array.from({length: 96}).map((_, i) => (
                     <div key={i} className={`h-1 rounded-full bg-primary-foreground/20 ${i % 7 === 0 ? 'bg-primary-foreground/40' : ''} ${i % 13 === 0 ? 'h-2' : ''}`}></div>
                   ))}
@@ -358,15 +358,15 @@ export default function Home() {
 
             {/* Input Sources */}
             <div className="flex flex-wrap justify-center gap-4 md:gap-8 mb-4 md:mb-6">
-              <div className="flex items-center gap-2 bg-blue-500/10 border border-blue-500/20 rounded-full px-3 py-1 text-xs md:text-sm text-blue-100">
+              <div className="flex items-center gap-2 bg-blue-500/10 border border-blue-500/20 rounded-full px-3 py-1 text-sm md:text-sm text-blue-100">
                 <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
                 Multi-Year Trends
               </div>
-              <div className="flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/20 rounded-full px-3 py-1 text-xs md:text-sm text-emerald-100">
+              <div className="flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/20 rounded-full px-3 py-1 text-sm md:text-sm text-emerald-100">
                 <div className="w-2 h-2 bg-emerald-400 rounded-full"></div>
                 Management Credibility
               </div>
-              <div className="flex items-center gap-2 bg-amber-500/10 border border-amber-500/20 rounded-full px-3 py-1 text-xs md:text-sm text-amber-100">
+              <div className="flex items-center gap-2 bg-amber-500/10 border border-amber-500/20 rounded-full px-3 py-1 text-sm md:text-sm text-amber-100">
                 <div className="w-2 h-2 bg-amber-400 rounded-full"></div>
                 Forward-Looking Analysis
               </div>
@@ -393,22 +393,22 @@ export default function Home() {
               </p>
               
               {/* Output Features */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mt-6">
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-3 md:gap-4 mt-6">
                 <div className="bg-primary-foreground/10 border border-primary-foreground/20 rounded-lg p-3 text-center">
-                  <div className="text-xs md:text-sm font-medium text-primary-foreground mb-1">Viability Assessment</div>
-                  <div className="text-xs text-primary-foreground/80">Quantified scoring</div>
+                  <div className="text-sm md:text-sm font-medium text-primary-foreground mb-1">Viability Assessment</div>
+                  <div className="text-xs md:text-sm text-primary-foreground/80">Quantified scoring</div>
                 </div>
                 <div className="bg-primary-foreground/10 border border-primary-foreground/20 rounded-lg p-3 text-center">
-                  <div className="text-xs md:text-sm font-medium text-primary-foreground mb-1">Scenario Bridges</div>
-                  <div className="text-xs text-primary-foreground/80">Base/Up/Down cases</div>
+                  <div className="text-sm md:text-sm font-medium text-primary-foreground mb-1">Scenario Bridges</div>
+                  <div className="text-xs md:text-sm text-primary-foreground/80">Base/Up/Down cases</div>
                 </div>
                 <div className="bg-primary-foreground/10 border border-primary-foreground/20 rounded-lg p-3 text-center">
-                  <div className="text-xs md:text-sm font-medium text-primary-foreground mb-1">Operational Watchlist</div>
-                  <div className="text-xs text-primary-foreground/80">Leading indicators</div>
+                  <div className="text-sm md:text-sm font-medium text-primary-foreground mb-1">Operational Watchlist</div>
+                  <div className="text-xs md:text-sm text-primary-foreground/80">Leading indicators</div>
                 </div>
                 <div className="bg-primary-foreground/10 border border-primary-foreground/20 rounded-lg p-3 text-center">
-                  <div className="text-xs md:text-sm font-medium text-primary-foreground mb-1">Consensus Mapping</div>
-                  <div className="text-xs text-primary-foreground/80">Agreement & tensions</div>
+                  <div className="text-sm md:text-sm font-medium text-primary-foreground mb-1">Consensus Mapping</div>
+                  <div className="text-xs md:text-sm text-primary-foreground/80">Agreement & tensions</div>
                 </div>
               </div>
             </div>
