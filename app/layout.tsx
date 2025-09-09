@@ -3,6 +3,7 @@ import "./globals.css";
 import Header from "@/components/header";
 import { Inter } from "next/font/google";
 import { ThemeProvider } from "next-themes";
+import { Analytics } from "@vercel/analytics/react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -27,6 +28,7 @@ export default function RootLayout({
         <ThemeProvider attribute="class" disableTransitionOnChange defaultTheme="light" enableSystem={false}>
           <Header />
           {children}
+          <Analytics />
         </ThemeProvider>
       </body>
     </html>
