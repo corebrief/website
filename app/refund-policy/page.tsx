@@ -7,8 +7,8 @@ export default function RefundPolicy() {
         <h1 className="text-4xl font-bold text-primary mb-8">Refund Policy</h1>
         
         <p className="text-muted-foreground mb-8">
-          <strong>Effective Date:</strong> {new Date().toLocaleDateString()}<br />
-          <strong>Last Updated:</strong> {new Date().toLocaleDateString()}
+          <strong>Effective Date:</strong> September 8, 2025<br />
+          <strong>Last Updated:</strong> September 8, 2025
         </p>
 
         <div className="space-y-12 text-sm leading-relaxed">
@@ -17,11 +17,11 @@ export default function RefundPolicy() {
           <section>
             <h2 className="text-2xl font-semibold text-primary mb-4">1. Policy Overview</h2>
             <p>
-              CoreBrief is committed to providing high-quality equity research and analysis to institutional clients. 
+              CoreBrief is committed to providing high-quality equity research and analysis to our clients. 
               Our refund policy is designed to be fair while protecting the integrity of our proprietary research content.
             </p>
             <p className="mt-4">
-              This policy applies to all purchases made through our platform, including individual reports and subscription services.
+              This policy applies to all report purchases made through our platform.
             </p>
           </section>
 
@@ -39,8 +39,8 @@ export default function RefundPolicy() {
             <h3 className="text-lg font-semibold mb-3">2.1 Refund Eligibility</h3>
             <p>Refunds for individual report purchases may be requested under the following circumstances:</p>
             <ul className="list-disc ml-6 mt-2 space-y-2">
-              <li><strong>Technical Issues:</strong> Report fails to download or contains corrupted data due to platform errors</li>
-              <li><strong>Content Errors:</strong> Report contains significant factual errors or missing core analysis sections</li>
+              <li><strong>Technical Issues:</strong> Report fails to download or contains corrupted/unreadable data due to platform errors</li>
+              <li><strong>Major System Failures:</strong> Report is substantially incomplete due to processing system failure (missing entire sections, garbled text throughout)</li>
               <li><strong>Wrong Report:</strong> You received a different report than the one ordered due to system error</li>
               <li><strong>Duplicate Purchase:</strong> Accidental duplicate purchase of the same report within 24 hours</li>
             </ul>
@@ -50,7 +50,9 @@ export default function RefundPolicy() {
             <ul className="list-disc ml-6 mt-2 space-y-2">
               <li>Change of mind after accessing the report content</li>
               <li>Disagreement with investment conclusions or ratings</li>
-              <li>Market performance differing from analysis expectations</li>
+              <li>Performance of the company differing from analysis expectations</li>
+              <li>Minor errors, omissions, or inconsistencies inherent in AI-generated content</li>
+              <li>Incomplete coverage of specific topics or metrics you expected</li>
               <li>Reports accessed more than 48 hours after purchase</li>
               <li>Reports shared with third parties in violation of terms</li>
             </ul>
@@ -58,73 +60,40 @@ export default function RefundPolicy() {
             <h3 className="text-lg font-semibold mb-3 mt-6">2.3 Request Timeline</h3>
             <p>
               Refund requests for individual reports must be submitted within <strong>48 hours</strong> of purchase 
-              and before the report has been downloaded or accessed.
+              and within <strong>24 hours</strong> of first accessing the report content.
             </p>
           </section>
 
-          {/* Subscription Services */}
+
+          {/* Discretionary Refunds */}
           <section>
-            <h2 className="text-2xl font-semibold text-primary mb-4">3. Subscription Services</h2>
-
-            <h3 className="text-lg font-semibold mb-3">3.1 Trial Period</h3>
+            <h2 className="text-2xl font-semibold text-primary mb-4">3. Discretionary Refunds</h2>
             <p>
-              New subscribers receive a <strong>14-day trial period</strong> to evaluate our services. 
-              You may cancel during this period for a full refund of subscription fees.
-            </p>
-
-            <h3 className="text-lg font-semibold mb-3 mt-6">3.2 Monthly Subscriptions</h3>
-            <ul className="list-disc ml-6 mt-2 space-y-2">
-              <li><strong>Cancellation:</strong> Cancel anytime through your account settings</li>
-              <li><strong>Prorated Refunds:</strong> No partial refunds for unused portions of the current billing cycle</li>
-              <li><strong>Access:</strong> Service continues until the end of the paid billing period</li>
-              <li><strong>Exception:</strong> Technical service failures exceeding 72 hours may qualify for prorated credits</li>
-            </ul>
-
-            <h3 className="text-lg font-semibold mb-3 mt-6">3.3 Annual Subscriptions</h3>
-            <ul className="list-disc ml-6 mt-2 space-y-2">
-              <li><strong>30-Day Window:</strong> Full refund available if cancelled within 30 days of initial purchase</li>
-              <li><strong>After 30 Days:</strong> Prorated refunds may be considered for exceptional circumstances</li>
-              <li><strong>Service Issues:</strong> Extended outages may qualify for service credits or partial refunds</li>
-            </ul>
-          </section>
-
-          {/* Exceptional Circumstances */}
-          <section>
-            <h2 className="text-2xl font-semibold text-primary mb-4">4. Exceptional Circumstances</h2>
-            <p>
-              CoreBrief may consider refunds outside standard policy terms for:
-            </p>
-            <ul className="list-disc ml-6 mt-2 space-y-2">
-              <li>Extended platform outages affecting service access</li>
-              <li>Significant changes to service features or content quality</li>
-              <li>Billing errors or unauthorized charges</li>
-              <li>Documented regulatory restrictions preventing service use</li>
-            </ul>
-            <p className="mt-4">
-              Each request will be evaluated individually based on specific circumstances and account history.
+              CoreBrief may, at its sole discretion, issue refunds outside the standard policy terms based on 
+              individual circumstances. Such decisions are not precedential and do not create any obligation 
+              for future similar situations.
             </p>
           </section>
 
           {/* Processing Details */}
           <section>
-            <h2 className="text-2xl font-semibold text-primary mb-4">5. Refund Processing</h2>
+            <h2 className="text-2xl font-semibold text-primary mb-4">4. Refund Processing</h2>
 
-            <h3 className="text-lg font-semibold mb-3">5.1 How to Request</h3>
+            <h3 className="text-lg font-semibold mb-3">4.1 How to Request</h3>
             <div className="bg-muted p-4 rounded-lg">
               <p><strong>Email:</strong> <a href="mailto:billing@corebrief.ai" className="text-primary hover:underline">billing@corebrief.ai</a></p>
               <p><strong>Subject Line:</strong> &ldquo;Refund Request - [Order Number]&rdquo;</p>
               <p><strong>Include:</strong> Order details, reason for request, supporting documentation</p>
             </div>
 
-            <h3 className="text-lg font-semibold mb-3 mt-6">5.2 Processing Timeline</h3>
-            <ul className="list-disc ml-6 mt-2 space-y-2">
-              <li><strong>Review Period:</strong> 3-5 business days for initial review</li>
-              <li><strong>Approval Notification:</strong> Email confirmation within 2 business days</li>
-              <li><strong>Refund Processing:</strong> 5-10 business days to original payment method</li>
-              <li><strong>Complex Cases:</strong> Up to 15 business days for exceptional circumstances</li>
-            </ul>
+            <h3 className="text-lg font-semibold mb-3 mt-6">4.2 Processing Timeline</h3>
+            <p>
+              We will review refund requests promptly and notify you of our decision via email. 
+              Approved refunds will be processed to your original payment method as soon as reasonably possible, 
+              typically within 5-10 business days depending on your payment provider.
+            </p>
 
-            <h3 className="text-lg font-semibold mb-3 mt-6">5.3 Refund Methods</h3>
+            <h3 className="text-lg font-semibold mb-3 mt-6">4.3 Refund Methods</h3>
             <p>
               Refunds are processed to the original payment method used for purchase. 
               Alternative refund methods may be arranged for exceptional circumstances.
@@ -133,26 +102,26 @@ export default function RefundPolicy() {
 
           {/* Institutional Clients */}
           <section>
-            <h2 className="text-2xl font-semibold text-primary mb-4">6. Institutional Client Considerations</h2>
+            <h2 className="text-2xl font-semibold text-primary mb-4">5. Institutional Client Considerations</h2>
             <p>
               For family offices, RIAs, and other institutional clients with custom agreements:
             </p>
             <ul className="list-disc ml-6 mt-2 space-y-2">
               <li>Custom refund terms may be negotiated as part of enterprise agreements</li>
-              <li>Bulk purchase refunds are evaluated on a case-by-case basis</li>
-              <li>Service level agreements may include specific remedies for service failures</li>
+              <li>Bulk report purchase refunds are evaluated on a case-by-case basis</li>
+              <li>Service level agreements may include specific remedies for platform failures</li>
               <li>Contact your account manager or <a href="mailto:institutional@corebrief.ai" className="text-primary hover:underline">institutional@corebrief.ai</a> for custom arrangements</li>
             </ul>
           </section>
 
           {/* Disputes */}
           <section>
-            <h2 className="text-2xl font-semibold text-primary mb-4">7. Dispute Resolution</h2>
+            <h2 className="text-2xl font-semibold text-primary mb-4">6. Dispute Resolution</h2>
             <p>
               If you disagree with a refund decision, you may:
             </p>
             <ul className="list-disc ml-6 mt-2 space-y-2">
-              <li>Request escalation to our legal team at <a href="mailto:legal@corebrief.ai" className="text-primary hover:underline">legal@corebrief.ai</a></li>
+              <li>Request escalation by contacting <a href="mailto:billing@corebrief.ai" className="text-primary hover:underline">billing@corebrief.ai</a> with &ldquo;Escalation Request&rdquo; in the subject line</li>
               <li>Provide additional documentation supporting your request</li>
               <li>Pursue resolution through the dispute mechanisms outlined in our Terms of Service</li>
             </ul>
@@ -163,7 +132,7 @@ export default function RefundPolicy() {
 
           {/* Policy Updates */}
           <section>
-            <h2 className="text-2xl font-semibold text-primary mb-4">8. Policy Updates</h2>
+            <h2 className="text-2xl font-semibold text-primary mb-4">7. Policy Updates</h2>
             <p>
               This refund policy may be updated periodically. Material changes will be communicated via email 
               and posted on our website. Continued use of our services constitutes acceptance of updated terms.
@@ -172,7 +141,7 @@ export default function RefundPolicy() {
 
           {/* Contact Information */}
           <section>
-            <h2 className="text-2xl font-semibold text-primary mb-4">9. Contact Information</h2>
+            <h2 className="text-2xl font-semibold text-primary mb-4">8. Contact Information</h2>
             <p>For refund requests or policy questions:</p>
             <div className="mt-4 p-4 bg-muted rounded-lg space-y-2">
               <p><strong>Billing & Refunds:</strong> <a href="mailto:billing@corebrief.ai" className="text-primary hover:underline">billing@corebrief.ai</a></p>

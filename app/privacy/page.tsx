@@ -7,22 +7,28 @@ export default function PrivacyPolicy() {
         <h1 className="text-4xl font-bold text-primary mb-8">Privacy Policy</h1>
         
         <p className="text-muted-foreground mb-8">
-          <strong>Effective Date:</strong> September 4, 2025<br />
-          <strong>Last Updated:</strong> September 4, 2025
+          <strong>Effective Date:</strong> September 8, 2025<br />
+          <strong>Last Updated:</strong> September 8, 2025
         </p>
 
         <div className="space-y-8 text-sm leading-relaxed">
           
           {/* Introduction */}
           <section>
-            <h2 className="text-2xl font-semibold text-primary mb-4">1. Information We Collect</h2>
+            <h2 className="text-2xl font-semibold text-primary mb-4">1. Introduction</h2>
             <p>
-              We collect information you provide directly, information collected automatically, and information from third parties.
+              CoreBrief provides AI-powered equity research and analysis services to family offices, registered investment advisors (RIAs), 
+              and independent professionals. We process financial and business data to generate comprehensive research reports 
+              that you purchase and own as JSON data files.
             </p>
             <p className="mt-4">
-              We are committed to protecting your privacy and maintaining the confidentiality expected in professional 
-              financial services relationships. This policy reflects our compliance with applicable privacy laws, including 
-              the General Data Protection Regulation (GDPR), California Consumer Privacy Act (CCPA), and other relevant 
+              As a provider to institutional clients handling sensitive financial information, we maintain strict data confidentiality 
+              and security standards. We are committed to protecting your privacy and maintaining the confidentiality expected in 
+              professional financial services relationships.
+            </p>
+            <p className="mt-4">
+              This Privacy Policy explains how we collect, use, and protect your information in compliance with applicable privacy laws, 
+              including the General Data Protection Regulation (GDPR), California Consumer Privacy Act (CCPA), and other relevant 
               data protection requirements.
             </p>
           </section>
@@ -30,17 +36,35 @@ export default function PrivacyPolicy() {
           {/* Information We Collect */}
           <section>
             <h2 className="text-2xl font-semibold text-primary mb-4">2. Information We Collect</h2>
+            <p>
+              We collect information you provide directly, information collected automatically through our platform, 
+              and information from third-party sources necessary for our research services.
+            </p>
             
-            <h3 className="text-lg font-medium mb-3">2.1 Information You Provide</h3>
-            <p>When you register for alpha access or use our services, we collect:</p>
+            <h3 className="text-lg font-medium mb-3 mt-6">2.1 Information You Provide</h3>
+            
+            <h4 className="font-medium mb-2 mt-4">Account Registration</h4>
+            <p>When you create an account, we collect:</p>
             <ul className="list-disc ml-6 mt-2 space-y-1">
-              <li><strong>Contact Information:</strong> Full name, email address, phone number</li>
-              <li><strong>Organization Details:</strong> Organization name, organization type (including family office, RIA, asset manager, individual professional, or financial advisor), your role/title</li>
-              <li><strong>Business Information:</strong> Investment portfolio size, research focus areas, current research providers</li>
-              <li><strong>Referral Information:</strong> How you heard about us, referral codes from partners</li>
-              <li><strong>Account Information:</strong> Login credentials, subscription preferences, service configurations</li>
-              <li><strong>Professional Use Confirmation:</strong> Acknowledgment that services are used for professional research purposes</li>
-              <li><strong>Communications:</strong> Messages, inquiries, and feedback you send to us</li>
+              <li><strong>Contact Information:</strong> Full name, email address</li>
+              <li><strong>Organization Details:</strong> Organization name (optional), organization type (individual professional, financial advisor, family office, RIA, asset manager, hedge fund, or other)</li>
+              <li><strong>Account Security:</strong> Password (encrypted), login credentials</li>
+              <li><strong>Referral Information:</strong> How you heard about us, referral codes (optional)</li>
+              <li><strong>Consent Records:</strong> Professional use confirmation, marketing consent (optional), terms and privacy policy agreement</li>
+            </ul>
+
+            <h4 className="font-medium mb-2 mt-4">Waitlist Requests</h4>
+            <p>When you submit a waitlist request for early access, we additionally collect:</p>
+            <ul className="list-disc ml-6 mt-2 space-y-1">
+              <li><strong>Access Preferences:</strong> Type of access requested (full early access, beta testing, custom demo, or pricing notifications)</li>
+              <li><strong>Timeline Requirements:</strong> Urgency level for access (standard, high priority, or urgent)</li>
+              <li><strong>Use Case Information:</strong> Description of how you plan to use CoreBrief, your research needs, and current workflow</li>
+            </ul>
+
+            <h4 className="font-medium mb-2 mt-4">Communications</h4>
+            <ul className="list-disc ml-6 mt-2 space-y-1">
+              <li><strong>Support Inquiries:</strong> Messages, questions, and feedback you send to us</li>
+              <li><strong>Privacy Requests:</strong> Data export, deletion, or other privacy-related requests</li>
             </ul>
 
             <h3 className="text-lg font-medium mb-3 mt-6">2.2 Automatically Collected Information</h3>
@@ -49,10 +73,11 @@ export default function PrivacyPolicy() {
               <li><strong>Device and Browser Information:</strong> IP address, browser type, operating system, device identifiers</li>
               <li><strong>Usage Analytics:</strong> Pages viewed, session duration, interaction patterns, feature usage</li>
               <li><strong>Security Logs:</strong> Authentication events, access attempts, security incidents</li>
-              <li><strong>Cookies and Similar Technologies:</strong> We use cookies, web beacons, and similar tracking technologies to enhance user experience, analyze usage patterns, and maintain security. You can manage cookie preferences through your browser settings or by contacting us for assistance.</li>
+              <li><strong>Essential Cookies:</strong> Authentication tokens, session management, and security cookies required for platform functionality</li>
+              <li><strong>Analytics:</strong> Basic usage analytics to improve our services (if enabled through our hosting provider)</li>
             </ul>
             <p className="mt-2 text-xs text-muted-foreground">
-              <em>Note: A detailed cookie policy is available upon request and may be linked separately.</em>
+              <em>We use minimal tracking focused on essential functionality. No third-party advertising or marketing cookies are used.</em>
             </p>
           </section>
 
@@ -71,8 +96,8 @@ export default function PrivacyPolicy() {
 
             <h3 className="text-lg font-medium mb-3 mt-4">3.2 Specific Uses</h3>
             <ul className="list-disc ml-6 mt-2 space-y-1">
-              <li><strong>Service Delivery:</strong> Providing equity analysis, managing your account, processing subscriptions</li>
-              <li><strong>Communication:</strong> Sending service updates, research reports, responding to inquiries</li>
+              <li><strong>Service Delivery:</strong> Providing equity analysis, managing your account, processing report purchases</li>
+              <li><strong>Communication:</strong> Sending service updates, account notifications, responding to inquiries</li>
               <li><strong>Business Operations:</strong> User authentication, billing, customer support, technical maintenance</li>
               <li><strong>Service Improvement:</strong> Understanding user needs, developing new features, quality assurance</li>
               <li><strong>Compliance and Security:</strong> Meeting legal obligations, preventing fraud, ensuring system security</li>
@@ -90,14 +115,15 @@ export default function PrivacyPolicy() {
             <ul className="list-disc ml-6 mt-2 space-y-1">
               <li>Cloud hosting and database services (Supabase)</li>
               <li>Payment processing (Stripe)</li>
-              <li>Email communications and customer support</li>
-              <li>Analytics and performance monitoring</li>
-              <li>Security monitoring and threat detection</li>
+              <li>Web hosting and deployment (Vercel)</li>
+              <li>AI processing and analysis services (cloud infrastructure providers)</li>
+              <li>Analytics and performance monitoring (Vercel Analytics)</li>
+              <li>Email delivery for account notifications</li>
             </ul>
             <p className="mt-2">
               All subprocessors are contractually bound to protect your information, use it only for specified purposes, 
               and undergo regular compliance reviews. A current list of subprocessors is available upon request by 
-              contacting <a href="mailto:privacy@corebrief.ai" className="text-primary hover:underline">privacy@corebrief.ai</a>.
+              contacting <a href="mailto:support@corebrief.ai" className="text-primary hover:underline">support@corebrief.ai</a>.
             </p>
 
             <h3 className="text-lg font-medium mb-3 mt-4">4.2 Legal Requirements</h3>
@@ -123,10 +149,10 @@ export default function PrivacyPolicy() {
             <ul className="list-disc ml-6 mt-2 space-y-1">
               <li><strong>Encryption:</strong> Data encrypted in transit using TLS and at rest using industry-standard encryption</li>
               <li><strong>Access Controls:</strong> Role-based access with multi-factor authentication and principle of least privilege</li>
-              <li><strong>Infrastructure Security:</strong> Secure cloud hosting with enterprise-grade protections and regular security audits</li>
-              <li><strong>Monitoring:</strong> Continuous security monitoring, threat detection, and incident response procedures</li>
+              <li><strong>Infrastructure Security:</strong> Secure cloud hosting with enterprise-grade protections through our service providers</li>
               <li><strong>Database Security:</strong> Row-level security policies ensuring users can only access their own data</li>
-              <li><strong>Employee Training:</strong> Regular security awareness training and confidentiality agreements</li>
+              <li><strong>Authentication:</strong> Secure user authentication and session management through Supabase</li>
+              <li><strong>Monitoring:</strong> Security monitoring and logging through our hosting infrastructure</li>
             </ul>
             <p className="mt-4">
               While we implement reasonable security measures, no system is completely secure. We encourage you to use 
@@ -143,7 +169,7 @@ export default function PrivacyPolicy() {
               <li><strong>Active Accounts:</strong> For the duration of your account and service relationship</li>
               <li><strong>Legal Requirements:</strong> As required by applicable laws, regulations, or legal proceedings</li>
               <li><strong>Business Purposes:</strong> For legitimate business needs including dispute resolution and contract enforcement</li>
-              <li><strong>Deleted Accounts:</strong> Personal information deleted or anonymized within 90 days of account closure, except where longer retention is legally required</li>
+              <li><strong>Deleted Accounts:</strong> Personal account information deleted or anonymized within 90 days of account closure, except where longer retention is legally required. Note that purchased report data is owned by you and handled according to our Terms of Service</li>
             </ul>
             
             <h3 className="text-lg font-medium mb-3 mt-4">6.1 Record of Processing Activities</h3>
@@ -194,6 +220,9 @@ export default function PrivacyPolicy() {
               We will respond within the timeframe required by applicable law (typically 30 days). Some requests may require 
               identity verification for security purposes.
             </p>
+            <p className="mt-2">
+              <strong>Note:</strong> Rights regarding purchased report data (JSON files) that you own are governed by our Terms of Service.
+            </p>
 
             <p className="mt-2 text-xs text-muted-foreground">
               <em>Note: Certain rights may be limited by applicable laws, legitimate business interests, or technical constraints.</em>
@@ -205,14 +234,14 @@ export default function PrivacyPolicy() {
             <h2 className="text-2xl font-semibold text-primary mb-4">8. International Data Transfers</h2>
             <p>
               Your information may be processed and stored in the United States or other countries where our service 
-              providers operate. When we transfer personal data outside the European Economic Area (EEA) or United Kingdom, 
-              we ensure appropriate safeguards are in place, including:
+              providers operate. Our primary service providers (Supabase, Vercel, Stripe) have established appropriate 
+              safeguards for international data transfers, including:
             </p>
             <ul className="list-disc ml-6 mt-2 space-y-1">
-              <li><strong>Standard Contractual Clauses:</strong> EU-approved contractual protections for data transfers</li>
-              <li><strong>Adequacy Decisions:</strong> Transfers to countries deemed adequate by relevant authorities</li>
-              <li><strong>Binding Corporate Rules:</strong> Where applicable for group companies</li>
-              <li><strong>Other Legal Mechanisms:</strong> As recognized under applicable privacy laws</li>
+              <li><strong>US-based providers:</strong> Operating under applicable US privacy frameworks</li>
+              <li><strong>Enterprise-grade compliance:</strong> Our service providers maintain GDPR compliance programs</li>
+              <li><strong>Contractual protections:</strong> Data processing agreements with appropriate safeguards</li>
+              <li><strong>Industry standards:</strong> SOC 2, ISO certifications, and other security frameworks</li>
             </ul>
             <p className="mt-4">
               For more information about our international transfer safeguards, please contact 
@@ -259,7 +288,7 @@ export default function PrivacyPolicy() {
               our Privacy Team:
             </p>
             <div className="mt-4 p-4 bg-muted rounded-lg">
-              <p><strong>Privacy Officer:</strong> <a href="mailto:privacy@corebrief.ai" className="text-primary hover:underline">privacy@corebrief.ai</a></p>
+              <p><strong>Privacy Questions:</strong> <a href="mailto:privacy@corebrief.ai" className="text-primary hover:underline">privacy@corebrief.ai</a></p>
               <p><strong>General Inquiries:</strong> <a href="mailto:info@corebrief.ai" className="text-primary hover:underline">info@corebrief.ai</a></p>
               <p><strong>Security Issues:</strong> <a href="mailto:security@corebrief.ai" className="text-primary hover:underline">security@corebrief.ai</a></p>
               <p className="mt-2 text-sm text-muted-foreground">

@@ -606,6 +606,8 @@ export default function Home() {
             <span className="hidden sm:inline">•</span>
             <Link href="/terms" className="hover:text-primary transition-colors duration-200">Terms of Service</Link>
             <span className="hidden sm:inline">•</span>
+            <Link href="/refund-policy" className="hover:text-primary transition-colors duration-200">Refund Policy</Link>
+            <span className="hidden sm:inline">•</span>
             <span>© {new Date().getFullYear()} CoreBrief. All rights reserved.</span>
           </div>
         </div>

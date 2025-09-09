@@ -18,11 +18,6 @@ export default async function ProtectedSidebar() {
           href: "/waitlist",
         },
         {
-          label: "Subscription",
-          href: "/subscription",
-          disabled: true,
-        },
-        {
           label: "Paid Content",
           href: "/paid-content",
           disabled: true,
