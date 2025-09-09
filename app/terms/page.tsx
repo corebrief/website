@@ -149,7 +149,7 @@ export default function TermsOfService() {
               INVESTMENT LOSSES, OR DAMAGES ARISING FROM AI-GENERATED CONTENT ERRORS, LIMITATIONS, OR OMISSIONS.
             </p>
             <p className="mt-4">
-              <strong>No Warranties:</strong> Our reports and services are provided "AS-IS" without warranties of any kind, 
+              <strong>No Warranties:</strong> Our reports and services are provided &ldquo;AS-IS&rdquo; without warranties of any kind, 
               including but not limited to warranties of merchantability, fitness for a particular purpose, or accuracy. 
               We do not warrant that our AI analysis will meet your specific research needs or be error-free.
             </p>
@@ -236,7 +236,7 @@ export default function TermsOfService() {
             <p className="mt-4">
               Arbitration shall be conducted by a single arbitrator through the American Arbitration Association (AAA) under its 
               Commercial Arbitration Rules. The arbitration shall take place in San Diego County, California, or may be conducted 
-              remotely by mutual agreement. The arbitrator's decision shall be final and binding.
+              remotely by mutual agreement. The arbitrator&apos;s decision shall be final and binding.
             </p>
 
             <h3 className="text-lg font-semibold mb-3 mt-6">12.3 Exceptions to Arbitration</h3>

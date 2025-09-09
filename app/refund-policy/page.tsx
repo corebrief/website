@@ -121,7 +121,7 @@ export default function RefundPolicy() {
               If you disagree with a refund decision, you may:
             </p>
             <ul className="list-disc ml-6 mt-2 space-y-2">
-              <li>Request escalation by contacting <a href="mailto:billing@corebrief.ai" className="text-primary hover:underline">billing@corebrief.ai</a> with "Escalation Request" in the subject line</li>
+              <li>Request escalation by contacting <a href="mailto:billing@corebrief.ai" className="text-primary hover:underline">billing@corebrief.ai</a> with &ldquo;Escalation Request&rdquo; in the subject line</li>
               <li>Provide additional documentation supporting your request</li>
               <li>Pursue resolution through the dispute mechanisms outlined in our Terms of Service</li>
             </ul>
