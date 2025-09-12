@@ -78,7 +78,7 @@ BEGIN
   );
   RETURN NEW;
 END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
+$$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = '';
 
 -- Optional: Add indexes for consent tracking (useful for compliance queries)
 CREATE INDEX IF NOT EXISTS idx_user_profiles_terms_agreement 

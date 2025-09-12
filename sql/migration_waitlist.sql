@@ -76,7 +76,7 @@ BEGIN
   
   RETURN NULL;
 END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
+$$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = '';
 
 -- Create trigger to update positions when waitlist status changes
 CREATE OR REPLACE TRIGGER trigger_update_waitlist_positions
@@ -144,7 +144,7 @@ BEGIN
   );
   RETURN NEW;
 END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
+$$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = '';
 
 -- Create indexes for performance
 CREATE INDEX IF NOT EXISTS idx_waitlist_requests_user_id ON public.waitlist_requests(user_id);

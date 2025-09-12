@@ -85,7 +85,7 @@ BEGIN
   );
   RETURN NEW;
 END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
+$$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = '';
 
 -- Note: The trigger should already exist from previous migrations
 -- If you need to recreate it, run these commands separately:
