@@ -123,7 +123,7 @@ BEGIN
   );
   RETURN NEW;
 END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
+$$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = '';
 
 -- Create trigger to automatically create user profile on signup
 CREATE TRIGGER on_auth_user_created
@@ -137,7 +137,7 @@ BEGIN
   NEW.updated_at = NOW();
   RETURN NEW;
 END;
-$$ LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = '';
 
 -- Create triggers for updated_at
 CREATE TRIGGER handle_updated_at BEFORE UPDATE ON public.user_profiles

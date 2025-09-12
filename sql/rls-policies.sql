@@ -105,7 +105,7 @@ RETURNS BOOLEAN AS $$
 BEGIN
   RETURN (SELECT auth.uid() = profile_id);
 END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
+$$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = '';
 
 -- Grant necessary permissions
 GRANT USAGE ON SCHEMA public TO authenticated, anon;
