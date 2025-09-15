@@ -24,6 +24,7 @@ interface ReportsDashboardProps {
 interface ReportsResponse {
   reports: BaseReportData[];
   total: number;
+  error?: string;
 }
 
 export default function ReportsDashboard({ hasFullAccess }: ReportsDashboardProps) {
