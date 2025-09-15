@@ -10,6 +10,10 @@ export default async function ProtectedSidebar() {
           href: "/",
         },
         {
+          label: "Reports",
+          href: "/reports",
+        },
+        {
           label: "Privacy",
           href: "/privacy",
         },
