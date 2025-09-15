@@ -408,8 +408,11 @@ function generateSummaryFromStructured(data: unknown): string {
     return 'Structured data available';
   }
 
+  // Type guard for object with properties
+  const dataObj = data as Record<string, unknown>;
+
   // Handle GeneralEquityAnalysis schema (multi_year_analysis)
-  if (data.company && data.window && data.semantic_themes && data.grading) {
+  if (dataObj.company && dataObj.window && dataObj.semantic_themes && dataObj.grading) {
     const analysis = data as GeneralEquityAnalysis;
     return `Analysis of ${analysis.company} covering ${analysis.window.num_years} years (FY${analysis.window.start_fy}-${analysis.window.end_fy}). 
     
@@ -424,7 +427,7 @@ ${analysis.ui_summaries.synopsis}`;
   }
 
   // Handle ManagementCredibilityAnalysis schema (management_credibility)
-  if (data.company && data.window && data.credibility_assessment && data.scores) {
+  if (dataObj.company && dataObj.window && dataObj.credibility_assessment && dataObj.scores) {
     const analysis = data as ManagementCredibilityAnalysis;
     return `Management credibility assessment of ${analysis.company} covering ${analysis.window.num_years} years (FY${analysis.window.start_fy}-${analysis.window.end_fy}).
 
@@ -441,7 +444,7 @@ ${analysis.ui_summaries.synopsis}`;
   }
 
   // Handle PredictiveInferenceAnalysis schema (predictive_inference)
-  if (data.company && data.window && data.scenarios && data.base_state) {
+  if (dataObj.company && dataObj.window && dataObj.scenarios && dataObj.base_state) {
     const analysis = data as PredictiveInferenceAnalysis;
     const baseScenario = analysis.scenarios.find(s => s.name === 'Base');
     return `Predictive outlook for ${analysis.company} covering ${analysis.window.num_years} years (FY${analysis.window.start_fy}-${analysis.window.end_fy}).
@@ -459,7 +462,7 @@ ${analysis.ui_summaries.synopsis}`;
   }
 
   // Handle BusinessThesisAnalysis schema (business_assessment)
-  if (data.company && data.window && data.business_thesis && data.viability_assessment) {
+  if (dataObj.company && dataObj.window && dataObj.business_thesis && dataObj.viability_assessment) {
     const analysis = data as BusinessThesisAnalysis;
     return `Business thesis synthesis for ${analysis.company} covering ${analysis.window.num_years} years (FY${analysis.window.start_fy}-${analysis.window.end_fy}).
 
