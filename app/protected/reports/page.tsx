@@ -2,8 +2,6 @@ import { createSupabaseClient } from "@/utils/supabase/server";
 import { checkEntitlement } from "@/utils/supabase/entitlements";
 import ReportsDashboard from "@/components/reports-dashboard";
 import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
 
 export default async function ReportsPage() {
   const { data: entitlementData, error: entitlementError } = await checkEntitlement("premium");
@@ -62,7 +60,6 @@ export default async function ReportsPage() {
       </Card>
 
       <ReportsDashboard 
-        userId={user.id} 
         hasFullAccess={entitlementData?.hasAccess || false} 
       />
     </div>

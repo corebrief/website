@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
@@ -19,7 +19,6 @@ import {
   TrendingDown, 
   Minus, 
   AlertTriangle, 
-  DollarSign, 
   Award,
   Shield,
   Target,
@@ -99,10 +98,10 @@ export default function GeneralEquityReport({ report }: GeneralEquityReportProps
   }: { 
     section: SectionKey; 
     title: string; 
-    icon: any; 
+    icon: React.ComponentType<{ className?: string }>; 
     badge?: string; 
     summary?: string;
-  }) => (
+  }): React.ReactElement => (
     <Button
       variant="ghost"
       className="w-full justify-start p-4 h-auto hover:bg-gray-50 cursor-pointer"

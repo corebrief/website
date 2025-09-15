@@ -8,7 +8,7 @@ export interface BaseReportData {
   management_credibility: string;
   predictive_inference: string;
   business_assessment: string;
-  analysis_metadata?: any;
+  analysis_metadata?: unknown;
   years_used?: number[];
   analysis_years?: number;
   model_used?: string;
@@ -21,7 +21,7 @@ export interface ParsedSection {
   title: string;
   content: string;
   subsections?: ParsedSection[];
-  structured_data?: any; // For JSON structured content
+  structured_data?: unknown; // For JSON structured content
 }
 
 export interface ParsedReport {
@@ -403,7 +403,7 @@ function parseSection(content: string, title: string): ParsedSection {
 /**
  * Generate a readable summary from structured JSON data
  */
-function generateSummaryFromStructured(data: any): string {
+function generateSummaryFromStructured(data: unknown): string {
   if (!data || typeof data !== 'object') {
     return 'Structured data available';
   }

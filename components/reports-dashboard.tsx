@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -18,7 +18,6 @@ import GeneralEquityReport from '@/components/general-equity-report';
 import { Search, Filter, Eye, ShoppingCart, Clock } from 'lucide-react';
 
 interface ReportsDashboardProps {
-  userId: string;
   hasFullAccess: boolean;
 }
 
@@ -27,7 +26,7 @@ interface ReportsResponse {
   total: number;
 }
 
-export default function ReportsDashboard({ userId, hasFullAccess }: ReportsDashboardProps) {
+export default function ReportsDashboard({ hasFullAccess }: ReportsDashboardProps) {
   const [reports, setReports] = useState<BaseReportData[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTicker, setSearchTicker] = useState('');
@@ -36,7 +35,7 @@ export default function ReportsDashboard({ userId, hasFullAccess }: ReportsDashb
   const [selectedReport, setSelectedReport] = useState<ParsedReport | null>(null);
 
   // Fetch reports
-  const fetchReports = async () => {
+  const fetchReports = useCallback(async () => {
     setLoading(true);
     try {
       const params = new URLSearchParams({
@@ -58,12 +57,12 @@ export default function ReportsDashboard({ userId, hasFullAccess }: ReportsDashb
     } finally {
       setLoading(false);
     }
-  };
+  }, [searchTicker, reportTypeFilter, accessFilter]);
 
   // Fetch reports on component mount and when filters change
   useEffect(() => {
     fetchReports();
-  }, [searchTicker, reportTypeFilter, accessFilter]);
+  }, [searchTicker, reportTypeFilter, accessFilter, fetchReports]);
 
   // Handle report selection
   const handleSelectReport = (report: BaseReportData) => {

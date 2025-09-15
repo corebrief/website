@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { type GeneralEquityAnalysis } from '@/utils/report-parsers';
-import { TrendingUp, TrendingDown, Minus, AlertTriangle, DollarSign, Calendar, Target, Award } from 'lucide-react';
+import { TrendingUp, TrendingDown, Minus, AlertTriangle, DollarSign, Target, Award } from 'lucide-react';
 
 interface GeneralEquityAnalysisProps {
   data: GeneralEquityAnalysis;
