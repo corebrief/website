@@ -10,12 +10,6 @@
     "lint:fix": "next lint --fix",
     "lint:strict": "next lint --max-warnings 0"
   },
-  "overrides": {
-    "@tremor/react": {
-      "react": "$react",
-      "react-dom": "$react-dom"
-    }
-  },
   "dependencies": {
     "@radix-ui/react-label": "^2.1.2",
     "@radix-ui/react-progress": "^1.1.7",
@@ -24,7 +18,7 @@
     "@supabase/ssr": "^0.6.1",
     "@supabase/supabase-js": "^2.49.4",
     "@tailwindcss/postcss": "^4.0.13",
-    "@tremor/react": "^3.18.7",
+    "@tremor/react": "4.0.0-beta-tremor-v4.4",
     "@types/stripe": "^8.0.416",
     "@vercel/analytics": "^1.5.0",
     "class-variance-authority": "^0.7.1",
