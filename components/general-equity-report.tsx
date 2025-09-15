@@ -577,7 +577,6 @@ export default function GeneralEquityReport({ report }: GeneralEquityReportProps
           section="management"
           title="Management Credibility Assessment"
           icon={Shield}
-          badge={managementData?.scores?.credibility_tier}
           summary={managementData?.ui_summaries?.one_liner}
         />
         {expandedSections.has('management') && managementData && (
@@ -585,75 +584,349 @@ export default function GeneralEquityReport({ report }: GeneralEquityReportProps
             <div className="space-y-6">
               {/* Management Synopsis */}
               {managementData.ui_summaries?.synopsis && (
-                <div className="bg-amber-50 p-4 rounded-lg border-l-4 border-amber-400">
-                  <h4 className="font-semibold mb-2 text-amber-800">Management Synopsis</h4>
-                  <p className="text-sm text-amber-700">{managementData.ui_summaries.synopsis}</p>
+                <div className="bg-slate-50 p-4 rounded-lg border-l-4 border-slate-400">
+                  <h4 className="font-semibold mb-2 text-slate-800">Management Synopsis</h4>
+                  <p className="text-sm text-slate-700">{managementData.ui_summaries.synopsis}</p>
                 </div>
               )}
 
-              {/* Credibility Scoring */}
+              {/* Credibility Component Analysis */}
               <div>
-                <div className="flex items-center justify-between mb-4">
-                  <h4 className="font-semibold">Credibility Assessment</h4>
-                  <Badge className={getGradeColor(managementData.scores.credibility_tier)}>
-                    {managementData.scores.credibility_tier} ({managementData.scores.composite_score.toFixed(1)}/10)
-                  </Badge>
+                <h4 className="font-semibold mb-3">Credibility Component Analysis</h4>
+                <div className="grid md:grid-cols-2 gap-4">
+                  {[
+                    { name: 'Promise Follow-through', score: managementData.scores.promise_follow_through },
+                    { name: 'Tone Discipline', score: managementData.scores.tone_discipline },
+                    { name: 'Disclosure Hygiene', score: managementData.scores.disclosure_hygiene },
+                    { name: 'Risk Candor', score: managementData.scores.risk_candor },
+                    { name: 'Strategic Coherence', score: managementData.scores.strategic_coherence },
+                    { name: 'Capital Allocation Consistency', score: managementData.scores.capital_allocation_consistency },
+                    { name: 'Metric Definition Stability', score: managementData.scores.metric_definition_stability },
+                    { name: 'Red Flags (inverse)', score: managementData.scores.red_flags }
+                  ].map((component, index) => (
+                    <div key={index} className="p-3 border rounded-lg">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-sm font-medium">{component.name}</span>
+                        <span className="text-sm font-bold">{component.score}/10</span>
+                      </div>
+                      <Progress value={component.score * 10} className="h-2" />
+                    </div>
+                  ))}
                 </div>
                 
+                <div className="mt-4 p-4 bg-slate-100 rounded-lg border-2 border-slate-300">
+                  <div className="flex justify-between items-center">
+                    <span className="font-semibold">Overall Credibility Score</span>
+                    <span className="font-bold text-xl">{managementData.scores.composite_score.toFixed(2)}/10</span>
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Weighted composite = {managementData.scores.credibility_tier} Tier
+                  </p>
+                </div>
+              </div>
+
+              {/* Promise Follow-through Analysis */}
+              {managementData.credibility_assessment.commitment_followthrough && managementData.credibility_assessment.commitment_followthrough.length > 0 && (
+                <div>
+                  <h4 className="font-semibold mb-4 flex items-center gap-2">
+                    <Target className="h-5 w-5 text-blue-600" />
+                    Promise Follow-through Analysis
+                  </h4>
+                  <div className="space-y-4">
+                    {managementData.credibility_assessment.commitment_followthrough.map((commitment, index) => (
+                      <div key={index} className="border rounded-lg p-4 bg-blue-50">
+                        <div className="flex items-start justify-between mb-2">
+                          <div className="text-sm font-medium text-blue-800">
+                            Filing Year {commitment.commitment_year} Commitment
+                          </div>
+                          <Badge className={`${
+                            commitment.outcome_label === 'Achieved' ? 'bg-green-100 text-green-800' :
+                            commitment.outcome_label === 'Progressing' ? 'bg-blue-100 text-blue-800' :
+                            commitment.outcome_label === 'Stalled' ? 'bg-yellow-100 text-yellow-800' :
+                            commitment.outcome_label === 'Reversed' ? 'bg-red-100 text-red-800' :
+                            'bg-gray-100 text-gray-800'
+                          }`}>
+                            {commitment.outcome_label}
+                          </Badge>
+                        </div>
+                        <p className="text-sm text-blue-700 mb-2">"{commitment.commitment}"</p>
+                        <div className="text-xs text-blue-600 mb-2">
+                          Tracked in: Filing Year {commitment.subsequent_followup_years.join(', Filing Year ')}
+                        </div>
+                        <p className="text-xs text-blue-600">{commitment.rationale}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Tone Profile */}
+              <div>
+                <h4 className="font-semibold mb-4 flex items-center gap-2">
+                  <Building2 className="h-5 w-5 text-purple-600" />
+                  Communication Style & Tone Profile
+                </h4>
                 <div className="grid md:grid-cols-2 gap-6">
                   <div className="space-y-3">
                     <div className="flex justify-between items-center">
-                      <span className="text-sm">Promise Follow-through</span>
-                      <span className="text-sm font-medium">{managementData.scores.promise_follow_through}/10</span>
+                      <span className="text-sm">Tone Balance</span>
+                      <Badge className="bg-purple-100 text-purple-800">
+                        {managementData.credibility_assessment.tone_profile.tone_balance_label}
+                      </Badge>
                     </div>
-                    <Progress value={managementData.scores.promise_follow_through * 10} className="h-2" />
-                    
                     <div className="flex justify-between items-center">
-                      <span className="text-sm">Tone Discipline</span>
-                      <span className="text-sm font-medium">{managementData.scores.tone_discipline}/10</span>
+                      <span className="text-sm">Superlative Frequency</span>
+                      <Badge className="bg-purple-100 text-purple-800">
+                        {managementData.credibility_assessment.tone_profile.superlative_frequency_label}
+                      </Badge>
                     </div>
-                    <Progress value={managementData.scores.tone_discipline * 10} className="h-2" />
-                    
-                    <div className="flex justify-between items-center">
-                      <span className="text-sm">Disclosure Hygiene</span>
-                      <span className="text-sm font-medium">{managementData.scores.disclosure_hygiene}/10</span>
-                    </div>
-                    <Progress value={managementData.scores.disclosure_hygiene * 10} className="h-2" />
-                    
-                    <div className="flex justify-between items-center">
-                      <span className="text-sm">Risk Candor</span>
-                      <span className="text-sm font-medium">{managementData.scores.risk_candor}/10</span>
-                    </div>
-                    <Progress value={managementData.scores.risk_candor * 10} className="h-2" />
                   </div>
-                  
                   <div className="space-y-3">
                     <div className="flex justify-between items-center">
-                      <span className="text-sm">Strategic Coherence</span>
-                      <span className="text-sm font-medium">{managementData.scores.strategic_coherence}/10</span>
+                      <span className="text-sm">Guidance Style</span>
+                      <Badge className="bg-purple-100 text-purple-800">
+                        {managementData.credibility_assessment.tone_profile.guidance_style_label}
+                      </Badge>
                     </div>
-                    <Progress value={managementData.scores.strategic_coherence * 10} className="h-2" />
-                    
                     <div className="flex justify-between items-center">
-                      <span className="text-sm">Capital Allocation</span>
-                      <span className="text-sm font-medium">{managementData.scores.capital_allocation_consistency}/10</span>
+                      <span className="text-sm">Tone Trend</span>
+                      <Badge className="bg-purple-100 text-purple-800">
+                        {managementData.credibility_assessment.tone_profile.change_in_tone_label}
+                      </Badge>
                     </div>
-                    <Progress value={managementData.scores.capital_allocation_consistency * 10} className="h-2" />
-                    
+                  </div>
+                </div>
+                {managementData.credibility_assessment.tone_profile.notes && (
+                  <div className="mt-4 p-3 bg-purple-50 rounded-lg">
+                    <p className="text-sm text-purple-700">{managementData.credibility_assessment.tone_profile.notes}</p>
+                  </div>
+                )}
+              </div>
+
+              {/* Disclosure Hygiene */}
+              <div>
+                <h4 className="font-semibold mb-4 flex items-center gap-2">
+                  <Shield className="h-5 w-5 text-teal-600" />
+                  Disclosure Hygiene Assessment
+                </h4>
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div className="space-y-3">
                     <div className="flex justify-between items-center">
-                      <span className="text-sm">Metric Stability</span>
-                      <span className="text-sm font-medium">{managementData.scores.metric_definition_stability}/10</span>
+                      <span className="text-sm">Non-GAAP Policy Clarity</span>
+                      <Badge className="bg-teal-100 text-teal-800">
+                        {managementData.credibility_assessment.disclosure_hygiene.non_gaap_policy_clarity}
+                      </Badge>
                     </div>
-                    <Progress value={managementData.scores.metric_definition_stability * 10} className="h-2" />
-                    
                     <div className="flex justify-between items-center">
-                      <span className="text-sm">Red Flags (inverse)</span>
-                      <span className="text-sm font-medium">{managementData.scores.red_flags}/10</span>
+                      <span className="text-sm">Impairment/Restructure Clarity</span>
+                      <Badge className="bg-teal-100 text-teal-800">
+                        {managementData.credibility_assessment.disclosure_hygiene.impairment_restructure_clarity}
+                      </Badge>
                     </div>
-                    <Progress value={managementData.scores.red_flags * 10} className="h-2" />
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm">Restatement/Weakness Mentions</span>
+                      <Badge className="bg-teal-100 text-teal-800">
+                        {managementData.credibility_assessment.disclosure_hygiene.restatement_or_weakness_mentions}
+                      </Badge>
+                    </div>
+                  </div>
+                  <div className="space-y-3">
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm">Accounting Policy Transparency</span>
+                      <Badge className="bg-teal-100 text-teal-800">
+                        {managementData.credibility_assessment.disclosure_hygiene.accounting_policy_change_transparency}
+                      </Badge>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm">Segment Bridge Quality</span>
+                      <Badge className="bg-teal-100 text-teal-800">
+                        {managementData.credibility_assessment.disclosure_hygiene.segment_bridge_quality}
+                      </Badge>
+                    </div>
                   </div>
                 </div>
               </div>
+
+              {/* Risk Candor */}
+              <div>
+                <h4 className="font-semibold mb-4 flex items-center gap-2">
+                  <AlertTriangle className="h-5 w-5 text-red-600" />
+                  Risk Candor Analysis
+                </h4>
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center p-3 bg-red-50 rounded-lg">
+                    <span className="text-sm font-medium">Realized Issues Acknowledged</span>
+                    <Badge className="bg-red-100 text-red-800">
+                      {managementData.credibility_assessment.risk_candor.realized_issues_acknowledged_label}
+                    </Badge>
+                  </div>
+                  
+                  {managementData.credibility_assessment.risk_candor.recurring_risks && managementData.credibility_assessment.risk_candor.recurring_risks.length > 0 && (
+                    <div>
+                      <h5 className="font-medium mb-3 text-red-700">Recurring Risk Disclosures</h5>
+                      <div className="grid gap-3">
+                        {managementData.credibility_assessment.risk_candor.recurring_risks.map((risk, index) => (
+                          <div key={index} className="border rounded-lg p-3 bg-red-50">
+                            <div className="flex items-start justify-between mb-2">
+                              <div className="font-medium text-red-800">{risk.name}</div>
+                              <Badge className="bg-red-100 text-red-800">{risk.candor_label}</Badge>
+                            </div>
+                            <div className="text-xs text-red-600 mb-2">
+                              Mentioned in: Filing Year {risk.recurrence_years.join(', Filing Year ')}
+                            </div>
+                            <p className="text-sm text-red-700">{risk.note}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Strategic Coherence */}
+              <div>
+                <h4 className="font-semibold mb-4 flex items-center gap-2">
+                  <Target className="h-5 w-5 text-indigo-600" />
+                  Strategic Coherence Assessment
+                </h4>
+                <div className="grid md:grid-cols-3 gap-4 mb-4">
+                  <div className="text-center p-3 bg-indigo-50 rounded-lg">
+                    <div className="text-sm font-medium text-indigo-800">Pivot Frequency</div>
+                    <Badge className="mt-2 bg-indigo-100 text-indigo-800">
+                      {managementData.credibility_assessment.strategic_coherence.pivot_frequency_label}
+                    </Badge>
+                  </div>
+                  <div className="text-center p-3 bg-indigo-50 rounded-lg">
+                    <div className="text-sm font-medium text-indigo-800">Rationalization Quality</div>
+                    <Badge className="mt-2 bg-indigo-100 text-indigo-800">
+                      {managementData.credibility_assessment.strategic_coherence.rationalization_quality_label}
+                    </Badge>
+                  </div>
+                  <div className="text-center p-3 bg-indigo-50 rounded-lg">
+                    <div className="text-sm font-medium text-indigo-800">Resegmentation Transparency</div>
+                    <Badge className="mt-2 bg-indigo-100 text-indigo-800">
+                      {managementData.credibility_assessment.strategic_coherence.resegmentation_transparency_label}
+                    </Badge>
+                  </div>
+                </div>
+                
+                {managementData.credibility_assessment.strategic_coherence.examples && managementData.credibility_assessment.strategic_coherence.examples.length > 0 && (
+                  <div>
+                    <h5 className="font-medium mb-3 text-indigo-700">Strategic Examples</h5>
+                    <ul className="space-y-2">
+                      {managementData.credibility_assessment.strategic_coherence.examples.map((example, index) => (
+                        <li key={index} className="text-sm flex items-start gap-2">
+                          <div className="w-2 h-2 bg-indigo-400 rounded-full mt-2 flex-shrink-0"></div>
+                          <span className="text-indigo-700">{example}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+
+              {/* Capital Allocation Consistency */}
+              <div>
+                <h4 className="font-semibold mb-4 flex items-center gap-2">
+                  <TrendingUp className="h-5 w-5 text-green-600" />
+                  Capital Allocation Consistency
+                </h4>
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center p-3 bg-green-50 rounded-lg">
+                    <span className="text-sm font-medium">Behavior Alignment</span>
+                    <Badge className="bg-green-100 text-green-800">
+                      {managementData.credibility_assessment.capital_allocation_consistency.behavior_alignment_label}
+                    </Badge>
+                  </div>
+                  
+                  {managementData.credibility_assessment.capital_allocation_consistency.stated_priorities && managementData.credibility_assessment.capital_allocation_consistency.stated_priorities.length > 0 && (
+                    <div>
+                      <h5 className="font-medium mb-3 text-green-700">Stated Priorities</h5>
+                      <div className="flex flex-wrap gap-2">
+                        {managementData.credibility_assessment.capital_allocation_consistency.stated_priorities.map((priority, index) => (
+                          <Badge key={index} className="bg-green-100 text-green-800">
+                            {priority.replace(/_/g, ' ')}
+                          </Badge>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  
+                  {managementData.credibility_assessment.capital_allocation_consistency.examples && managementData.credibility_assessment.capital_allocation_consistency.examples.length > 0 && (
+                    <div>
+                      <h5 className="font-medium mb-3 text-green-700">Execution Examples</h5>
+                      <ul className="space-y-2">
+                        {managementData.credibility_assessment.capital_allocation_consistency.examples.map((example, index) => (
+                          <li key={index} className="text-sm flex items-start gap-2">
+                            <div className="w-2 h-2 bg-green-400 rounded-full mt-2 flex-shrink-0"></div>
+                            <span className="text-green-700">{example}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Metric Definition Stability */}
+              {managementData.credibility_assessment.metric_definition_stability && managementData.credibility_assessment.metric_definition_stability.length > 0 && (
+                <div>
+                  <h4 className="font-semibold mb-4 flex items-center gap-2">
+                    <Brain className="h-5 w-5 text-cyan-600" />
+                    Metric Definition Stability
+                  </h4>
+                  <div className="space-y-3">
+                    {managementData.credibility_assessment.metric_definition_stability.map((metric, index) => (
+                      <div key={index} className="border rounded-lg p-3 bg-cyan-50">
+                        <div className="flex items-start justify-between mb-2">
+                          <div className="font-medium text-cyan-800">{metric.metric}</div>
+                          <Badge className="bg-cyan-100 text-cyan-800">{metric.stability_label}</Badge>
+                        </div>
+                        <p className="text-sm text-cyan-700">{metric.notes}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Bullet Highlights and Watch Items */}
+              {(managementData.ui_summaries?.bullet_highlights || managementData.ui_summaries?.watch_items) && (
+                <div className="grid md:grid-cols-2 gap-6">
+                  {managementData.ui_summaries?.bullet_highlights && managementData.ui_summaries.bullet_highlights.length > 0 && (
+                    <div>
+                      <h4 className="font-semibold mb-3 text-blue-700 flex items-center gap-2">
+                        <Award className="h-5 w-5" />
+                        Key Highlights
+                      </h4>
+                      <ul className="space-y-2">
+                        {managementData.ui_summaries.bullet_highlights.map((highlight, index) => (
+                          <li key={index} className="text-sm flex items-start gap-2">
+                            <div className="w-2 h-2 bg-blue-400 rounded-full mt-2 flex-shrink-0"></div>
+                            <span className="text-blue-700">{highlight}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                  
+                  {managementData.ui_summaries?.watch_items && managementData.ui_summaries.watch_items.length > 0 && (
+                    <div>
+                      <h4 className="font-semibold mb-3 text-orange-700 flex items-center gap-2">
+                        <AlertTriangle className="h-5 w-5" />
+                        Watch Items
+                      </h4>
+                      <ul className="space-y-2">
+                        {managementData.ui_summaries.watch_items.map((item, index) => (
+                          <li key={index} className="text-sm flex items-start gap-2">
+                            <AlertTriangle className="h-4 w-4 text-orange-500 mt-0.5 flex-shrink-0" />
+                            <span className="text-orange-700">{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              )}
 
               {/* Red and Green Flags */}
               <div className="grid md:grid-cols-2 gap-6">
@@ -684,6 +957,13 @@ export default function GeneralEquityReport({ report }: GeneralEquityReportProps
                     </ul>
                   </div>
                 )}
+              </div>
+
+              {/* Disclaimer */}
+              <div className="mt-6 p-4 bg-gray-50 rounded-lg border-l-4 border-gray-400">
+                <p className="text-xs text-gray-600">
+                  For informational purposes only. Operational analysis of historical disclosures. Not investment advice or a recommendation.
+                </p>
               </div>
             </div>
           </CardContent>
@@ -955,3 +1235,4 @@ export default function GeneralEquityReport({ report }: GeneralEquityReportProps
     </div>
   );
 }
+
