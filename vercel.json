@@ -1,3 +1,11 @@
 {
-  "framework": "nextjs"
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "npm run build",
+  "installCommand": "npm ci && npm install --no-save --platform=linux --arch=x64 lightningcss",
+  "framework": "nextjs",
+  "functions": {
+    "app/**": {
+      "runtime": "nodejs20.x"
+    }
+  }
 }
