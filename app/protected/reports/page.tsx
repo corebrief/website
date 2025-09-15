@@ -40,9 +40,9 @@ export default async function ReportsPage() {
   return (
     <div className="space-y-6 p-6">
       <div>
-        <h1 className="text-3xl font-bold">Company Analysis Reports</h1>
+        <h1 className="text-3xl font-bold">Multi-Year Equity Intelligence</h1>
         <p className="text-muted-foreground mt-2">
-          Institutional-quality equity analysis powered by multi-agent AI
+          10-K analysis powered by multi-agent AI
         </p>
       </div>
 

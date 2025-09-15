@@ -10,6 +10,15 @@
     "lint:fix": "next lint --fix",
     "lint:strict": "next lint --max-warnings 0"
   },
+  "overrides": {
+    "@tremor/react": {
+      "react": "$react",
+      "react-dom": "$react-dom"
+    }
+  },
+  "npmConfig": {
+    "legacy-peer-deps": true
+  },
   "dependencies": {
     "@radix-ui/react-label": "^2.1.2",
     "@radix-ui/react-progress": "^1.1.7",
