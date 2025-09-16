@@ -663,7 +663,7 @@ export default function GeneralEquityReport({ report }: GeneralEquityReportProps
                             {commitment.outcome_label}
                           </Badge>
                         </div>
-                        <p className="text-sm text-blue-700 mb-2">"{commitment.commitment}"</p>
+                        <p className="text-sm text-blue-700 mb-2">&ldquo;{commitment.commitment}&rdquo;</p>
                         <div className="text-xs text-blue-600 mb-2">
                           Tracked in: Filing Year {commitment.subsequent_followup_years.join(', Filing Year ')}
                         </div>
@@ -850,7 +850,7 @@ export default function GeneralEquityReport({ report }: GeneralEquityReportProps
                   {managementData.credibility_assessment.capital_allocation_consistency.stated_priorities && managementData.credibility_assessment.capital_allocation_consistency.stated_priorities.length > 0 && (
                     <div className="p-4 border rounded-lg bg-green-50">
                       <h5 className="font-medium mb-3 text-green-800">
-                        Management's Stated Capital Priorities
+                        Management&apos;s Stated Capital Priorities
                       </h5>
                       <div className="flex flex-wrap gap-2">
                         {managementData.credibility_assessment.capital_allocation_consistency.stated_priorities.map((priority, index) => (
