@@ -399,13 +399,58 @@ export interface BusinessThesisAnalysis {
     composite: number;
     rationale: string;
   };
+  consensus_map: {
+    aligned_themes: string[];
+    tensions: Array<{
+      topic: string;
+      positions: {
+        multi_year: string;
+        management: string;
+        predictive: string;
+      };
+      diagnosis: string;
+    }>;
+    missing_info: string[];
+  };
+  agreement: {
+    alignment_score: number;
+    areas_of_agreement: string[];
+    areas_of_divergence: string[];
+  };
+  scenarios_bridge: {
+    base_path: string;
+    upside_falsifiers: string[];
+    downside_falsifiers: string[];
+  };
   watchlist: {
     leading_indicators: string[];
     early_warnings: string[];
     data_gaps: string[];
   };
+  transition_triggers: Array<{
+    event: string;
+    interpretation: string;
+    expected_effect: string;
+    thesis_update_rule: string;
+  }>;
+  contribution_breakdown: {
+    weights: {
+      multi_year: number;
+      management: number;
+      predictive: number;
+    };
+    components: {
+      MY_comp: number;
+      MG_comp: number;
+      PR_comp: number;
+    };
+    viability_composite: number;
+    notes: string;
+  };
   one_liner: string;
   synopsis: string;
+  disclaimer: string;
+  version: string;
 }
 
 /**

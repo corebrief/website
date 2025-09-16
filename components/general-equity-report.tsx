@@ -23,7 +23,19 @@ import {
   Shield,
   Target,
   Brain,
-  Building2
+  Building2,
+  AlertCircle,
+  HelpCircle,
+  Zap,
+  Star,
+  Eye,
+  BarChart3,
+  Lightbulb,
+  GitBranch,
+  Activity,
+  CheckCircle,
+  XCircle,
+  Gauge
 } from 'lucide-react';
 
 interface GeneralEquityReportProps {
@@ -34,6 +46,8 @@ type SectionKey = 'multi_year' | 'management' | 'predictive' | 'thesis';
 
 export default function GeneralEquityReport({ report }: GeneralEquityReportProps) {
   const [expandedSections, setExpandedSections] = useState<Set<SectionKey>>(new Set());
+  const [showAnalyticalTensions, setShowAnalyticalTensions] = useState(false);
+  const [showThesisUpdateTriggers, setShowThesisUpdateTriggers] = useState(false);
 
   const toggleSection = (section: SectionKey) => {
     const newExpanded = new Set(expandedSections);
@@ -1056,7 +1070,6 @@ export default function GeneralEquityReport({ report }: GeneralEquityReportProps
           section="predictive"
           title="Forward-Looking Analysis"
           icon={Brain}
-          badge={predictiveData ? `${predictiveData.horizon_selection.length} ${predictiveData.horizon_selection.type}` : undefined}
           summary={predictiveData?.ui_summaries?.one_liner}
         />
         {expandedSections.has('predictive') && predictiveData && (
@@ -1070,13 +1083,56 @@ export default function GeneralEquityReport({ report }: GeneralEquityReportProps
                 </div>
               )}
 
+              {/* Key Highlights & Watch Items */}
+              {(predictiveData.ui_summaries.bullet_highlights || predictiveData.ui_summaries.watch_items) && (
+                <div>
+                  <div className="grid md:grid-cols-2 gap-6">
+                    {/* Bullet Highlights */}
+                    {predictiveData.ui_summaries.bullet_highlights && predictiveData.ui_summaries.bullet_highlights.length > 0 && (
+                      <div className="p-4 border rounded-lg bg-blue-50">
+                        <h5 className="font-semibold mb-3 text-blue-800 flex items-center gap-2">
+                          <Star className="h-5 w-5" />
+                          Key Highlights
+                        </h5>
+                        <ul className="space-y-2">
+                          {predictiveData.ui_summaries.bullet_highlights.map((highlight, index) => (
+                            <li key={index} className="text-sm flex items-start gap-2">
+                              <div className="w-1.5 h-1.5 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
+                              <span className="text-blue-700">{highlight}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+
+                    {/* Watch Items */}
+                    {predictiveData.ui_summaries.watch_items && predictiveData.ui_summaries.watch_items.length > 0 && (
+                      <div className="p-4 border rounded-lg bg-purple-50">
+                        <h5 className="font-semibold mb-3 text-purple-800 flex items-center gap-2">
+                          <Eye className="h-5 w-5" />
+                          Priority Watch Items
+                        </h5>
+                        <ul className="space-y-2">
+                          {predictiveData.ui_summaries.watch_items.map((item, index) => (
+                            <li key={index} className="text-sm flex items-start gap-2">
+                              <div className="w-1.5 h-1.5 bg-purple-500 rounded-full mt-2 flex-shrink-0"></div>
+                              <span className="text-purple-700">{item}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
               {/* Horizon Selection & Assumptions */}
               <div className="grid md:grid-cols-2 gap-6">
                 {/* Horizon Selection */}
                 <div className="p-4 border rounded-lg bg-blue-50">
                   <h4 className="font-semibold mb-3 text-blue-800 flex items-center gap-2">
                     <Brain className="h-5 w-5" />
-                    Analysis Horizon
+                    Forward Analysis Horizon
                   </h4>
                   <div className="space-y-2">
                     <div className="flex justify-between items-center">
@@ -1288,6 +1344,257 @@ export default function GeneralEquityReport({ report }: GeneralEquityReportProps
                   ))}
                 </div>
               </div>
+
+              {/* Transition Map */}
+              {predictiveData.transition_map && predictiveData.transition_map.length > 0 && (
+                <div>
+                  <h4 className="font-semibold mb-4 flex items-center gap-2">
+                    <Target className="h-5 w-5 text-indigo-600" />
+                    Scenario Transition Analysis
+                  </h4>
+                  <div className="space-y-4">
+                    {predictiveData.transition_map.map((transition, index) => (
+                      <div key={index} className="p-4 border rounded-lg bg-indigo-50">
+                        <div className="flex items-center gap-4 mb-3">
+                          <div className="text-sm font-medium text-indigo-700">Scenario Shift:</div>
+                          <div className="flex items-center gap-3">
+                            <Badge className={`${
+                              transition.from === 'Base' ? 'bg-slate-100 text-slate-800' :
+                              transition.from === 'Upside' ? 'bg-green-100 text-green-800' :
+                              'bg-red-100 text-red-800'
+                            }`}>
+                              {transition.from} Case
+                            </Badge>
+                            <div className="text-indigo-600 font-bold text-3xl px-2">→</div>
+                            <Badge className={`${
+                              transition.to === 'Upside' ? 'bg-green-100 text-green-800' :
+                              transition.to === 'Downside' ? 'bg-red-100 text-red-800' :
+                              'bg-slate-100 text-slate-800'
+                            }`}>
+                              {transition.to} Case
+                            </Badge>
+                          </div>
+                        </div>
+                        
+                        <div className="space-y-3">
+                          <div>
+                            <h6 className="font-medium text-sm text-indigo-800 mb-1">Transition Trigger</h6>
+                            <p className="text-sm text-indigo-700">{transition.trigger}</p>
+                          </div>
+                          
+                          <div>
+                            <h6 className="font-medium text-sm text-indigo-800 mb-2">Early Warning Signals</h6>
+                            <ul className="space-y-1">
+                              {transition.early_signals.map((signal, idx) => (
+                                <li key={idx} className="text-sm flex items-start gap-2">
+                                  <div className="w-1.5 h-1.5 bg-indigo-500 rounded-full mt-2 flex-shrink-0"></div>
+                                  <span className="text-indigo-700">{signal}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Uncertainty Analysis */}
+              {predictiveData.uncertainty && (
+                <div>
+                  <h4 className="font-semibold mb-4 flex items-center gap-2">
+                    <AlertCircle className="h-5 w-5 text-amber-600" />
+                    Uncertainty & Risk Assessment
+                  </h4>
+                  <div className="grid md:grid-cols-2 gap-6">
+                    {/* Dominant Unknowns */}
+                    <div className="p-4 border rounded-lg bg-amber-50">
+                      <h5 className="font-semibold mb-3 text-amber-800">Dominant Unknowns</h5>
+                      <ul className="space-y-2">
+                        {predictiveData.uncertainty.dominant_unknowns.map((unknown, index) => (
+                          <li key={index} className="text-sm flex items-start gap-2">
+                            <HelpCircle className="h-4 w-4 text-amber-600 mt-0.5 flex-shrink-0" />
+                            <span className="text-amber-700">{unknown}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    {/* Confidence Check & Black Swan */}
+                    <div className="space-y-4">
+                      <div className="p-4 border rounded-lg bg-slate-50">
+                        <h5 className="font-semibold mb-2 text-slate-800">Overall Confidence</h5>
+                        <Badge className={`${
+                          predictiveData.uncertainty.confidence_check === 'High' ? 'bg-green-100 text-green-800' :
+                          predictiveData.uncertainty.confidence_check === 'Medium' ? 'bg-yellow-100 text-yellow-800' :
+                          'bg-red-100 text-red-800'
+                        }`}>
+                          {predictiveData.uncertainty.confidence_check}
+                        </Badge>
+                      </div>
+
+                      {predictiveData.uncertainty.black_swan_notes && (
+                        <div className="p-4 border rounded-lg bg-red-50">
+                          <h5 className="font-semibold mb-2 text-red-800 flex items-center gap-2">
+                            <Zap className="h-4 w-4" />
+                            Tail Risk Considerations
+                          </h5>
+                          <p className="text-sm text-red-700">{predictiveData.uncertainty.black_swan_notes}</p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Dividend Forward Analysis */}
+              {predictiveData.dividend_forward_analysis && predictiveData.dividend_forward_analysis.applies && (
+                <div className="p-6 border-2 rounded-lg bg-gradient-to-br from-slate-50 to-blue-50 border-slate-300">
+                  <h4 className="font-semibold mb-6 flex items-center gap-2 text-lg">
+                    <TrendingUp className="h-6 w-6 text-green-600" />
+                    Dividend Forward Analysis
+                  </h4>
+                  
+                  <div className="space-y-6">
+                    {/* Base Outlook & Sustainability */}
+                    <div className="grid md:grid-cols-2 gap-6">
+                      {/* Base Outlook */}
+                      <div className="p-4 border rounded-lg bg-white shadow-sm">
+                        <h5 className="font-semibold mb-3 text-green-800">Base Case Outlook</h5>
+                        <div className="space-y-3">
+                          <div className="flex justify-between items-center">
+                            <span className="text-sm font-medium">Expected Direction:</span>
+                            <Badge className={`${
+                              predictiveData.dividend_forward_analysis.base_outlook === 'Increase' ? 'bg-green-100 text-green-800' :
+                              predictiveData.dividend_forward_analysis.base_outlook === 'Maintain' ? 'bg-blue-100 text-blue-800' :
+                              predictiveData.dividend_forward_analysis.base_outlook === 'Reduce' ? 'bg-orange-100 text-orange-800' :
+                              predictiveData.dividend_forward_analysis.base_outlook === 'Suspend' ? 'bg-red-100 text-red-800' :
+                              'bg-slate-100 text-slate-800'
+                            }`}>
+                              {predictiveData.dividend_forward_analysis.base_outlook}
+                            </Badge>
+                          </div>
+                          
+                          <div className="grid grid-cols-1 gap-2">
+                            <div className="flex justify-between items-center">
+                              <span className="text-xs">FCF Trajectory:</span>
+                              <Badge variant="outline" className="text-xs">
+                                {predictiveData.dividend_forward_analysis.sustainability_drivers.fcf_trajectory}
+                              </Badge>
+                            </div>
+                            <div className="flex justify-between items-center">
+                              <span className="text-xs">Payout Pressure:</span>
+                              <Badge variant="outline" className="text-xs">
+                                {predictiveData.dividend_forward_analysis.sustainability_drivers.payout_pressure}
+                              </Badge>
+                            </div>
+                            <div className="flex justify-between items-center">
+                              <span className="text-xs">Capital Priority:</span>
+                              <Badge variant="outline" className="text-xs">
+                                {predictiveData.dividend_forward_analysis.sustainability_drivers.capital_allocation_priority}
+                              </Badge>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Management Signaling */}
+                      <div className="p-4 border rounded-lg bg-white shadow-sm">
+                        <h5 className="font-semibold mb-3 text-blue-800">Management Signaling</h5>
+                        <div className="space-y-3">
+                          <div className="flex justify-between items-center">
+                            <span className="text-sm font-medium">Commitment Strength:</span>
+                            <Badge className={`${
+                              predictiveData.dividend_forward_analysis.management_signaling.commitment_strength === 'Strong' ? 'bg-green-100 text-green-800' :
+                              predictiveData.dividend_forward_analysis.management_signaling.commitment_strength === 'Moderate' ? 'bg-yellow-100 text-yellow-800' :
+                              predictiveData.dividend_forward_analysis.management_signaling.commitment_strength === 'Weak' ? 'bg-red-100 text-red-800' :
+                              'bg-slate-100 text-slate-800'
+                            }`}>
+                              {predictiveData.dividend_forward_analysis.management_signaling.commitment_strength}
+                            </Badge>
+                          </div>
+                          
+                          <div className="flex justify-between items-center">
+                            <span className="text-sm font-medium">Messaging Tone:</span>
+                            <Badge className={`${
+                              predictiveData.dividend_forward_analysis.management_signaling.recent_messaging_tone === 'Confident' ? 'bg-green-100 text-green-800' :
+                              predictiveData.dividend_forward_analysis.management_signaling.recent_messaging_tone === 'Cautious' ? 'bg-yellow-100 text-yellow-800' :
+                              predictiveData.dividend_forward_analysis.management_signaling.recent_messaging_tone === 'Defensive' ? 'bg-red-100 text-red-800' :
+                              'bg-slate-100 text-slate-800'
+                            }`}>
+                              {predictiveData.dividend_forward_analysis.management_signaling.recent_messaging_tone}
+                            </Badge>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Scenario Differentiation */}
+                    <div className="grid md:grid-cols-2 gap-6">
+                      {/* Upside Case */}
+                      {predictiveData.dividend_forward_analysis.scenario_differentiation.upside_dividend_case && (
+                        <div className="p-4 border rounded-lg bg-white shadow-sm border-green-200">
+                          <h5 className="font-semibold mb-2 text-green-800 flex items-center gap-2">
+                            <TrendingUp className="h-4 w-4" />
+                            Upside Dividend Case
+                          </h5>
+                          <p className="text-sm text-green-700">
+                            {predictiveData.dividend_forward_analysis.scenario_differentiation.upside_dividend_case}
+                          </p>
+                        </div>
+                      )}
+
+                      {/* Downside Risk */}
+                      {predictiveData.dividend_forward_analysis.scenario_differentiation.downside_dividend_risk && (
+                        <div className="p-4 border rounded-lg bg-white shadow-sm border-red-200">
+                          <h5 className="font-semibold mb-2 text-red-800 flex items-center gap-2">
+                            <TrendingDown className="h-4 w-4" />
+                            Downside Dividend Risk
+                          </h5>
+                          <p className="text-sm text-red-700">
+                            {predictiveData.dividend_forward_analysis.scenario_differentiation.downside_dividend_risk}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Policy Inflection Signals */}
+                    {predictiveData.dividend_forward_analysis.policy_inflection_signals && 
+                     predictiveData.dividend_forward_analysis.policy_inflection_signals.length > 0 && (
+                      <div className="p-4 border rounded-lg bg-white shadow-sm border-orange-200">
+                        <h5 className="font-semibold mb-3 text-orange-800 flex items-center gap-2">
+                          <AlertTriangle className="h-4 w-4" />
+                          Policy Inflection Signals to Monitor
+                        </h5>
+                        <ul className="space-y-2">
+                          {predictiveData.dividend_forward_analysis.policy_inflection_signals.map((signal, index) => (
+                            <li key={index} className="text-sm flex items-start gap-2">
+                              <div className="w-1.5 h-1.5 bg-orange-500 rounded-full mt-2 flex-shrink-0"></div>
+                              <span className="text-orange-700">{signal}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+
+                    {/* Additional Notes */}
+                    {predictiveData.dividend_forward_analysis.notes && (
+                      <div className="p-4 border rounded-lg bg-white shadow-sm border-slate-200">
+                        <h5 className="font-semibold mb-2 text-slate-800">Additional Insights</h5>
+                        <p className="text-sm text-slate-700">{predictiveData.dividend_forward_analysis.notes}</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* Disclaimer */}
+              {predictiveData.ui_summaries.disclaimer && (
+                <div className="p-4 border rounded-lg bg-slate-100">
+                  <p className="text-xs text-slate-600 italic">{predictiveData.ui_summaries.disclaimer}</p>
+                </div>
+              )}
             </div>
           </CardContent>
         )}
@@ -1297,150 +1604,485 @@ export default function GeneralEquityReport({ report }: GeneralEquityReportProps
       <Card>
         <SectionHeader
           section="thesis"
-          title="Investment Thesis Synthesis"
+          title="Business Thesis Synthesis"
           icon={Building2}
-          badge={thesisData?.viability_assessment?.tier}
           summary={thesisData?.one_liner}
         />
         {expandedSections.has('thesis') && thesisData && (
           <CardContent className="pt-0">
             <div className="space-y-6">
-              {/* Thesis Synopsis */}
-              {thesisData.synopsis && (
-                <div className="bg-green-50 p-4 rounded-lg border-l-4 border-green-400">
-                  <h4 className="font-semibold mb-2 text-green-800">Investment Synopsis</h4>
-                  <p className="text-sm text-green-700">{thesisData.synopsis}</p>
-                </div>
-              )}
 
-              {/* Thesis Statement */}
-              <div className="bg-blue-50 p-4 rounded-lg">
-                <h4 className="font-semibold mb-2">Investment Thesis</h4>
-                <p className="text-sm">{thesisData.business_thesis.thesis_statement}</p>
+
+              {/* Synopsis and Analysis Alignment Side by Side */}
+              <div className="grid md:grid-cols-2 gap-6">
+                {/* Synopsis */}
+                {thesisData.synopsis && (
+                  <div className="bg-gradient-to-br from-orange-50 to-yellow-50 p-4 rounded-lg border-l-4 border-yellow-400">
+                    <h4 className="font-semibold mb-2 text-slate-800">Business Thesis Synopsis</h4>
+                    <p className="text-sm text-slate-700">{thesisData.synopsis}</p>
+                  </div>
+                )}
+
+                {/* Analysis Alignment */}
+                {thesisData.agreement && (
+                  <div className="p-4 border rounded-lg bg-blue-50">
+                    <h4 className="font-semibold mb-3 text-blue-800 flex items-center gap-2">
+                      <Gauge className="h-4 w-4" />
+                      Analysis Alignment
+                    </h4>
+                    <div className="space-y-3">
+                      <div className="flex items-center gap-3">
+                        <span className="text-sm font-medium">Consensus Score:</span>
+                        <Badge className="bg-blue-100 text-blue-800">
+                          {(thesisData.agreement.alignment_score * 100).toFixed(0)}%
+                        </Badge>
+                      </div>
+                      <div className="w-full bg-blue-200 rounded-full h-2">
+                        <div 
+                          className="bg-blue-600 h-2 rounded-full" 
+                          style={{ width: `${thesisData.agreement.alignment_score * 100}%` }}
+                        ></div>
+                      </div>
+                      <p className="text-xs text-blue-600">
+                        Agreement across Multi-Year, Management, and Forward-Looking analyses
+                      </p>
+                    </div>
+                  </div>
+                )}
               </div>
 
-              {/* Viability Assessment */}
-              <div>
-                <div className="flex items-center justify-between mb-4">
-                  <h4 className="font-semibold">Viability Assessment</h4>
-                  <Badge className={getViabilityColor(thesisData.viability_assessment.tier)}>
+              {/* Business Viability Assessment - Top Priority */}
+              <div className="p-6 border-2 rounded-lg bg-gradient-to-br from-slate-50 to-indigo-50 border-indigo-200">
+                <div className="flex items-center justify-between mb-6">
+                  <h4 className="font-semibold text-lg flex items-center gap-2">
+                    <BarChart3 className="h-6 w-6 text-indigo-600" />
+                    Business Viability Assessment
+                  </h4>
+                  <Badge className={`text-lg px-4 py-2 ${getViabilityColor(thesisData.viability_assessment.tier)}`}>
                     {thesisData.viability_assessment.tier} ({thesisData.viability_assessment.composite.toFixed(1)}/10)
                   </Badge>
                 </div>
                 
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div className="space-y-3">
-                    <div className="flex justify-between items-center">
-                      <span className="text-sm">Durability</span>
-                      <span className="text-sm font-medium">{thesisData.viability_assessment.subscores.durability}/10</span>
+                <div className="grid md:grid-cols-2 gap-6 mb-6">
+                  <div className="space-y-4">
+                    <div className="p-3 bg-white rounded-lg border">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-sm font-medium">Durability</span>
+                        <span className="text-sm font-bold">{thesisData.viability_assessment.subscores.durability.toFixed(1)}/10</span>
+                      </div>
+                      <Progress value={thesisData.viability_assessment.subscores.durability * 10} className="h-2" />
                     </div>
-                    <Progress value={thesisData.viability_assessment.subscores.durability * 10} className="h-2" />
                     
-                    <div className="flex justify-between items-center">
-                      <span className="text-sm">Execution Quality</span>
-                      <span className="text-sm font-medium">{thesisData.viability_assessment.subscores.execution_quality}/10</span>
+                    <div className="p-3 bg-white rounded-lg border">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-sm font-medium">Execution Quality</span>
+                        <span className="text-sm font-bold">{thesisData.viability_assessment.subscores.execution_quality.toFixed(1)}/10</span>
+                      </div>
+                      <Progress value={thesisData.viability_assessment.subscores.execution_quality * 10} className="h-2" />
                     </div>
-                    <Progress value={thesisData.viability_assessment.subscores.execution_quality * 10} className="h-2" />
                     
-                    <div className="flex justify-between items-center">
-                      <span className="text-sm">Financial Resilience</span>
-                      <span className="text-sm font-medium">{thesisData.viability_assessment.subscores.financial_resilience}/10</span>
+                    <div className="p-3 bg-white rounded-lg border">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-sm font-medium">Financial Resilience</span>
+                        <span className="text-sm font-bold">{thesisData.viability_assessment.subscores.financial_resilience.toFixed(1)}/10</span>
+                      </div>
+                      <Progress value={thesisData.viability_assessment.subscores.financial_resilience * 10} className="h-2" />
                     </div>
-                    <Progress value={thesisData.viability_assessment.subscores.financial_resilience * 10} className="h-2" />
                   </div>
                   
-                  <div className="space-y-3">
-                    <div className="flex justify-between items-center">
-                      <span className="text-sm">Risk Balance</span>
-                      <span className="text-sm font-medium">{thesisData.viability_assessment.subscores.risk_balance}/10</span>
+                  <div className="space-y-4">
+                    <div className="p-3 bg-white rounded-lg border">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-sm font-medium">Risk Balance</span>
+                        <span className="text-sm font-bold">{thesisData.viability_assessment.subscores.risk_balance.toFixed(1)}/10</span>
+                      </div>
+                      <Progress value={thesisData.viability_assessment.subscores.risk_balance * 10} className="h-2" />
                     </div>
-                    <Progress value={thesisData.viability_assessment.subscores.risk_balance * 10} className="h-2" />
                     
-                    <div className="flex justify-between items-center">
-                      <span className="text-sm">Governance Quality</span>
-                      <span className="text-sm font-medium">{thesisData.viability_assessment.subscores.governance_quality}/10</span>
+                    <div className="p-3 bg-white rounded-lg border">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-sm font-medium">Governance Quality</span>
+                        <span className="text-sm font-bold">{thesisData.viability_assessment.subscores.governance_quality.toFixed(1)}/10</span>
+                      </div>
+                      <Progress value={thesisData.viability_assessment.subscores.governance_quality * 10} className="h-2" />
                     </div>
-                    <Progress value={thesisData.viability_assessment.subscores.governance_quality * 10} className="h-2" />
+
+                    {/* Contribution Breakdown */}
+                    {thesisData.contribution_breakdown && (
+                      <div className="p-3 bg-indigo-50 rounded-lg border border-indigo-200">
+                        <h6 className="font-medium text-sm text-indigo-800 mb-2">Analysis Contribution Weights</h6>
+                        <div className="space-y-1 text-xs">
+                          <div className="flex justify-between">
+                            <span>Multi-Year Analysis:</span>
+                            <span className="font-medium">{(thesisData.contribution_breakdown.weights.multi_year * 100).toFixed(0)}%</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span>Management Analysis:</span>
+                            <span className="font-medium">{(thesisData.contribution_breakdown.weights.management * 100).toFixed(0)}%</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span>Forward-Looking Analysis:</span>
+                            <span className="font-medium">{(thesisData.contribution_breakdown.weights.predictive * 100).toFixed(0)}%</span>
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </div>
+                </div>
+
+                <div className="p-4 bg-white rounded-lg border">
+                  <h6 className="font-medium text-sm mb-2">Assessment Rationale</h6>
+                  <p className="text-sm text-slate-700">{thesisData.viability_assessment.rationale}</p>
                 </div>
               </div>
 
-              {/* Structural Position */}
-              <div>
-                <h4 className="font-semibold mb-3">Structural Position</h4>
-                <div className="grid md:grid-cols-3 gap-4">
-                  <div className="text-center p-3 border rounded-lg">
-                    <h5 className="font-medium mb-1">Moat</h5>
-                    <Badge variant="outline">{thesisData.business_thesis.structural_position.moat_label}</Badge>
-                  </div>
-                  <div className="text-center p-3 border rounded-lg">
-                    <h5 className="font-medium mb-1">Switching Costs</h5>
-                    <Badge variant="outline">{thesisData.business_thesis.structural_position.switching_costs}</Badge>
-                  </div>
-                  <div className="text-center p-3 border rounded-lg">
-                    <h5 className="font-medium mb-1">Regulatory</h5>
-                    <Badge variant="outline">{thesisData.business_thesis.structural_position.regulatory_posture}</Badge>
-                  </div>
-                </div>
-              </div>
-
-              {/* Value Creation vs Fragilities */}
-              <div className="grid md:grid-cols-2 gap-6">
+              {/* Consensus Map */}
+              {thesisData.consensus_map && (
                 <div>
-                  <h4 className="font-semibold mb-3 text-green-700">Value Creation Drivers</h4>
-                  <ul className="space-y-2">
-                    {thesisData.business_thesis.value_creation_drivers.map((driver, index) => (
-                      <li key={index} className="text-sm flex items-start gap-2">
-                        <Target className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
-                        {driver}
-                      </li>
-                    ))}
-                  </ul>
+                  <h4 className="font-semibold mb-4 flex items-center gap-2">
+                    <GitBranch className="h-5 w-5 text-blue-600" />
+                    Analysis Consensus Map
+                  </h4>
+                  
+                  <div className="space-y-6">
+                    {/* Areas of Agreement and Divergence */}
+                    <div className="grid md:grid-cols-2 gap-6">
+                      {/* Areas of Agreement */}
+                      <div className="p-4 border rounded-lg bg-green-50">
+                        <h5 className="font-semibold mb-3 text-green-800 flex items-center gap-2">
+                          <CheckCircle className="h-4 w-4" />
+                          Areas of Agreement
+                        </h5>
+                        <ul className="space-y-2">
+                          {thesisData.consensus_map.aligned_themes.map((theme, index) => (
+                            <li key={index} className="text-sm flex items-start gap-2">
+                              <div className="w-1.5 h-1.5 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
+                              <span className="text-green-700">{theme}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+
+                      {/* Areas of Divergence */}
+                      <div className="p-4 border rounded-lg bg-red-50">
+                        <h5 className="font-semibold mb-3 text-red-800 flex items-center gap-2">
+                          <XCircle className="h-4 w-4" />
+                          Areas of Divergence
+                        </h5>
+                        {thesisData.agreement.areas_of_divergence && thesisData.agreement.areas_of_divergence.length > 0 ? (
+                          <ul className="space-y-2">
+                            {thesisData.agreement.areas_of_divergence.map((divergence, index) => (
+                              <li key={index} className="text-sm flex items-start gap-2">
+                                <div className="w-1.5 h-1.5 bg-red-500 rounded-full mt-2 flex-shrink-0"></div>
+                                <span className="text-red-700">{divergence}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        ) : (
+                          <p className="text-sm text-red-600 italic">No significant divergences identified</p>
+                        )}
+                      </div>
+                    </div>
+
+                  </div>
+
+                  {/* Analytical Tensions - Collapsible */}
+                  {thesisData.consensus_map.tensions && thesisData.consensus_map.tensions.length > 0 && (
+                    <div className="mt-4">
+                      <button 
+                        onClick={() => setShowAnalyticalTensions(!showAnalyticalTensions)}
+                        className="w-full flex items-center justify-between p-3 bg-amber-50 border border-amber-200 rounded-lg hover:bg-amber-100 transition-colors"
+                      >
+                        <div className="flex items-center gap-2">
+                          <AlertCircle className="h-4 w-4 text-amber-600" />
+                          <h5 className="font-semibold text-amber-800">
+                            Analytical Tensions ({thesisData.consensus_map.tensions.length})
+                          </h5>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs text-amber-600">
+                            {showAnalyticalTensions ? 'Hide details' : 'Show details'}
+                          </span>
+                          <ChevronDown className={`h-4 w-4 text-amber-600 transition-transform ${
+                            showAnalyticalTensions ? 'rotate-180' : ''
+                          }`} />
+                        </div>
+                      </button>
+                      
+                      {showAnalyticalTensions && (
+                        <div className="mt-3 space-y-3">
+                          {thesisData.consensus_map.tensions.map((tension, index) => (
+                            <div key={index} className="p-4 border rounded-lg bg-amber-50">
+                              <h6 className="font-medium text-sm text-amber-800 mb-2">{tension.topic}</h6>
+                              <div className="grid md:grid-cols-3 gap-3 mb-3">
+                                <div className="text-xs">
+                                  <span className="font-medium text-slate-600">Multi-Year:</span>
+                                  <p className="text-slate-700 mt-1">{tension.positions.multi_year}</p>
+                                </div>
+                                <div className="text-xs">
+                                  <span className="font-medium text-slate-600">Management:</span>
+                                  <p className="text-slate-700 mt-1">{tension.positions.management}</p>
+                                </div>
+                                <div className="text-xs">
+                                  <span className="font-medium text-slate-600">Forward-Looking:</span>
+                                  <p className="text-slate-700 mt-1">{tension.positions.predictive}</p>
+                                </div>
+                              </div>
+                              <div className="text-xs bg-amber-100 p-2 rounded">
+                                <span className="font-medium text-amber-800">Diagnosis:</span>
+                                <span className="text-amber-700 ml-1">{tension.diagnosis}</span>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
-                
+              )}
+
+              {/* Operating Model Profile */}
+              {thesisData.business_thesis && (
                 <div>
-                  <h4 className="font-semibold mb-3 text-red-700">Key Fragilities</h4>
-                  <ul className="space-y-2">
-                    {thesisData.business_thesis.fragilities.map((fragility, index) => (
-                      <li key={index} className="text-sm flex items-start gap-2">
-                        <AlertTriangle className="h-4 w-4 text-red-500 mt-0.5 flex-shrink-0" />
-                        {fragility}
-                      </li>
-                    ))}
-                  </ul>
+                  <h4 className="font-semibold mb-4 flex items-center gap-2">
+                    <Lightbulb className="h-5 w-5 text-purple-600" />
+                    Operating Model Profile
+                  </h4>
+                  
+                  {/* Operating Model */}
+                  <div className="grid md:grid-cols-2 gap-6 mb-4">
+                    <div className="p-4 border rounded-lg bg-green-50">
+                      <h5 className="font-semibold mb-3 text-green-800">Operating Model Strengths</h5>
+                      <ul className="space-y-2">
+                        {thesisData.business_thesis.operating_model.strengths.map((strength, index) => (
+                          <li key={index} className="text-sm flex items-start gap-2">
+                            <div className="w-1.5 h-1.5 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
+                            <span className="text-green-700">{strength}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    <div className="p-4 border rounded-lg bg-red-50">
+                      <h5 className="font-semibold mb-3 text-red-800">Operating Constraints</h5>
+                      <ul className="space-y-2">
+                        {thesisData.business_thesis.operating_model.constraints.map((constraint, index) => (
+                          <li key={index} className="text-sm flex items-start gap-2">
+                            <div className="w-1.5 h-1.5 bg-red-500 rounded-full mt-2 flex-shrink-0"></div>
+                            <span className="text-red-700">{constraint}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+
+                  {/* Value Creation & Fragilities */}
+                  <div className="grid md:grid-cols-2 gap-6 mb-4">
+                    <div className="p-4 border rounded-lg bg-blue-50">
+                      <h5 className="font-semibold mb-3 text-blue-800">Value Creation Drivers</h5>
+                      <ul className="space-y-2">
+                        {thesisData.business_thesis.value_creation_drivers.map((driver, index) => (
+                          <li key={index} className="text-sm flex items-start gap-2">
+                            <TrendingUp className="h-3 w-3 text-blue-600 mt-1 flex-shrink-0" />
+                            <span className="text-blue-700">{driver}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    <div className="p-4 border rounded-lg bg-orange-50">
+                      <h5 className="font-semibold mb-3 text-orange-800">Key Fragilities</h5>
+                      <ul className="space-y-2">
+                        {thesisData.business_thesis.fragilities.map((fragility, index) => (
+                          <li key={index} className="text-sm flex items-start gap-2">
+                            <AlertTriangle className="h-3 w-3 text-orange-600 mt-1 flex-shrink-0" />
+                            <span className="text-orange-700">{fragility}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+
+                  {/* Structural Position */}
+                  <div className="p-4 border rounded-lg bg-slate-50">
+                    <h5 className="font-semibold mb-3 text-slate-800">Structural Position Assessment</h5>
+                    <div className="grid md:grid-cols-3 gap-4 mb-3">
+                      <div className="text-center">
+                        <div className="text-xs text-slate-600 mb-1">Competitive Moat</div>
+                        <Badge className={`${
+                          thesisData.business_thesis.structural_position.moat_label === 'Strengthening' ? 'bg-green-100 text-green-800' :
+                          thesisData.business_thesis.structural_position.moat_label === 'Stable' ? 'bg-blue-100 text-blue-800' :
+                          thesisData.business_thesis.structural_position.moat_label === 'Eroding' ? 'bg-red-100 text-red-800' :
+                          'bg-slate-100 text-slate-800'
+                        }`}>
+                          {thesisData.business_thesis.structural_position.moat_label}
+                        </Badge>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-xs text-slate-600 mb-1">Switching Costs</div>
+                        <Badge className={`${
+                          thesisData.business_thesis.structural_position.switching_costs === 'High' ? 'bg-green-100 text-green-800' :
+                          thesisData.business_thesis.structural_position.switching_costs === 'Medium' ? 'bg-yellow-100 text-yellow-800' :
+                          'bg-red-100 text-red-800'
+                        }`}>
+                          {thesisData.business_thesis.structural_position.switching_costs}
+                        </Badge>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-xs text-slate-600 mb-1">Regulatory Posture</div>
+                        <Badge className={`${
+                          thesisData.business_thesis.structural_position.regulatory_posture === 'Favorable' ? 'bg-green-100 text-green-800' :
+                          thesisData.business_thesis.structural_position.regulatory_posture === 'Neutral' ? 'bg-blue-100 text-blue-800' :
+                          thesisData.business_thesis.structural_position.regulatory_posture === 'Adverse' ? 'bg-red-100 text-red-800' :
+                          'bg-slate-100 text-slate-800'
+                        }`}>
+                          {thesisData.business_thesis.structural_position.regulatory_posture}
+                        </Badge>
+                      </div>
+                    </div>
+                    <p className="text-xs text-slate-600 italic">{thesisData.business_thesis.structural_position.notes}</p>
+                  </div>
+                </div>
+              )}
+
+              {/* Scenarios Bridge */}
+              {thesisData.scenarios_bridge && (
+                <div>
+                  <h4 className="font-semibold mb-4 flex items-center gap-2">
+                    <Activity className="h-5 w-5 text-teal-600" />
+                    Scenario Outlook & Triggers
+                  </h4>
+                  
+                  <div className="p-4 border rounded-lg bg-teal-50 mb-4">
+                    <h5 className="font-semibold mb-2 text-teal-800">Base Path Expectation</h5>
+                    <p className="text-sm text-teal-700 font-medium">{thesisData.scenarios_bridge.base_path}</p>
+                  </div>
+
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <div className="p-4 border rounded-lg bg-green-50">
+                      <h5 className="font-semibold mb-3 text-green-800 flex items-center gap-2">
+                        <TrendingUp className="h-4 w-4" />
+                        Upside Scenario Confirmations
+                      </h5>
+                      <ul className="space-y-2">
+                        {thesisData.scenarios_bridge.upside_falsifiers.map((falsifier, index) => (
+                          <li key={index} className="text-sm flex items-start gap-2">
+                            <CheckCircle className="h-3 w-3 text-green-600 mt-1 flex-shrink-0" />
+                            <span className="text-green-700">{falsifier}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    <div className="p-4 border rounded-lg bg-red-50">
+                      <h5 className="font-semibold mb-3 text-red-800 flex items-center gap-2">
+                        <TrendingDown className="h-4 w-4" />
+                        Downside Scenario Confirmations
+                      </h5>
+                      <ul className="space-y-2">
+                        {thesisData.scenarios_bridge.downside_falsifiers.map((falsifier, index) => (
+                          <li key={index} className="text-sm flex items-start gap-2">
+                            <XCircle className="h-3 w-3 text-red-600 mt-1 flex-shrink-0" />
+                            <span className="text-red-700">{falsifier}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Comprehensive Monitoring Framework */}
+              <div>
+                <h4 className="font-semibold mb-4 flex items-center gap-2">
+                  <Eye className="h-5 w-5 text-gray-600" />
+                  Monitoring Dashboard
+                </h4>
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div className="p-4 border rounded-lg bg-blue-50">
+                    <h5 className="font-semibold mb-3 text-blue-800">Leading Indicators</h5>
+                    <ul className="space-y-2">
+                      {thesisData.watchlist.leading_indicators.map((indicator, index) => (
+                        <li key={index} className="text-sm flex items-start gap-2">
+                          <div className="w-1.5 h-1.5 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
+                          <span className="text-blue-700">{indicator}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  
+                  <div className="p-4 border rounded-lg bg-amber-50">
+                    <h5 className="font-semibold mb-3 text-amber-800">Early Warning Signals</h5>
+                    <ul className="space-y-2">
+                      {thesisData.watchlist.early_warnings.map((warning, index) => (
+                        <li key={index} className="text-sm flex items-start gap-2">
+                          <AlertTriangle className="h-3 w-3 text-amber-600 mt-1 flex-shrink-0" />
+                          <span className="text-amber-700">{warning}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
               </div>
 
-              {/* Watchlist */}
-              <div>
-                <h4 className="font-semibold mb-3">Key Monitoring Items</h4>
-                <div className="grid md:grid-cols-3 gap-4">
-                  <div>
-                    <h5 className="font-medium mb-2 text-blue-700">Leading Indicators</h5>
-                    <ul className="text-sm space-y-1">
-                      {thesisData.watchlist.leading_indicators.slice(0, 3).map((indicator, index) => (
-                        <li key={index}>• {indicator}</li>
+              {/* Transition Triggers - Collapsible */}
+              {thesisData.transition_triggers && thesisData.transition_triggers.length > 0 && (
+                <div>
+                  <button 
+                    onClick={() => setShowThesisUpdateTriggers(!showThesisUpdateTriggers)}
+                    className="w-full flex items-center justify-between p-3 bg-yellow-50 border border-yellow-200 rounded-lg hover:bg-yellow-100 transition-colors"
+                  >
+                    <div className="flex items-center gap-2">
+                      <Zap className="h-4 w-4 text-yellow-600" />
+                      <h4 className="font-semibold text-yellow-800">
+                        Business Thesis Update Triggers ({thesisData.transition_triggers.length})
+                      </h4>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs text-yellow-600">
+                        {showThesisUpdateTriggers ? 'Hide details' : 'Show details'}
+                      </span>
+                      <ChevronDown className={`h-4 w-4 text-yellow-600 transition-transform ${
+                        showThesisUpdateTriggers ? 'rotate-180' : ''
+                      }`} />
+                    </div>
+                  </button>
+                  
+                  {showThesisUpdateTriggers && (
+                    <div className="mt-3 space-y-3">
+                      {thesisData.transition_triggers.map((trigger, index) => (
+                        <div key={index} className="p-4 border rounded-lg bg-yellow-50">
+                          <div className="flex items-start justify-between mb-2">
+                            <h6 className="font-medium text-sm text-yellow-800">{trigger.event}</h6>
+                            <div className="flex gap-2">
+                              <Badge className={`text-xs ${
+                                trigger.interpretation === 'Positive' ? 'bg-green-100 text-green-800' :
+                                trigger.interpretation === 'Negative' ? 'bg-red-100 text-red-800' :
+                                'bg-slate-100 text-slate-800'
+                              }`}>
+                                {trigger.interpretation}
+                              </Badge>
+                              <Badge variant="outline" className="text-xs">
+                                {trigger.expected_effect}
+                              </Badge>
+                            </div>
+                          </div>
+                          <p className="text-xs text-yellow-700 italic">
+                            <span className="font-medium">Update Rule:</span> {trigger.thesis_update_rule}
+                          </p>
+                        </div>
                       ))}
-                    </ul>
-                  </div>
-                  <div>
-                    <h5 className="font-medium mb-2 text-amber-700">Early Warnings</h5>
-                    <ul className="text-sm space-y-1">
-                      {thesisData.watchlist.early_warnings.slice(0, 3).map((warning, index) => (
-                        <li key={index}>• {warning}</li>
-                      ))}
-                    </ul>
-                  </div>
-                  <div>
-                    <h5 className="font-medium mb-2 text-gray-700">Data Gaps</h5>
-                    <ul className="text-sm space-y-1">
-                      {thesisData.watchlist.data_gaps.slice(0, 3).map((gap, index) => (
-                        <li key={index}>• {gap}</li>
-                      ))}
-                    </ul>
-                  </div>
+                    </div>
+                  )}
                 </div>
-              </div>
+              )}
+
+              {/* Final Disclaimer */}
+              {thesisData.disclaimer && (
+                <div className="p-4 border rounded-lg bg-slate-100">
+                  <p className="text-xs text-slate-600 italic">{thesisData.disclaimer}</p>
+                </div>
+              )}
             </div>
           </CardContent>
         )}
