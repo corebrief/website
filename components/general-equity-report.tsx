@@ -88,6 +88,15 @@ export default function GeneralEquityReport({ report }: GeneralEquityReportProps
     }
   };
 
+  const getCredibilityTierColor = (tier: string) => {
+    switch (tier.toLowerCase()) {
+      case 'high': return 'bg-green-100 text-green-800 border-green-300';
+      case 'medium': return 'bg-yellow-100 text-yellow-800 border-yellow-300';
+      case 'low': return 'bg-red-100 text-red-800 border-red-300';
+      default: return 'bg-gray-100 text-gray-800 border-gray-300';
+    }
+  };
+
   // Section header component
   const SectionHeader = ({ 
     section, 
@@ -617,10 +626,15 @@ export default function GeneralEquityReport({ report }: GeneralEquityReportProps
                 <div className="mt-4 p-4 bg-slate-100 rounded-lg border-2 border-slate-300">
                   <div className="flex justify-between items-center">
                     <span className="font-semibold">Overall Credibility Score</span>
-                    <span className="font-bold text-xl">{managementData.scores.composite_score.toFixed(2)}/10</span>
+                    <div className="flex items-center gap-3">
+                      <span className="font-bold text-xl">{managementData.scores.composite_score.toFixed(2)}/10</span>
+                      <Badge className={`text-lg px-3 py-1 ${getCredibilityTierColor(managementData.scores.credibility_tier)}`}>
+                        {managementData.scores.credibility_tier} Tier
+                      </Badge>
+                    </div>
                   </div>
                   <p className="text-xs text-muted-foreground mt-1">
-                    Weighted composite = {managementData.scores.credibility_tier} Tier
+                    Weighted composite assessment
                   </p>
                 </div>
               </div>
@@ -653,7 +667,7 @@ export default function GeneralEquityReport({ report }: GeneralEquityReportProps
                         <div className="text-xs text-blue-600 mb-2">
                           Tracked in: Filing Year {commitment.subsequent_followup_years.join(', Filing Year ')}
                         </div>
-                        <p className="text-xs text-blue-600">{commitment.rationale}</p>
+                        <p className="text-xs text-blue-600"><span className="font-medium">Rationale:</span> {commitment.rationale}</p>
                       </div>
                     ))}
                   </div>
@@ -826,25 +840,21 @@ export default function GeneralEquityReport({ report }: GeneralEquityReportProps
               </div>
 
               {/* Capital Allocation Consistency */}
-              <div>
+              <div className="p-6 border-2 border-slate-200 rounded-lg bg-gradient-to-r from-slate-50 to-gray-50">
                 <h4 className="font-semibold mb-4 flex items-center gap-2">
                   <TrendingUp className="h-5 w-5 text-green-600" />
-                  Capital Allocation Consistency
+                  Capital Allocation Consistency Analysis
                 </h4>
-                <div className="space-y-4">
-                  <div className="flex justify-between items-center p-3 bg-green-50 rounded-lg">
-                    <span className="text-sm font-medium">Behavior Alignment</span>
-                    <Badge className="bg-green-100 text-green-800">
-                      {managementData.credibility_assessment.capital_allocation_consistency.behavior_alignment_label}
-                    </Badge>
-                  </div>
-                  
+                <div className="space-y-6">
+                  {/* Stated Priorities */}
                   {managementData.credibility_assessment.capital_allocation_consistency.stated_priorities && managementData.credibility_assessment.capital_allocation_consistency.stated_priorities.length > 0 && (
-                    <div>
-                      <h5 className="font-medium mb-3 text-green-700">Stated Priorities</h5>
+                    <div className="p-4 border rounded-lg bg-green-50">
+                      <h5 className="font-medium mb-3 text-green-800">
+                        Management's Stated Capital Priorities
+                      </h5>
                       <div className="flex flex-wrap gap-2">
                         {managementData.credibility_assessment.capital_allocation_consistency.stated_priorities.map((priority, index) => (
-                          <Badge key={index} className="bg-green-100 text-green-800">
+                          <Badge key={index} className="bg-green-100 text-green-800 border border-green-300">
                             {priority.replace(/_/g, ' ')}
                           </Badge>
                         ))}
@@ -852,19 +862,40 @@ export default function GeneralEquityReport({ report }: GeneralEquityReportProps
                     </div>
                   )}
                   
+                  {/* Execution Examples */}
                   {managementData.credibility_assessment.capital_allocation_consistency.examples && managementData.credibility_assessment.capital_allocation_consistency.examples.length > 0 && (
-                    <div>
-                      <h5 className="font-medium mb-3 text-green-700">Execution Examples</h5>
+                    <div className="p-4 border rounded-lg bg-blue-50">
+                      <h5 className="font-medium mb-3 text-blue-800">
+                        Actual Execution Track Record
+                      </h5>
                       <ul className="space-y-2">
                         {managementData.credibility_assessment.capital_allocation_consistency.examples.map((example, index) => (
                           <li key={index} className="text-sm flex items-start gap-2">
-                            <div className="w-2 h-2 bg-green-400 rounded-full mt-2 flex-shrink-0"></div>
-                            <span className="text-green-700">{example}</span>
+                            <div className="w-2 h-2 bg-blue-400 rounded-full mt-2 flex-shrink-0"></div>
+                            <span className="text-blue-700">{example}</span>
                           </li>
                         ))}
                       </ul>
                     </div>
                   )}
+                  
+                  {/* Assessment Result */}
+                  <div className="p-4 border-2 rounded-lg bg-white">
+                    <h5 className="font-medium mb-3 text-slate-800">
+                      Behavior Alignment Assessment
+                    </h5>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm">Stated priorities vs. actual execution:</span>
+                      <Badge className={`text-lg px-3 py-1 ${
+                        managementData.credibility_assessment.capital_allocation_consistency.behavior_alignment_label === 'Aligned' ? 'bg-green-100 text-green-800 border-green-300' :
+                        managementData.credibility_assessment.capital_allocation_consistency.behavior_alignment_label === 'Mixed' ? 'bg-yellow-100 text-yellow-800 border-yellow-300' :
+                        managementData.credibility_assessment.capital_allocation_consistency.behavior_alignment_label === 'NotAligned' ? 'bg-red-100 text-red-800 border-red-300' :
+                        'bg-slate-100 text-slate-800 border-slate-300'
+                      }`}>
+                        {managementData.credibility_assessment.capital_allocation_consistency.behavior_alignment_label}
+                      </Badge>
+                    </div>
+                  </div>
                 </div>
               </div>
 
@@ -885,6 +916,55 @@ export default function GeneralEquityReport({ report }: GeneralEquityReportProps
                         <p className="text-sm text-cyan-700">{metric.notes}</p>
                       </div>
                     ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Overall Classification Summary */}
+              {managementData.classification && (
+                <div>
+                  <h4 className="font-semibold mb-4 flex items-center gap-2">
+                    <Building2 className="h-5 w-5 text-slate-600" />
+                    Management Classification Summary
+                  </h4>
+                  <div className="p-4 border rounded-lg bg-slate-50">
+                    <div className="grid md:grid-cols-3 gap-4 mb-4">
+                      <div className="text-center">
+                        <div className="text-sm font-medium text-slate-700 mb-2">Communication Style</div>
+                        <Badge className="bg-slate-100 text-slate-800">
+                          {managementData.classification.communication_style}
+                        </Badge>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-sm font-medium text-slate-700 mb-2">Credibility Trend</div>
+                        <Badge className={`${
+                          managementData.classification.credibility_trend === 'Improving' ? 'bg-green-100 text-green-800' :
+                          managementData.classification.credibility_trend === 'Deteriorating' ? 'bg-red-100 text-red-800' :
+                          managementData.classification.credibility_trend === 'Mixed' ? 'bg-yellow-100 text-yellow-800' :
+                          'bg-slate-100 text-slate-800'
+                        }`}>
+                          {managementData.classification.credibility_trend}
+                        </Badge>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-sm font-medium text-slate-700 mb-2">Disclosure Quality</div>
+                        <Badge className={`${
+                          managementData.classification.disclosure_quality_tier === 'High' ? 'bg-green-100 text-green-800' :
+                          managementData.classification.disclosure_quality_tier === 'Moderate' ? 'bg-yellow-100 text-yellow-800' :
+                          managementData.classification.disclosure_quality_tier === 'Low' ? 'bg-red-100 text-red-800' :
+                          'bg-slate-100 text-slate-800'
+                        }`}>
+                          {managementData.classification.disclosure_quality_tier}
+                        </Badge>
+                      </div>
+                    </div>
+                    
+                    {managementData.classification.rationale && (
+                      <div className="border-t pt-4">
+                        <h5 className="font-medium mb-2 text-slate-700">Assessment Rationale</h5>
+                        <p className="text-sm text-slate-600">{managementData.classification.rationale}</p>
+                      </div>
+                    )}
                   </div>
                 </div>
               )}
