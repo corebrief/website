@@ -1064,79 +1064,222 @@ export default function GeneralEquityReport({ report }: GeneralEquityReportProps
             <div className="space-y-6">
               {/* Predictive Synopsis */}
               {predictiveData.ui_summaries?.synopsis && (
-                <div className="bg-purple-50 p-4 rounded-lg border-l-4 border-purple-400">
-                  <h4 className="font-semibold mb-2 text-purple-800">Forward-Looking Synopsis</h4>
-                  <p className="text-sm text-purple-700">{predictiveData.ui_summaries.synopsis}</p>
+                <div className="bg-slate-50 p-4 rounded-lg border-l-4 border-slate-400">
+                  <h4 className="font-semibold mb-2 text-slate-800">Forward-Looking Synopsis</h4>
+                  <p className="text-sm text-slate-700">{predictiveData.ui_summaries.synopsis}</p>
                 </div>
               )}
 
-              {/* Current State */}
-              <div>
-                <h4 className="font-semibold mb-3">Current State Assessment</h4>
-                <div className="grid md:grid-cols-2 gap-4">
+              {/* Horizon Selection & Assumptions */}
+              <div className="grid md:grid-cols-2 gap-6">
+                {/* Horizon Selection */}
+                <div className="p-4 border rounded-lg bg-blue-50">
+                  <h4 className="font-semibold mb-3 text-blue-800 flex items-center gap-2">
+                    <Brain className="h-5 w-5" />
+                    Analysis Horizon
+                  </h4>
                   <div className="space-y-2">
-                    <div className="flex justify-between">
-                      <span className="text-sm">Growth:</span>
-                      <Badge variant="outline">{predictiveData.base_state.starting_point.growth}</Badge>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm">Time Frame:</span>
+                      <Badge className="bg-blue-100 text-blue-800">
+                        {predictiveData.horizon_selection.length} {predictiveData.horizon_selection.type}
+                      </Badge>
                     </div>
-                    <div className="flex justify-between">
-                      <span className="text-sm">Margins:</span>
-                      <Badge variant="outline">{predictiveData.base_state.starting_point.margin}</Badge>
+                    <div className="text-xs text-blue-600">
+                      <span className="font-medium">Rationale:</span> {predictiveData.horizon_selection.reason}
                     </div>
                   </div>
-                  <div className="space-y-2">
-                    <div className="flex justify-between">
-                      <span className="text-sm">Cash Generation:</span>
-                      <Badge variant="outline">{predictiveData.base_state.starting_point.cash_generation}</Badge>
+                </div>
+
+                {/* Base State Assessment */}
+                <div className="p-4 border rounded-lg bg-green-50">
+                  <h4 className="font-semibold mb-3 text-green-800">Current State Assessment</h4>
+                  <div className="grid grid-cols-2 gap-2">
+                    <div className="flex justify-between items-center">
+                      <span className="text-xs">Growth:</span>
+                      <Badge className="bg-green-100 text-green-800 text-xs">
+                        {predictiveData.base_state.starting_point.growth}
+                      </Badge>
                     </div>
-                    <div className="flex justify-between">
-                      <span className="text-sm">Risk Level:</span>
-                      <Badge variant="outline">{predictiveData.base_state.starting_point.risk_level}</Badge>
+                    <div className="flex justify-between items-center">
+                      <span className="text-xs">Margins:</span>
+                      <Badge className="bg-green-100 text-green-800 text-xs">
+                        {predictiveData.base_state.starting_point.margin}
+                      </Badge>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-xs">Cash Gen:</span>
+                      <Badge className="bg-green-100 text-green-800 text-xs">
+                        {predictiveData.base_state.starting_point.cash_generation}
+                      </Badge>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-xs">Risk:</span>
+                      <Badge className="bg-green-100 text-green-800 text-xs">
+                        {predictiveData.base_state.starting_point.risk_level}
+                      </Badge>
                     </div>
                   </div>
                 </div>
               </div>
 
-              {/* Scenarios */}
+              {/* Assumption Journal */}
+              {predictiveData.assumption_journal && predictiveData.assumption_journal.length > 0 && (
+                <div>
+                  <h4 className="font-semibold mb-3 flex items-center gap-2">
+                    <Target className="h-5 w-5 text-indigo-600" />
+                    Key Assumptions from Historical Analysis
+                  </h4>
+                  <div className="space-y-2">
+                    {predictiveData.assumption_journal.map((assumption, index) => (
+                      <div key={index} className="p-3 border rounded-lg bg-indigo-50">
+                        <p className="text-sm text-indigo-700">{assumption}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Recent Inflections */}
+              {predictiveData.base_state.recent_inflections && predictiveData.base_state.recent_inflections.length > 0 && (
+                <div>
+                  <h4 className="font-semibold mb-3 flex items-center gap-2">
+                    <TrendingUp className="h-5 w-5 text-orange-600" />
+                    Recent Operational Inflections
+                  </h4>
+                  <ul className="space-y-2">
+                    {predictiveData.base_state.recent_inflections.map((inflection, index) => (
+                      <li key={index} className="text-sm flex items-start gap-2">
+                        <div className="w-2 h-2 bg-orange-400 rounded-full mt-2 flex-shrink-0"></div>
+                        <span className="text-orange-700">{inflection}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {/* Forward Scenarios */}
               <div>
-                <h4 className="font-semibold mb-3">Forward Scenarios</h4>
-                <div className="space-y-4">
+                <h4 className="font-semibold mb-4">Forward-Looking Scenarios</h4>
+                <div className="space-y-6">
                   {predictiveData.scenarios.map((scenario, index) => (
-                    <div key={index} className="p-4 border rounded-lg">
-                      <div className="flex items-center justify-between mb-3">
-                        <h5 className="font-semibold">{scenario.name} Case</h5>
-                        <Badge variant="outline">
+                    <div key={index} className={`p-6 border-2 rounded-lg ${
+                      scenario.name === 'Base' ? 'bg-slate-50 border-slate-300' :
+                      scenario.name === 'Upside' ? 'bg-green-50 border-green-300' :
+                      'bg-red-50 border-red-300'
+                    }`}>
+                      <div className="flex items-center justify-between mb-4">
+                        <h5 className="font-semibold text-lg">{scenario.name} Case</h5>
+                        <Badge className={`text-lg px-3 py-1 ${
+                          scenario.name === 'Base' ? 'bg-slate-100 text-slate-800' :
+                          scenario.name === 'Upside' ? 'bg-green-100 text-green-800' :
+                          'bg-red-100 text-red-800'
+                        }`}>
                           {(scenario.confidence * 100).toFixed(0)}% Confidence
                         </Badge>
                       </div>
                       
-                      <div className="grid md:grid-cols-3 gap-4 mb-3">
-                        <div className="text-sm">
-                          <span className="font-medium">Topline:</span> {scenario.outcomes.topline}
+                      {/* Complete Outcomes Grid */}
+                      <div className="grid md:grid-cols-3 gap-4 mb-4">
+                        <div className="space-y-2">
+                          <div className="flex justify-between items-center">
+                            <span className="text-sm font-medium">Topline:</span>
+                            <Badge variant="outline">{scenario.outcomes.topline}</Badge>
+                          </div>
+                          <div className="flex justify-between items-center">
+                            <span className="text-sm font-medium">Margins:</span>
+                            <Badge variant="outline">{scenario.outcomes.margin}</Badge>
+                          </div>
+                          <div className="flex justify-between items-center">
+                            <span className="text-sm font-medium">Cash Generation:</span>
+                            <Badge variant="outline">{scenario.outcomes.cash_generation}</Badge>
+                          </div>
                         </div>
-                        <div className="text-sm">
-                          <span className="font-medium">Margins:</span> {scenario.outcomes.margin}
+                        <div className="space-y-2">
+                          <div className="flex justify-between items-center">
+                            <span className="text-sm font-medium">Capex Intensity:</span>
+                            <Badge variant="outline">{scenario.outcomes.capex_intensity}</Badge>
+                          </div>
+                          <div className="flex justify-between items-center">
+                            <span className="text-sm font-medium">Leverage:</span>
+                            <Badge variant="outline">{scenario.outcomes.leverage}</Badge>
+                          </div>
+                          <div className="flex justify-between items-center">
+                            <span className="text-sm font-medium">Diversification:</span>
+                            <Badge variant="outline">{scenario.outcomes.diversification}</Badge>
+                          </div>
                         </div>
-                        <div className="text-sm">
-                          <span className="font-medium">Cash:</span> {scenario.outcomes.cash_generation}
+                        <div className="space-y-2">
+                          <div className="flex justify-between items-center">
+                            <span className="text-sm font-medium">Execution Load:</span>
+                            <Badge variant="outline">{scenario.outcomes.execution_load}</Badge>
+                          </div>
+                          <div className="flex justify-between items-center">
+                            <span className="text-sm font-medium">Risk Level:</span>
+                            <Badge variant="outline">{scenario.outcomes.risk_level}</Badge>
+                          </div>
+                          <div className="flex justify-between items-center">
+                            <span className="text-sm font-medium">Dividend Outlook:</span>
+                            <Badge variant="outline">{scenario.outcomes.dividend_outlook}</Badge>
+                          </div>
                         </div>
                       </div>
 
-                      <div className="space-y-2">
+                      {/* Numeric Notes */}
+                      {(scenario.coarse_numeric_notes.yoy_growth_range_pct || scenario.coarse_numeric_notes.margin_change_bps) && (
+                        <div className="mb-4 p-3 bg-white rounded-lg border">
+                          <h6 className="font-medium mb-2 text-sm">Quantitative Indicators</h6>
+                          <div className="grid md:grid-cols-2 gap-2">
+                            {scenario.coarse_numeric_notes.yoy_growth_range_pct && (
+                              <div className="text-sm">
+                                <span className="font-medium">Growth Range:</span> {scenario.coarse_numeric_notes.yoy_growth_range_pct}
+                              </div>
+                            )}
+                            {scenario.coarse_numeric_notes.margin_change_bps && (
+                              <div className="text-sm">
+                                <span className="font-medium">Margin Change:</span> {scenario.coarse_numeric_notes.margin_change_bps}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      )}
+
+                      <div className="grid md:grid-cols-3 gap-6">
+                        {/* Key Drivers */}
                         <div>
-                          <span className="text-sm font-medium">Key Drivers:</span>
-                          <ul className="text-sm text-muted-foreground ml-4">
-                            {scenario.key_drivers.slice(0, 3).map((driver, idx) => (
-                              <li key={idx}>• {driver}</li>
+                          <h6 className="font-medium mb-2 text-sm">Key Drivers</h6>
+                          <ul className="space-y-1">
+                            {scenario.key_drivers.map((driver, idx) => (
+                              <li key={idx} className="text-sm flex items-start gap-2">
+                                <div className="w-1.5 h-1.5 bg-blue-400 rounded-full mt-2 flex-shrink-0"></div>
+                                <span className="text-blue-700">{driver}</span>
+                              </li>
                             ))}
                           </ul>
                         </div>
                         
+                        {/* Leading Indicators */}
                         <div>
-                          <span className="text-sm font-medium">Watch For:</span>
-                          <ul className="text-sm text-muted-foreground ml-4">
-                            {scenario.leading_indicators.slice(0, 2).map((indicator, idx) => (
-                              <li key={idx}>• {indicator}</li>
+                          <h6 className="font-medium mb-2 text-sm">Leading Indicators</h6>
+                          <ul className="space-y-1">
+                            {scenario.leading_indicators.map((indicator, idx) => (
+                              <li key={idx} className="text-sm flex items-start gap-2">
+                                <div className="w-1.5 h-1.5 bg-green-400 rounded-full mt-2 flex-shrink-0"></div>
+                                <span className="text-green-700">{indicator}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+
+                        {/* Falsifiers */}
+                        <div>
+                          <h6 className="font-medium mb-2 text-sm">Scenario Falsifiers</h6>
+                          <ul className="space-y-1">
+                            {scenario.falsifiers.map((falsifier, idx) => (
+                              <li key={idx} className="text-sm flex items-start gap-2">
+                                <AlertTriangle className="h-3 w-3 text-red-500 mt-1 flex-shrink-0" />
+                                <span className="text-red-700">{falsifier}</span>
+                              </li>
                             ))}
                           </ul>
                         </div>

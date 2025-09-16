@@ -313,6 +313,38 @@ export interface PredictiveInferenceAnalysis {
     black_swan_notes: string | null;
     confidence_check: string;
   };
+  transition_map: Array<{
+    from: string;
+    to: string;
+    trigger: string;
+    early_signals: string[];
+  }>;
+  dividend_forward_analysis: {
+    applies: boolean;
+    base_outlook: string;
+    sustainability_drivers: {
+      fcf_trajectory: string;
+      payout_pressure: string;
+      capital_allocation_priority: string;
+    };
+    scenario_differentiation: {
+      upside_dividend_case: string | null;
+      downside_dividend_risk: string | null;
+    };
+    policy_inflection_signals: string[];
+    management_signaling: {
+      commitment_strength: string;
+      recent_messaging_tone: string;
+    };
+    notes: string | null;
+  };
+  features_for_downstream: {
+    directional_tilt: string;
+    confidence_bucket: string;
+    key_drivers_top3: string[];
+    key_falsifiers_top3: string[];
+    watchlist_metrics: string[];
+  };
   ui_summaries: {
     one_liner: string;
     synopsis: string;
