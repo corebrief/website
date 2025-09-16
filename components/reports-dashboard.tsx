@@ -32,7 +32,6 @@ export default function ReportsDashboard({ hasFullAccess }: ReportsDashboardProp
   const [loading, setLoading] = useState(true);
   const [searchTicker, setSearchTicker] = useState('');
   const [reportTypeFilter, setReportTypeFilter] = useState<string>('all');
-  const [accessFilter, setAccessFilter] = useState<string>(hasFullAccess ? 'all' : 'free');
   const [selectedReport, setSelectedReport] = useState<ParsedReport | null>(null);
 
   // Fetch reports
@@ -42,7 +41,7 @@ export default function ReportsDashboard({ hasFullAccess }: ReportsDashboardProp
       const params = new URLSearchParams({
         ...(searchTicker && { ticker: searchTicker }),
         type: reportTypeFilter,
-        access: accessFilter,
+        access: 'all',
       });
 
       const response = await fetch(`/api/reports?${params}`);
@@ -58,12 +57,12 @@ export default function ReportsDashboard({ hasFullAccess }: ReportsDashboardProp
     } finally {
       setLoading(false);
     }
-  }, [searchTicker, reportTypeFilter, accessFilter]);
+  }, [searchTicker, reportTypeFilter]);
 
   // Fetch reports on component mount and when filters change
   useEffect(() => {
     fetchReports();
-  }, [searchTicker, reportTypeFilter, accessFilter, fetchReports]);
+  }, [searchTicker, reportTypeFilter, fetchReports]);
 
   // Handle report selection
   const handleSelectReport = (report: BaseReportData) => {
@@ -105,11 +104,6 @@ export default function ReportsDashboard({ hasFullAccess }: ReportsDashboardProp
               <Badge className={getClassificationColor(report.classification)}>
                 {getClassificationDisplayName(report.classification)}
               </Badge>
-              {report.is_free && (
-                <Badge variant="outline" className="text-green-600 border-green-300">
-                  FREE
-                </Badge>
-              )}
             </div>
           </div>
           <div className="flex-shrink-0 flex items-center gap-1 text-sm text-muted-foreground">
@@ -239,16 +233,6 @@ export default function ReportsDashboard({ hasFullAccess }: ReportsDashboardProp
                 <SelectItem value="general">General</SelectItem>
                 <SelectItem value="reit">REITs</SelectItem>
                 <SelectItem value="mlp">MLPs</SelectItem>
-              </SelectContent>
-            </Select>
-            <Select value={accessFilter} onValueChange={setAccessFilter}>
-              <SelectTrigger className="w-[150px]">
-                <SelectValue placeholder="Access" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Reports</SelectItem>
-                <SelectItem value="free">Free Only</SelectItem>
-                <SelectItem value="purchased">Purchased Only</SelectItem>
               </SelectContent>
             </Select>
           </div>
