@@ -231,6 +231,12 @@ export interface ManagementCredibilityAnalysis {
     red_flags: string[];
     green_flags: string[];
   };
+  classification: {
+    communication_style: string;
+    credibility_trend: string;
+    disclosure_quality_tier: string;
+    rationale: string;
+  };
   scores: {
     promise_follow_through: number;
     tone_discipline: number;
