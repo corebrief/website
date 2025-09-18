@@ -34,6 +34,20 @@ export default function ReportsDashboard({ hasFullAccess }: ReportsDashboardProp
   const [reportTypeFilter, setReportTypeFilter] = useState<string>('all');
   const [selectedReport, setSelectedReport] = useState<ParsedReport | null>(null);
 
+  // Reset selected report when navigating back to reports page
+  useEffect(() => {
+    const handleResetReports = () => {
+      setSelectedReport(null);
+    };
+
+    // Listen for custom event from sidebar navigation
+    window.addEventListener('resetReports', handleResetReports);
+    
+    return () => {
+      window.removeEventListener('resetReports', handleResetReports);
+    };
+  }, []);
+
   // Fetch reports
   const fetchReports = useCallback(async () => {
     setLoading(true);

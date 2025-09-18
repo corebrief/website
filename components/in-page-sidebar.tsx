@@ -64,6 +64,10 @@ function SidebarLink({
             e.preventDefault();
             return;
           }
+          // Dispatch custom event for reports page to reset state
+          if (href.endsWith('/reports')) {
+            window.dispatchEvent(new CustomEvent('resetReports'));
+          }
         }}
         className={cn(
           "p-2 py-3 rounded-md text-sm text-gray-500 hover:text-foreground transition-colors",
