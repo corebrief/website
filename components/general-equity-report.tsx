@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { 
   type ParsedReport,
@@ -14,7 +13,6 @@ import {
 } from '@/utils/report-parsers';
 import { 
   ChevronDown, 
-  ChevronRight, 
   TrendingUp, 
   TrendingDown, 
   Minus, 
@@ -126,142 +124,157 @@ export default function GeneralEquityReport({ report }: GeneralEquityReportProps
     }
   };
 
-  // Section header component
-  const SectionHeader = ({ 
-    section, 
-    title, 
-    icon: Icon, 
-    badge, 
-    summary 
-  }: { 
-    section: SectionKey; 
-    title: string; 
-    icon: React.ComponentType<{ className?: string }>; 
-    badge?: string; 
-    summary?: string;
-  }): React.ReactElement => (
-    <Button
-      variant="ghost"
-      className="w-full justify-start p-4 h-auto hover:bg-gray-50 cursor-pointer"
-      onClick={() => toggleSection(section)}
-    >
-      <div className="flex items-center justify-between w-full">
-        <div className="flex items-center gap-3 flex-1 min-w-0">
-          <Icon className="h-5 w-5 text-primary flex-shrink-0" />
-          <div className="text-left flex-1 min-w-0">
-            <div className="flex items-center gap-2 flex-wrap">
-              <h3 className="font-semibold text-lg">{title}</h3>
-              {badge && (
-                <Badge className="flex-shrink-0">{badge}</Badge>
-              )}
-            </div>
-            {summary && <p className="text-sm text-muted-foreground mt-1">{summary}</p>}
-          </div>
-        </div>
-        <div className="flex items-center gap-1 text-xs text-muted-foreground ml-4 flex-shrink-0">
-          {expandedSections.has(section) ? (
-            <ChevronDown className="h-4 w-4" />
-          ) : (
-            <ChevronRight className="h-4 w-4" />
-          )}
-        </div>
-      </div>
-    </Button>
-  );
 
   return (
     <div className="w-full space-y-8">
       
-      {/* Fixed Navigation Header */}
-      <div className="sticky top-0 z-10 bg-white border-b border-slate-200 mb-6">
-        <Card className="bg-slate-50 border-x-0 border-t-0 rounded-none">
-          <CardContent className="p-4">
-            <div className="text-center">
-              <h2 className="text-lg font-semibold mb-2 text-slate-800">
-                Business Analysis Framework
-              </h2>
-              
-              {/* Data Foundation */}
-              <div className="text-center mb-4">
-                <div className="text-sm font-medium text-slate-700 mb-1">
-                  {multiYearData?.window?.num_years || 5} Years of 10-K Filings
-                </div>
-                <div className="text-xs text-slate-500 mb-3">
-                  FY{multiYearData?.window?.start_fy || 'XXXX'}–{multiYearData?.window?.end_fy || 'XXXX'} • Complete SEC Filing Analysis
-                </div>
-              </div>
-              
-              {/* Navigation Tabs */}
-              <div className="flex flex-col items-center">
-                <p className="text-sm text-slate-600 mb-3">Analyzed through three independent frameworks</p>
-                <div className="flex flex-wrap justify-center gap-3 mb-3">
-                  <button 
-                    className={`px-4 py-2 text-sm rounded-lg border transition-all duration-200 ${
-                      expandedSections.has('multi_year') 
-                        ? 'bg-blue-500 text-white border-blue-500 shadow-lg transform scale-105' 
-                        : 'bg-blue-100 text-blue-700 border-blue-200 hover:bg-blue-200 hover:shadow-md'
-                    }`}
-                    onClick={() => toggleSection('multi_year')}
-                  >
-                    <div className="text-center">
-                      <div className="font-medium">Multi-Year Analysis</div>
-                      {!expandedSections.has('multi_year') && <div className="text-xs opacity-75">Click to View</div>}
-                    </div>
-                  </button>
-                  <button 
-                    className={`px-4 py-2 text-sm rounded-lg border transition-all duration-200 ${
-                      expandedSections.has('management') 
-                        ? 'bg-emerald-500 text-white border-emerald-500 shadow-lg transform scale-105' 
-                        : 'bg-emerald-100 text-emerald-700 border-emerald-200 hover:bg-emerald-200 hover:shadow-md'
-                    }`}
-                    onClick={() => toggleSection('management')}
-                  >
-                    <div className="text-center">
-                      <div className="font-medium">Management Assessment</div>
-                      {!expandedSections.has('management') && <div className="text-xs opacity-75">Click to View</div>}
-                    </div>
-                  </button>
-                  <button 
-                    className={`px-4 py-2 text-sm rounded-lg border transition-all duration-200 ${
-                      expandedSections.has('predictive') 
-                        ? 'bg-amber-500 text-white border-amber-500 shadow-lg transform scale-105' 
-                        : 'bg-amber-100 text-amber-700 border-amber-200 hover:bg-amber-200 hover:shadow-md'
-                    }`}
-                    onClick={() => toggleSection('predictive')}
-                  >
-                    <div className="text-center">
-                      <div className="font-medium">Predictive Inference</div>
-                      {!expandedSections.has('predictive') && <div className="text-xs opacity-75">Click to View</div>}
-                    </div>
-                  </button>
-                </div>
-                
-                {/* Visual flow showing synthesis */}
-                <div className="flex flex-col items-center text-xs text-slate-500 mb-3">
-                  <div className="text-slate-400">↓</div>
-                  <div className="text-slate-600">synthesized into</div>
-                  <div className="text-slate-400">↓</div>
-                </div>
-                
-                {/* Synthesis Output */}
-                <button 
-                  className={`px-5 py-3 text-sm rounded-lg border-2 transition-all duration-200 font-medium ${
-                    expandedSections.has('thesis') 
-                      ? 'bg-orange-500 text-white border-orange-500 shadow-lg transform scale-105' 
-                      : 'bg-orange-100 text-orange-700 border-orange-300 hover:bg-orange-200 hover:shadow-md'
-                  }`}
-                  onClick={() => toggleSection('thesis')}
-                >
-                  <div className="text-center">
-                    <div className="font-semibold">Business Thesis</div>
-                    {!expandedSections.has('thesis') && <div className="text-xs opacity-75">Click to View</div>}
-                  </div>
-                </button>
-              </div>
+      {/* Mobile-Responsive Navigation Header */}
+      <div className="sticky top-0 z-10 bg-white/95 backdrop-blur-sm border-b border-slate-200 mb-4">
+        <div className="py-3 px-4">
+          {/* Title - Always on top */}
+          <div className="text-center lg:text-left mb-3 lg:mb-0">
+            <h2 className="text-base font-semibold text-slate-800">Business Analysis Framework</h2>
+            <div className="text-xs text-slate-500">
+              {multiYearData?.window?.num_years || 5} Years • Filing Year {multiYearData?.window?.start_fy || 'XXXX'}–{multiYearData?.window?.end_fy || 'XXXX'}
             </div>
-          </CardContent>
-        </Card>
+          </div>
+          
+          {/* Desktop: Horizontal Layout */}
+          <div className="hidden lg:flex items-center justify-end gap-2">
+            <button 
+              className={`px-3 py-2 text-xs rounded-md border transition-all duration-200 ${
+                expandedSections.has('multi_year') 
+                  ? 'bg-blue-500 text-white border-blue-500 shadow-md' 
+                  : 'bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100 hover:shadow-sm'
+              }`}
+              onClick={() => toggleSection('multi_year')}
+            >
+              <div className="text-center">
+                <div className="font-medium">Multi-Year Analysis</div>
+                {!expandedSections.has('multi_year') && <div className="text-[10px] opacity-75 mt-0.5">Click to View</div>}
+              </div>
+            </button>
+            <button 
+              className={`px-3 py-2 text-xs rounded-md border transition-all duration-200 ${
+                expandedSections.has('management') 
+                  ? 'bg-emerald-500 text-white border-emerald-500 shadow-md' 
+                  : 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100 hover:shadow-sm'
+              }`}
+              onClick={() => toggleSection('management')}
+            >
+              <div className="text-center">
+                <div className="font-medium">Management Assessment</div>
+                {!expandedSections.has('management') && <div className="text-[10px] opacity-75 mt-0.5">Click to View</div>}
+              </div>
+            </button>
+            <button 
+              className={`px-3 py-2 text-xs rounded-md border transition-all duration-200 ${
+                expandedSections.has('predictive') 
+                  ? 'bg-amber-500 text-white border-amber-500 shadow-md' 
+                  : 'bg-amber-50 text-amber-700 border-amber-200 hover:bg-amber-100 hover:shadow-sm'
+              }`}
+              onClick={() => toggleSection('predictive')}
+            >
+              <div className="text-center">
+                <div className="font-medium">Predictive Inference</div>
+                {!expandedSections.has('predictive') && <div className="text-[10px] opacity-75 mt-0.5">Click to View</div>}
+              </div>
+            </button>
+            <div className="text-slate-400 text-xs px-1">→</div>
+            <button 
+              className={`px-3 py-2 text-xs rounded-md border-2 transition-all duration-200 font-medium ${
+                expandedSections.has('thesis') 
+                  ? 'bg-orange-500 text-white border-orange-500 shadow-md' 
+                  : 'bg-orange-50 text-orange-700 border-orange-300 hover:bg-orange-100 hover:shadow-sm'
+              }`}
+              onClick={() => toggleSection('thesis')}
+            >
+              <div className="text-center">
+                <div className="font-semibold">Business Thesis</div>
+                {!expandedSections.has('thesis') && <div className="text-[10px] opacity-75 mt-0.5">Click to View</div>}
+              </div>
+            </button>
+          </div>
+
+          {/* Mobile: Grid Layout */}
+          <div className="lg:hidden grid grid-cols-2 gap-2">
+            <button 
+              className={`px-3 py-3 text-xs rounded-md border transition-all duration-200 ${
+                expandedSections.has('multi_year') 
+                  ? 'bg-blue-500 text-white border-blue-500 shadow-md' 
+                  : 'bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100'
+              }`}
+              onClick={() => toggleSection('multi_year')}
+            >
+              <div className="text-center">
+                <div className="font-medium">Multi-Year</div>
+                {!expandedSections.has('multi_year') && <div className="text-[10px] opacity-75 mt-1">Tap to View</div>}
+              </div>
+            </button>
+            <button 
+              className={`px-3 py-3 text-xs rounded-md border transition-all duration-200 ${
+                expandedSections.has('management') 
+                  ? 'bg-emerald-500 text-white border-emerald-500 shadow-md' 
+                  : 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100'
+              }`}
+              onClick={() => toggleSection('management')}
+            >
+              <div className="text-center">
+                <div className="font-medium">Management</div>
+                {!expandedSections.has('management') && <div className="text-[10px] opacity-75 mt-1">Tap to View</div>}
+              </div>
+            </button>
+            <button 
+              className={`px-3 py-3 text-xs rounded-md border transition-all duration-200 ${
+                expandedSections.has('predictive') 
+                  ? 'bg-amber-500 text-white border-amber-500 shadow-md' 
+                  : 'bg-amber-50 text-amber-700 border-amber-200 hover:bg-amber-100'
+              }`}
+              onClick={() => toggleSection('predictive')}
+            >
+              <div className="text-center">
+                <div className="font-medium">Predictive</div>
+                {!expandedSections.has('predictive') && <div className="text-[10px] opacity-75 mt-1">Tap to View</div>}
+              </div>
+            </button>
+            <button 
+              className={`px-3 py-3 text-xs rounded-md border-2 transition-all duration-200 font-medium ${
+                expandedSections.has('thesis') 
+                  ? 'bg-orange-500 text-white border-orange-500 shadow-md' 
+                  : 'bg-orange-50 text-orange-700 border-orange-300 hover:bg-orange-100'
+              }`}
+              onClick={() => toggleSection('thesis')}
+            >
+              <div className="text-center">
+                <div className="font-semibold">Business Thesis</div>
+                {!expandedSections.has('thesis') && <div className="text-[10px] opacity-75 mt-1">Tap to View</div>}
+              </div>
+            </button>
+          </div>
+        </div>
       </div>
+
+      {/* Getting Started Indicator - Shows when no section is selected */}
+      {expandedSections.size === 0 && (
+        <div className="text-center py-12">
+          <div className="max-w-md mx-auto">
+            <div className="mb-4">
+              <Eye className="h-12 w-12 text-slate-400 mx-auto mb-3" />
+            </div>
+            <h3 className="text-lg font-semibold text-slate-700 mb-2">
+              Choose an Analysis to Begin
+            </h3>
+            <p className="text-sm text-slate-500 mb-4">
+              Select one of the analysis buttons above to view detailed insights from our multi-agent AI system.
+            </p>
+            <div className="flex items-center justify-center gap-1 text-xs text-slate-400">
+              <span>Click</span>
+              <div className="px-2 py-1 bg-blue-100 text-blue-700 rounded text-[10px] font-medium">Multi-Year Analysis</div>
+              <span>to get started</span>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Analysis Sections */}
       <div className="space-y-6">
@@ -295,12 +308,9 @@ export default function GeneralEquityReport({ report }: GeneralEquityReportProps
 
               {/* Historical Performance Grade */}
               {multiYearData.grading && (
-                <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg">
                   <div>
-                    <h4 className="font-semibold mb-1">Historical Performance Grade</h4>
-                    <p className="text-sm text-muted-foreground">
-                      Composite score: {multiYearData.scores.composite_score.toFixed(2)}/10 based on past operational metrics
-                    </p>
+                    <h4 className="font-semibold">Historical Performance Grade</h4>
                   </div>
                   <Badge className={`text-lg px-4 py-2 ${getGradeColor(multiYearData.grading.letter)}`}>
                     {multiYearData.grading.letter}
@@ -403,16 +413,6 @@ export default function GeneralEquityReport({ report }: GeneralEquityReportProps
                       <Progress value={component.score * 10} className="h-2" />
                     </div>
                   ))}
-                </div>
-                
-                <div className="mt-4 p-4 bg-slate-100 rounded-lg border-2 border-slate-300">
-                  <div className="flex justify-between items-center">
-                    <span className="font-semibold">Historical Performance Score</span>
-                    <span className="font-bold text-xl">{multiYearData.scores.composite_score.toFixed(2)}/10</span>
-                  </div>
-                  <p className="text-xs text-muted-foreground mt-1">
-                    Sum of weighted components = Grade {multiYearData.grading.letter}
-                  </p>
                 </div>
               </div>
 
