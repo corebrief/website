@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from 'react';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
@@ -49,14 +49,29 @@ export default function GeneralEquityReport({ report }: GeneralEquityReportProps
   const [showAnalyticalTensions, setShowAnalyticalTensions] = useState(false);
   const [showThesisUpdateTriggers, setShowThesisUpdateTriggers] = useState(false);
 
+  // Early return if report is not properly structured
+  if (!report || !report.sections) {
+    return (
+      <div className="max-w-none w-full space-y-8">
+        <Card className="border-amber-200 bg-amber-50">
+          <CardContent className="pt-6">
+            <p className="text-sm text-amber-800">
+              Report data is not available or improperly formatted.
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
   const toggleSection = (section: SectionKey) => {
-    const newExpanded = new Set(expandedSections);
-    if (newExpanded.has(section)) {
-      newExpanded.delete(section);
+    if (expandedSections.has(section)) {
+      // If clicking the currently open section, close it
+      setExpandedSections(new Set());
     } else {
-      newExpanded.add(section);
+      // If clicking a different section, show only that section
+      setExpandedSections(new Set([section]));
     }
-    setExpandedSections(newExpanded);
   };
 
   // Extract structured data from sections
@@ -155,19 +170,111 @@ export default function GeneralEquityReport({ report }: GeneralEquityReportProps
   );
 
   return (
-    <div className="max-w-none w-full space-y-6">
+    <div className="w-full space-y-8">
+      
+      {/* Fixed Navigation Header */}
+      <div className="sticky top-0 z-10 bg-white border-b border-slate-200 mb-6">
+        <Card className="bg-slate-50 border-x-0 border-t-0 rounded-none">
+          <CardContent className="p-4">
+            <div className="text-center">
+              <h2 className="text-lg font-semibold mb-2 text-slate-800">
+                Business Analysis Framework
+              </h2>
+              
+              {/* Data Foundation */}
+              <div className="text-center mb-4">
+                <div className="text-sm font-medium text-slate-700 mb-1">
+                  {multiYearData?.window?.num_years || 5} Years of 10-K Filings
+                </div>
+                <div className="text-xs text-slate-500 mb-3">
+                  FY{multiYearData?.window?.start_fy || 'XXXX'}–{multiYearData?.window?.end_fy || 'XXXX'} • Complete SEC Filing Analysis
+                </div>
+              </div>
+              
+              {/* Navigation Tabs */}
+              <div className="flex flex-col items-center">
+                <p className="text-sm text-slate-600 mb-3">Analyzed through three independent frameworks</p>
+                <div className="flex flex-wrap justify-center gap-3 mb-3">
+                  <button 
+                    className={`px-4 py-2 text-sm rounded-lg border transition-all duration-200 ${
+                      expandedSections.has('multi_year') 
+                        ? 'bg-blue-500 text-white border-blue-500 shadow-lg transform scale-105' 
+                        : 'bg-blue-100 text-blue-700 border-blue-200 hover:bg-blue-200 hover:shadow-md'
+                    }`}
+                    onClick={() => toggleSection('multi_year')}
+                  >
+                    <div className="text-center">
+                      <div className="font-medium">Multi-Year Analysis</div>
+                      {!expandedSections.has('multi_year') && <div className="text-xs opacity-75">Click to View</div>}
+                    </div>
+                  </button>
+                  <button 
+                    className={`px-4 py-2 text-sm rounded-lg border transition-all duration-200 ${
+                      expandedSections.has('management') 
+                        ? 'bg-emerald-500 text-white border-emerald-500 shadow-lg transform scale-105' 
+                        : 'bg-emerald-100 text-emerald-700 border-emerald-200 hover:bg-emerald-200 hover:shadow-md'
+                    }`}
+                    onClick={() => toggleSection('management')}
+                  >
+                    <div className="text-center">
+                      <div className="font-medium">Management Assessment</div>
+                      {!expandedSections.has('management') && <div className="text-xs opacity-75">Click to View</div>}
+                    </div>
+                  </button>
+                  <button 
+                    className={`px-4 py-2 text-sm rounded-lg border transition-all duration-200 ${
+                      expandedSections.has('predictive') 
+                        ? 'bg-amber-500 text-white border-amber-500 shadow-lg transform scale-105' 
+                        : 'bg-amber-100 text-amber-700 border-amber-200 hover:bg-amber-200 hover:shadow-md'
+                    }`}
+                    onClick={() => toggleSection('predictive')}
+                  >
+                    <div className="text-center">
+                      <div className="font-medium">Predictive Inference</div>
+                      {!expandedSections.has('predictive') && <div className="text-xs opacity-75">Click to View</div>}
+                    </div>
+                  </button>
+                </div>
+                
+                {/* Visual flow showing synthesis */}
+                <div className="flex flex-col items-center text-xs text-slate-500 mb-3">
+                  <div className="text-slate-400">↓</div>
+                  <div className="text-slate-600">synthesized into</div>
+                  <div className="text-slate-400">↓</div>
+                </div>
+                
+                {/* Synthesis Output */}
+                <button 
+                  className={`px-5 py-3 text-sm rounded-lg border-2 transition-all duration-200 font-medium ${
+                    expandedSections.has('thesis') 
+                      ? 'bg-orange-500 text-white border-orange-500 shadow-lg transform scale-105' 
+                      : 'bg-orange-100 text-orange-700 border-orange-300 hover:bg-orange-200 hover:shadow-md'
+                  }`}
+                  onClick={() => toggleSection('thesis')}
+                >
+                  <div className="text-center">
+                    <div className="font-semibold">Business Thesis</div>
+                    {!expandedSections.has('thesis') && <div className="text-xs opacity-75">Click to View</div>}
+                  </div>
+                </button>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
 
-      {/* Multi-Year Analysis Section */}
-      <Card>
-        <SectionHeader
-          section="multi_year"
-          title="Multi-Year Operational Analysis"
-          icon={TrendingUp}
-          badge={undefined}
-          summary={multiYearData?.ui_summaries?.one_liner}
-        />
+      {/* Analysis Sections */}
+      <div className="space-y-6">
+        {/* Multi-Year Analysis */}
         {expandedSections.has('multi_year') && multiYearData && (
-          <CardContent className="pt-0">
+          <Card>
+            <CardHeader className="pb-3">
+              <h3 className="text-lg font-semibold text-slate-800 flex items-center gap-2">
+                <TrendingUp className="h-5 w-5 text-blue-600" />
+                Multi-Year Operational Analysis
+              </h3>
+            </CardHeader>
+            <CardContent>
             <div className="space-y-6">
               {/* Data Coverage Quality */}
               <div className="bg-slate-50 p-4 rounded-lg border border-slate-200">
@@ -178,10 +285,10 @@ export default function GeneralEquityReport({ report }: GeneralEquityReportProps
                 </div>
               </div>
 
-              {/* Executive Synopsis */}
+              {/* Historical Performance Synopsis */}
               {multiYearData.ui_summaries?.synopsis && (
                 <div className="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-400">
-                  <h4 className="font-semibold mb-2 text-blue-800">Executive Synopsis</h4>
+                  <h4 className="font-semibold mb-2 text-blue-800">Historical Performance Synopsis</h4>
                   <p className="text-sm text-blue-700">{multiYearData.ui_summaries.synopsis}</p>
                 </div>
               )}
@@ -584,26 +691,26 @@ export default function GeneralEquityReport({ report }: GeneralEquityReportProps
 
 
               {/* Disclaimer */}
-              <div className="mt-6 p-3 bg-slate-100 border border-slate-300 rounded-lg">
+                <div className="mt-6 p-3 bg-slate-100 border border-slate-300 rounded-lg">
                 <p className="text-xs text-slate-600 text-center">
                   <strong>Disclaimer:</strong> For informational purposes only. Operational analysis of historical disclosures. Not investment advice or a recommendation.
                 </p>
               </div>
             </div>
           </CardContent>
+        </Card>
         )}
-      </Card>
 
-      {/* Management Credibility Section */}
-      <Card>
-        <SectionHeader
-          section="management"
-          title="Management Credibility Assessment"
-          icon={Shield}
-          summary={managementData?.ui_summaries?.one_liner}
-        />
+        {/* Management Credibility */}
         {expandedSections.has('management') && managementData && (
-          <CardContent className="pt-0">
+          <Card>
+            <CardHeader className="pb-3">
+              <h3 className="text-lg font-semibold text-slate-800 flex items-center gap-2">
+                <Shield className="h-5 w-5 text-emerald-600" />
+                Management Credibility Assessment
+              </h3>
+            </CardHeader>
+            <CardContent>
             <div className="space-y-6">
               {/* Management Synopsis */}
               {managementData.ui_summaries?.synopsis && (
@@ -1061,19 +1168,19 @@ export default function GeneralEquityReport({ report }: GeneralEquityReportProps
               </div>
             </div>
           </CardContent>
+        </Card>
         )}
-      </Card>
 
-      {/* Predictive Inference Section */}
-      <Card>
-        <SectionHeader
-          section="predictive"
-          title="Forward-Looking Analysis"
-          icon={Brain}
-          summary={predictiveData?.ui_summaries?.one_liner}
-        />
+        {/* Predictive Analysis */}
         {expandedSections.has('predictive') && predictiveData && (
-          <CardContent className="pt-0">
+          <Card>
+            <CardHeader className="pb-3">
+              <h3 className="text-lg font-semibold text-slate-800 flex items-center gap-2">
+                <Brain className="h-5 w-5 text-amber-600" />
+                Predictive Inference Analysis
+              </h3>
+            </CardHeader>
+            <CardContent>
             <div className="space-y-6">
               {/* Predictive Synopsis */}
               {predictiveData.ui_summaries?.synopsis && (
@@ -1597,22 +1704,20 @@ export default function GeneralEquityReport({ report }: GeneralEquityReportProps
               )}
             </div>
           </CardContent>
+        </Card>
         )}
-      </Card>
 
-      {/* Business Thesis Section */}
-      <Card>
-        <SectionHeader
-          section="thesis"
-          title="Business Thesis Synthesis"
-          icon={Building2}
-          summary={thesisData?.one_liner}
-        />
+        {/* Business Thesis */}
         {expandedSections.has('thesis') && thesisData && (
-          <CardContent className="pt-0">
+          <Card>
+            <CardHeader className="pb-3">
+              <h3 className="text-lg font-semibold text-slate-800 flex items-center gap-2">
+                <Building2 className="h-5 w-5 text-orange-600" />
+                Business Thesis & Viability Assessment
+              </h3>
+            </CardHeader>
+            <CardContent>
             <div className="space-y-6">
-
-
               {/* Synopsis and Analysis Alignment Side by Side */}
               <div className="grid md:grid-cols-2 gap-6">
                 {/* Synopsis */}
@@ -2085,8 +2190,9 @@ export default function GeneralEquityReport({ report }: GeneralEquityReportProps
               )}
             </div>
           </CardContent>
+        </Card>
         )}
-      </Card>
+      </div>
 
       {/* Disclaimer */}
       <Card className="border-amber-200 bg-amber-50">
@@ -2100,4 +2206,3 @@ export default function GeneralEquityReport({ report }: GeneralEquityReportProps
     </div>
   );
 }
-
