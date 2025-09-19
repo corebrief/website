@@ -187,10 +187,23 @@ export default function REITEquityAnalysisComponent({ data }: REITAnalysisProps)
           </div>
         </CardHeader>
         <CardContent>
-          <div className="bg-blue-50 p-4 rounded-lg">
+          <div className="bg-blue-50 p-4 rounded-lg mb-4">
             <h4 className="font-semibold mb-2">Executive Summary</h4>
             <p className="text-sm mb-2">{data.ui_summaries.one_liner}</p>
             <p className="text-sm">{data.ui_summaries.synopsis}</p>
+          </div>
+
+          {/* Key Operational Highlights */}
+          <div className="bg-green-50 p-4 rounded-lg border-l-4 border-green-400">
+            <h4 className="font-semibold mb-3 text-green-800">Key Operational Highlights</h4>
+            <ul className="space-y-2">
+              {data.ui_summaries.bullet_highlights.map((highlight, index) => (
+                <li key={index} className="text-sm text-green-700 flex items-start gap-2">
+                  <span className="text-green-500 mt-1 flex-shrink-0">•</span>
+                  <span>{highlight}</span>
+                </li>
+              ))}
+            </ul>
           </div>
         </CardContent>
       </Card>
@@ -466,40 +479,22 @@ export default function REITEquityAnalysisComponent({ data }: REITAnalysisProps)
         </Card>
       )}
 
-      {/* Key Highlights & Watch Items */}
-      <div className="grid md:grid-cols-2 gap-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>Key Highlights</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ul className="space-y-2">
-              {data.ui_summaries.bullet_highlights.map((highlight, index) => (
-                <li key={index} className="text-sm flex items-start gap-2">
-                  <span className="text-blue-500 mt-1">•</span>
-                  {highlight}
-                </li>
-              ))}
-            </ul>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Watch Items</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ul className="space-y-2">
-              {data.ui_summaries.watch_items.map((item, index) => (
-                <li key={index} className="text-sm flex items-start gap-2">
-                  <AlertTriangle className="h-4 w-4 text-amber-500 mt-0.5 flex-shrink-0" />
-                  {item}
-                </li>
-              ))}
-            </ul>
-          </CardContent>
-        </Card>
-      </div>
+      {/* Watch Items */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Watch Items</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <ul className="space-y-2">
+            {data.ui_summaries.watch_items.map((item, index) => (
+              <li key={index} className="text-sm flex items-start gap-2">
+                <AlertTriangle className="h-4 w-4 text-amber-500 mt-0.5 flex-shrink-0" />
+                {item}
+              </li>
+            ))}
+          </ul>
+        </CardContent>
+      </Card>
 
       {/* Disclaimer */}
       <Card className="border-amber-200 bg-amber-50">

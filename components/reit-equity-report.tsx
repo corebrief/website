@@ -44,6 +44,7 @@ interface REITMultiYearData {
       label: string;
       average_occupancy_pct?: number;
       rationale: string;
+      notes?: string;
     };
     leasing_economics: {
       rent_spread_trend: string;
@@ -73,6 +74,10 @@ interface REITMultiYearData {
       region_or_market: string;
       approx_share_label: string;
     }>;
+    strategy_evolution: Array<{
+      year: number;
+      change: string;
+    }>;
     competitive_posture: {
       label: string;
       drivers: string[];
@@ -94,6 +99,35 @@ interface REITMultiYearData {
       note: string;
     }>;
   };
+  timeseries_semantic: {
+    same_store_noi_by_year: Array<{
+      year: number;
+      label: string;
+    }>;
+    occupancy_by_year: Array<{
+      year: number;
+      label: string;
+    }>;
+    distribution_policy_by_year: Array<{
+      year: number;
+      label: string;
+    }>;
+  };
+  optional_numerics: {
+    mentioned_ffo_affo_growth_pct: number | null;
+    mentioned_affo_payout_ratio_pct: number | null;
+    net_debt_to_ebitdare_range: string | null;
+    fixed_vs_variable_debt_mix_pct: string | null;
+    walt_years: number | null;
+    cap_rate_notes: string | null;
+    notes: string;
+  };
+  classification: {
+    primary: string;
+    secondary: string[];
+    reit_profile_tags: string[];
+    rationale: string;
+  };
   scores: {
     portfolio_quality_occupancy: number;
     same_store_noi_trend: number;
@@ -103,6 +137,7 @@ interface REITMultiYearData {
     tenant_industry_diversification: number;
     external_growth_discipline: number;
     risk_overhangs: number;
+    weights: number[];
     composite_score: number;
   };
   grading: {
@@ -124,6 +159,34 @@ interface REITMultiYearData {
       ffo_payout_ratio_bucket: string;
       coverage_trend: string;
     };
+    distribution_actions: Array<{
+      year: number;
+      action: string;
+      context: string;
+    }>;
+    policy_philosophy: string;
+    yield_profile: {
+      characterization: string;
+      trend: string;
+    };
+    reit_specific_factors: {
+      taxable_income_requirement_mentioned: boolean;
+      return_of_capital_component: string;
+      capital_recycling_impact: string;
+    };
+    sustainability_factors: string[];
+    notes: string | null;
+  };
+  features_for_downstream: {
+    same_store_noi_trend: string;
+    occupancy_level: string;
+    rent_spread_direction: string;
+    walt_bucket: string;
+    top_tenant_concentration: string;
+    funding_risk: string;
+    rate_sensitivity: string;
+    development_intensity: string;
+    capital_recycling_stance: string;
   };
   ui_summaries: {
     one_liner: string;
@@ -132,6 +195,7 @@ interface REITMultiYearData {
     watch_items: string[];
     disclaimer: string;
   };
+  version: string;
 }
 
 interface REITManagementData {
@@ -404,6 +468,15 @@ function REITEquityReportContent({
     return 'bg-gray-100 text-gray-800';
   };
 
+  const getSeverityColor = (severity: string) => {
+    switch (severity.toLowerCase()) {
+      case 'high': return 'bg-red-100 text-red-800 border-red-300';
+      case 'med': case 'medium': return 'bg-yellow-100 text-yellow-800 border-yellow-300';
+      case 'low': return 'bg-green-100 text-green-800 border-green-300';
+      default: return 'bg-gray-100 text-gray-800 border-gray-300';
+    }
+  };
+
   return (
     <div className="w-full space-y-8">
       {/* Mobile-Responsive Navigation Header */}
@@ -589,6 +662,36 @@ function REITEquityReportContent({
                   </div>
                 )}
 
+                {/* Key Operational Highlights */}
+                {multiYearData.ui_summaries?.bullet_highlights && (
+                  <div className="bg-green-50 p-4 rounded-lg border-l-4 border-green-400">
+                    <h4 className="font-semibold mb-3 text-green-800">Key Operational Highlights</h4>
+                    <ul className="space-y-2">
+                      {multiYearData.ui_summaries.bullet_highlights.map((highlight, index) => (
+                        <li key={index} className="text-sm text-green-700 flex items-start gap-2">
+                          <span className="text-green-500 mt-1 flex-shrink-0">•</span>
+                          <span>{highlight}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {/* Key Monitoring Points */}
+                {multiYearData.ui_summaries?.watch_items && (
+                  <div className="bg-amber-50 p-4 rounded-lg border-l-4 border-amber-400">
+                    <h4 className="font-semibold mb-3 text-amber-800">Key Monitoring Points</h4>
+                    <ul className="space-y-2">
+                      {multiYearData.ui_summaries.watch_items.map((item, index) => (
+                        <li key={index} className="text-sm text-amber-700 flex items-start gap-2">
+                          <span className="text-amber-500 mt-1 flex-shrink-0">⚠</span>
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
                 {/* Key REIT Metrics */}
                 <div className="grid md:grid-cols-3 gap-4">
                   <div className="p-4 border rounded-lg">
@@ -605,8 +708,14 @@ function REITEquityReportContent({
                       <h5 className="font-medium text-green-800">Occupancy Trend</h5>
                     </div>
                     <p className="text-sm text-slate-700">{multiYearData.semantic_themes?.occupancy_trend?.label}</p>
+                    {multiYearData.semantic_themes?.occupancy_trend?.rationale && (
+                      <p className="text-xs text-slate-500 mt-1">{multiYearData.semantic_themes.occupancy_trend.rationale}</p>
+                    )}
                     {multiYearData.semantic_themes?.occupancy_trend?.average_occupancy_pct && (
-                      <p className="text-xs text-slate-500 mt-1">Avg: {multiYearData.semantic_themes.occupancy_trend.average_occupancy_pct}%</p>
+                      <p className="text-xs text-slate-500 mt-1">Average Occupancy: {multiYearData.semantic_themes.occupancy_trend.average_occupancy_pct}%</p>
+                    )}
+                    {multiYearData.semantic_themes?.occupancy_trend?.notes && (
+                      <p className="text-xs text-slate-500 mt-1 italic">{multiYearData.semantic_themes.occupancy_trend.notes}</p>
                     )}
                   </div>
                   <div className="p-4 border rounded-lg">
@@ -614,8 +723,11 @@ function REITEquityReportContent({
                       <DollarSign className="h-4 w-4 text-purple-600" />
                       <h5 className="font-medium text-purple-800">Leasing Economics</h5>
                     </div>
-                    <p className="text-sm text-slate-700">{multiYearData.semantic_themes?.leasing_economics?.rent_spread_trend}</p>
+                    <p className="text-sm text-slate-700">Rent Spread Trend: {multiYearData.semantic_themes?.leasing_economics?.rent_spread_trend}</p>
                     <p className="text-xs text-slate-500 mt-1">Escalators: {multiYearData.semantic_themes?.leasing_economics?.escalators_presence}</p>
+                    {multiYearData.semantic_themes?.leasing_economics?.notes && (
+                      <p className="text-xs text-slate-500 mt-1 italic">{multiYearData.semantic_themes.leasing_economics.notes}</p>
+                    )}
                   </div>
                 </div>
 
@@ -631,7 +743,7 @@ function REITEquityReportContent({
                       { name: 'Lease Maturity Risk', score: multiYearData.scores.lease_maturity_concentration_risk },
                       { name: 'Tenant Diversification', score: multiYearData.scores.tenant_industry_diversification },
                       { name: 'External Growth Discipline', score: multiYearData.scores.external_growth_discipline },
-                      { name: 'Risk Management', score: multiYearData.scores.risk_overhangs },
+                      { name: 'Risk Overhangs (inverse)', score: multiYearData.scores.risk_overhangs },
                     ].map((component, index) => (
                       <div key={index} className="p-3 border rounded-lg bg-white">
                         <div className="flex justify-between items-center mb-1">
@@ -644,75 +756,680 @@ function REITEquityReportContent({
                   </div>
                 </div>
 
-                {/* Property Portfolio Mix */}
-                {multiYearData.semantic_themes?.property_type_mix && (
-                  <div className="p-4 border rounded-lg bg-gradient-to-r from-green-50 to-blue-50 border-green-200">
-                    <h4 className="font-semibold mb-3 text-green-800">🏢 Property Portfolio Mix</h4>
-                    <div className="grid md:grid-cols-3 gap-4">
-                      {multiYearData.semantic_themes.property_type_mix.map((prop, index) => (
-                        <div key={index} className="p-3 bg-white rounded-lg border">
-                          <div className="font-medium text-sm">{prop.type}</div>
-                          <Badge className={`text-xs mt-1 ${getTrendColor(prop.approx_share_label)}`}>
-                            {prop.approx_share_label} Share
-                          </Badge>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {/* Geographic Mix */}
-                {multiYearData.semantic_themes?.geography_mix && (
-                  <div className="p-4 border rounded-lg bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200">
-                    <h4 className="font-semibold mb-3 text-blue-800">🗺️ Geographic Exposure</h4>
-                    <div className="grid md:grid-cols-3 gap-4">
-                      {multiYearData.semantic_themes.geography_mix.map((geo, index) => (
-                        <div key={index} className="p-3 bg-white rounded-lg border">
-                          <div className="font-medium text-sm">{geo.region_or_market}</div>
-                          <Badge className={`text-xs mt-1 ${getTrendColor(geo.approx_share_label)}`}>
-                            {geo.approx_share_label} Exposure
-                          </Badge>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {/* Distribution Analysis */}
-                {multiYearData.distribution_analysis?.applies && (
-                  <div className="p-4 border rounded-lg bg-gradient-to-r from-purple-50 to-indigo-50 border-purple-200">
-                    <h4 className="font-semibold mb-3 text-purple-800">💰 Distribution Analysis</h4>
-                    <div className="space-y-4">
-                      <div className="grid md:grid-cols-2 gap-4">
-                        <div className="p-4 border rounded-lg bg-white shadow-sm">
-                          <h5 className="font-medium mb-2">Policy Characterization</h5>
-                          <p className="text-sm text-slate-700">{multiYearData.distribution_analysis.policy_characterization}</p>
-                          {multiYearData.distribution_analysis.cadence && (
-                            <p className="text-xs text-slate-500 mt-1">Cadence: {multiYearData.distribution_analysis.cadence}</p>
-                          )}
-                        </div>
-                        <div className="p-4 border rounded-lg bg-white shadow-sm">
-                          <h5 className="font-medium mb-2">Coverage Metrics</h5>
-                          <div className="space-y-1 text-sm">
-                            <div>AFFO Coverage: <Badge className="text-xs ml-1">{multiYearData.distribution_analysis.coverage_metrics.affo_payout_ratio_bucket}</Badge></div>
-                            <div>FFO Coverage: <Badge className="text-xs ml-1">{multiYearData.distribution_analysis.coverage_metrics.ffo_payout_ratio_bucket}</Badge></div>
-                            <div>Trend: <Badge className="text-xs ml-1">{multiYearData.distribution_analysis.coverage_metrics.coverage_trend}</Badge></div>
+                {/* Lease Profile */}
+                <div>
+                  <h4 className="font-semibold mb-3">Lease Profile</h4>
+                  <div className="grid md:grid-cols-2 gap-6">
+                    {/* WALT and Releasing Risk */}
+                    <div className="p-4 border rounded-lg">
+                      <h5 className="font-semibold mb-3">Lease Term Profile</h5>
+                      <div className="space-y-2">
+                        {multiYearData.semantic_themes.lease_profile.walt_years && (
+                          <div className="flex justify-between items-center">
+                            <span className="text-sm">WALT (Weighted Avg Lease Term):</span>
+                            <Badge className="bg-blue-100 text-blue-800">
+                              {multiYearData.semantic_themes.lease_profile.walt_years} years
+                            </Badge>
                           </div>
+                        )}
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm">Releasing Risk:</span>
+                          <Badge className={
+                            multiYearData.semantic_themes.lease_profile.releasing_risk_label === 'Low' ? 'bg-green-100 text-green-800' :
+                            multiYearData.semantic_themes.lease_profile.releasing_risk_label === 'Medium' ? 'bg-yellow-100 text-yellow-800' :
+                            multiYearData.semantic_themes.lease_profile.releasing_risk_label === 'High' ? 'bg-red-100 text-red-800' :
+                            'bg-gray-100 text-gray-800'
+                          }>
+                            {multiYearData.semantic_themes.lease_profile.releasing_risk_label}
+                          </Badge>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Lease Expiry Buckets */}
+                    <div className="p-4 border rounded-lg">
+                      <h5 className="font-semibold mb-3">Lease Expiry Schedule</h5>
+                      <div className="space-y-2">
+                        {multiYearData.semantic_themes.lease_profile.expiry_buckets.next_12m_pct && (
+                          <div className="flex justify-between items-center">
+                            <span className="text-sm">Next 12 months:</span>
+                            <Badge variant="outline" className="text-xs">
+                              {multiYearData.semantic_themes.lease_profile.expiry_buckets.next_12m_pct}%
+                            </Badge>
+                          </div>
+                        )}
+                        {multiYearData.semantic_themes.lease_profile.expiry_buckets.next_36m_pct && (
+                          <div className="flex justify-between items-center">
+                            <span className="text-sm">Next 36 months:</span>
+                            <Badge variant="outline" className="text-xs">
+                              {multiYearData.semantic_themes.lease_profile.expiry_buckets.next_36m_pct}%
+                            </Badge>
+                          </div>
+                        )}
+                        {multiYearData.semantic_themes.lease_profile.expiry_buckets.next_60m_pct && (
+                          <div className="flex justify-between items-center">
+                            <span className="text-sm">Next 60 months:</span>
+                            <Badge variant="outline" className="text-xs">
+                              {multiYearData.semantic_themes.lease_profile.expiry_buckets.next_60m_pct}%
+                            </Badge>
+                          </div>
+                        )}
+                        {!multiYearData.semantic_themes.lease_profile.expiry_buckets.next_12m_pct && 
+                         !multiYearData.semantic_themes.lease_profile.expiry_buckets.next_36m_pct && 
+                         !multiYearData.semantic_themes.lease_profile.expiry_buckets.next_60m_pct && (
+                          <p className="text-sm text-gray-500 italic">Expiry details not disclosed</p>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Tenant Concentration */}
+                <div>
+                  <h4 className="font-semibold mb-3">Tenant Concentration</h4>
+                  <div className="grid md:grid-cols-2 gap-6">
+                    {/* Concentration Metrics */}
+                    <div className="p-4 border rounded-lg">
+                      <h5 className="font-semibold mb-3">Concentration Profile</h5>
+                      <div className="space-y-2">
+                        {multiYearData.semantic_themes.tenant_concentration.top_tenant_pct_rent && (
+                          <div className="flex justify-between items-center">
+                            <span className="text-sm">Top Tenant % of Rent:</span>
+                            <Badge className="bg-blue-100 text-blue-800">
+                              {multiYearData.semantic_themes.tenant_concentration.top_tenant_pct_rent}%
+                            </Badge>
+                          </div>
+                        )}
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm">Concentration Risk:</span>
+                          <Badge className={
+                            multiYearData.semantic_themes.tenant_concentration.concentration_label === 'Low' ? 'bg-green-100 text-green-800' :
+                            multiYearData.semantic_themes.tenant_concentration.concentration_label === 'Medium' ? 'bg-yellow-100 text-yellow-800' :
+                            multiYearData.semantic_themes.tenant_concentration.concentration_label === 'High' ? 'bg-red-100 text-red-800' :
+                            'bg-gray-100 text-gray-800'
+                          }>
+                            {multiYearData.semantic_themes.tenant_concentration.concentration_label}
+                          </Badge>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Tenant Quality */}
+                    <div className="p-4 border rounded-lg">
+                      <h5 className="font-semibold mb-3">Tenant Quality</h5>
+                      <div className="space-y-2">
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm">Investment Grade Exposure:</span>
+                          <Badge className={
+                            multiYearData.semantic_themes.tenant_concentration.investment_grade_exposure_label === 'High' ? 'bg-green-100 text-green-800' :
+                            multiYearData.semantic_themes.tenant_concentration.investment_grade_exposure_label === 'Medium' ? 'bg-yellow-100 text-yellow-800' :
+                            multiYearData.semantic_themes.tenant_concentration.investment_grade_exposure_label === 'Low' ? 'bg-red-100 text-red-800' :
+                            'bg-gray-100 text-gray-800'
+                          }>
+                            {multiYearData.semantic_themes.tenant_concentration.investment_grade_exposure_label}
+                          </Badge>
+                        </div>
+                      </div>
+                      {multiYearData.semantic_themes.tenant_concentration.notes && (
+                        <div className="mt-3 p-3 bg-slate-50 rounded border">
+                          <p className="text-xs text-slate-600 italic">{multiYearData.semantic_themes.tenant_concentration.notes}</p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                {/* External Growth */}
+                <div>
+                  <h4 className="font-semibold mb-3">External Growth Strategy</h4>
+                  <div className="p-4 border rounded-lg">
+                    <div className="space-y-4">
+                      {/* Activity Level and Modes Combined */}
+                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                        <div className="flex items-center gap-3">
+                          <span className="text-sm font-medium">Activity Level:</span>
+                          <Badge className={
+                            multiYearData.semantic_themes.external_growth.activity_label === 'Active' ? 'bg-green-100 text-green-800' :
+                            multiYearData.semantic_themes.external_growth.activity_label === 'Selective' ? 'bg-blue-100 text-blue-800' :
+                            multiYearData.semantic_themes.external_growth.activity_label === 'Limited' ? 'bg-yellow-100 text-yellow-800' :
+                            multiYearData.semantic_themes.external_growth.activity_label === 'Paused' ? 'bg-red-100 text-red-800' :
+                            'bg-gray-100 text-gray-800'
+                          }>
+                            {multiYearData.semantic_themes.external_growth.activity_label}
+                          </Badge>
+                        </div>
+                        
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span className="text-sm font-medium">Modes:</span>
+                          {multiYearData.semantic_themes.external_growth.modes.map((mode, index) => (
+                            <Badge key={index} variant="outline" className="text-xs">
+                              {mode}
+                            </Badge>
+                          ))}
+                        </div>
+                      </div>
+                      
+                      {/* Discipline Assessment */}
+                      {multiYearData.semantic_themes.external_growth.discipline_note && (
+                        <div className="pt-3 border-t border-slate-200">
+                          <h5 className="font-medium mb-2 text-slate-800">Capital Allocation Discipline</h5>
+                          <p className="text-sm text-slate-700">{multiYearData.semantic_themes.external_growth.discipline_note}</p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Balance Sheet & Liquidity */}
+                <div>
+                  <h4 className="font-semibold mb-3">Balance Sheet & Liquidity</h4>
+                  <div className="p-4 border rounded-lg">
+                    <div className="grid md:grid-cols-2 gap-6 mb-4">
+                      {/* Financial Metrics */}
+                      <div className="space-y-3">
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm font-medium">Leverage Level:</span>
+                          <Badge className={
+                            multiYearData.semantic_themes.balance_sheet_liquidity.leverage_label === 'Low' ? 'bg-green-100 text-green-800' :
+                            multiYearData.semantic_themes.balance_sheet_liquidity.leverage_label === 'Medium' ? 'bg-yellow-100 text-yellow-800' :
+                            multiYearData.semantic_themes.balance_sheet_liquidity.leverage_label === 'High' ? 'bg-red-100 text-red-800' :
+                            'bg-gray-100 text-gray-800'
+                          }>
+                            {multiYearData.semantic_themes.balance_sheet_liquidity.leverage_label}
+                          </Badge>
+                        </div>
+                        
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm font-medium">Rate Exposure:</span>
+                          <Badge className={
+                            multiYearData.semantic_themes.balance_sheet_liquidity.rate_exposure_label === 'MostlyFixed' ? 'bg-green-100 text-green-800' :
+                            multiYearData.semantic_themes.balance_sheet_liquidity.rate_exposure_label === 'Mixed' ? 'bg-yellow-100 text-yellow-800' :
+                            multiYearData.semantic_themes.balance_sheet_liquidity.rate_exposure_label === 'MostlyVariable' ? 'bg-red-100 text-red-800' :
+                            'bg-gray-100 text-gray-800'
+                          }>
+                            {multiYearData.semantic_themes.balance_sheet_liquidity.rate_exposure_label}
+                          </Badge>
+                        </div>
+                      </div>
+                      
+                      {/* Liquidity Commentary */}
+                      <div>
+                        <h5 className="font-medium mb-2 text-slate-800">Liquidity Position</h5>
+                        <p className="text-sm text-slate-700">{multiYearData.semantic_themes.balance_sheet_liquidity.liquidity_comment}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+
+                {/* Portfolio Diversification */}
+                {(multiYearData.semantic_themes?.property_type_mix || multiYearData.semantic_themes?.geography_mix) && (
+                  <div>
+                    <h4 className="font-semibold mb-4">Portfolio Diversification</h4>
+                    <div className="grid md:grid-cols-2 gap-6">
+                      {/* Property Portfolio Mix */}
+                      {multiYearData.semantic_themes?.property_type_mix && (
+                        <div className="p-4 border rounded-lg bg-gradient-to-r from-green-50 to-blue-50 border-green-200">
+                          <h5 className="font-semibold mb-3 text-green-800 flex items-center gap-2">
+                            <span>🏢</span>
+                            Property Portfolio Mix
+                          </h5>
+                          <div className="grid gap-3">
+                            {multiYearData.semantic_themes.property_type_mix.map((prop, index) => (
+                              <div key={index} className="p-3 bg-white rounded-lg border">
+                                <div className="font-medium text-sm">{prop.type}</div>
+                                <Badge className={`text-xs mt-1 ${getTrendColor(prop.approx_share_label)}`}>
+                                  {prop.approx_share_label} Share
+                                </Badge>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Geographic Mix */}
+                      {multiYearData.semantic_themes?.geography_mix && (
+                        <div className="p-4 border rounded-lg bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200">
+                          <h5 className="font-semibold mb-3 text-blue-800 flex items-center gap-2">
+                            <span>🗺️</span>
+                            Geographic Exposure
+                          </h5>
+                          <div className="grid gap-3">
+                            {multiYearData.semantic_themes.geography_mix.map((geo, index) => (
+                              <div key={index} className="p-3 bg-white rounded-lg border">
+                                <div className="font-medium text-sm">{geo.region_or_market}</div>
+                                <Badge className={`text-xs mt-1 ${getTrendColor(geo.approx_share_label)}`}>
+                                  {geo.approx_share_label} Exposure
+                                </Badge>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {/* Strategy Evolution */}
+                {multiYearData.semantic_themes.strategy_evolution && multiYearData.semantic_themes.strategy_evolution.length > 0 && (
+                  <div>
+                    <h4 className="font-semibold mb-3">Strategic Evolution</h4>
+                    <div className="space-y-3">
+                      {multiYearData.semantic_themes.strategy_evolution.map((evolution, index) => (
+                        <div key={index} className="p-3 border-l-4 border-blue-400 bg-blue-50 rounded-r-lg">
+                          <div className="flex items-center gap-2 mb-1">
+                            <Badge variant="outline">{evolution.year}</Badge>
+                            <span className="font-medium">Strategic Shift</span>
+                          </div>
+                          <p className="text-sm">{evolution.change}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Competitive Position */}
+                <div>
+                  <h4 className="font-semibold mb-3">Competitive Position</h4>
+                  <div className="p-4 border rounded-lg">
+                    <div className="flex items-center gap-2 mb-3">
+                      <Badge className={
+                        multiYearData.semantic_themes.competitive_posture.label.includes('Strengthening') 
+                          ? 'bg-green-100 text-green-800' 
+                          : multiYearData.semantic_themes.competitive_posture.label.includes('Eroding')
+                          ? 'bg-red-100 text-red-800'
+                          : 'bg-gray-100 text-gray-800'
+                      }>
+                        {multiYearData.semantic_themes.competitive_posture.label}
+                      </Badge>
+                    </div>
+                    <div>
+                      <h5 className="font-medium mb-2">Key Competitive Drivers:</h5>
+                      <ul className="space-y-1">
+                        {multiYearData.semantic_themes.competitive_posture.drivers.map((driver, index) => (
+                          <li key={index} className="text-sm flex items-start gap-2">
+                            <span className="text-blue-500 mt-1">•</span>
+                            {driver}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Time Series Analysis */}
+                {multiYearData.timeseries_semantic && (
+                  <div>
+                    <h4 className="font-semibold mb-3">Filing Year Trends</h4>
+                    <div className="grid md:grid-cols-3 gap-4">
+                      <div className="p-3 border rounded-lg">
+                        <h5 className="font-medium mb-2">Same Store NOI by Filing Year</h5>
+                        <div className="space-y-1">
+                          {multiYearData.timeseries_semantic.same_store_noi_by_year.map((item, index) => (
+                            <div key={index} className="flex justify-between text-sm">
+                              <span>{item.year}:</span>
+                              <Badge variant="outline" className="text-xs">
+                                {item.label}
+                              </Badge>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                      
+                      <div className="p-3 border rounded-lg">
+                        <h5 className="font-medium mb-2">Occupancy by Filing Year</h5>
+                        <div className="space-y-1">
+                          {multiYearData.timeseries_semantic.occupancy_by_year.map((item, index) => (
+                            <div key={index} className="flex justify-between text-sm">
+                              <span>{item.year}:</span>
+                              <Badge variant="outline" className="text-xs">
+                                {item.label}
+                              </Badge>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                      
+                      <div className="p-3 border rounded-lg">
+                        <h5 className="font-medium mb-2">Distribution Policy by Filing Year</h5>
+                        <div className="space-y-1">
+                          {multiYearData.timeseries_semantic.distribution_policy_by_year.map((item, index) => (
+                            <div key={index} className="flex justify-between text-sm">
+                              <span>{item.year}:</span>
+                              <Badge variant="outline" className="text-xs">
+                                {item.label}
+                              </Badge>
+                            </div>
+                          ))}
                         </div>
                       </div>
                     </div>
                   </div>
                 )}
 
-                {/* Key Highlights */}
-                {multiYearData.ui_summaries?.bullet_highlights && (
-                  <div className="bg-green-50 p-4 rounded-lg border-l-4 border-green-400">
-                    <h4 className="font-semibold mb-2 text-green-800">Key Highlights</h4>
-                    <ul className="list-disc list-inside space-y-1 text-sm text-green-700">
-                      {multiYearData.ui_summaries.bullet_highlights.map((item, index) => (
-                        <li key={index}>{item}</li>
+                {/* Optional Numerics */}
+                {multiYearData.optional_numerics && (
+                  (() => {
+                    const hasAnyData = 
+                      multiYearData.optional_numerics.mentioned_ffo_affo_growth_pct ||
+                      multiYearData.optional_numerics.mentioned_affo_payout_ratio_pct ||
+                      multiYearData.optional_numerics.net_debt_to_ebitdare_range ||
+                      multiYearData.optional_numerics.fixed_vs_variable_debt_mix_pct ||
+                      multiYearData.optional_numerics.walt_years ||
+                      multiYearData.optional_numerics.cap_rate_notes ||
+                      multiYearData.optional_numerics.notes;
+
+                    if (!hasAnyData) return null;
+
+                    const metrics = [];
+                    
+                    // Build array of available metrics
+                    if (multiYearData.optional_numerics.mentioned_ffo_affo_growth_pct) {
+                      metrics.push({
+                        label: 'FFO/AFFO Growth',
+                        value: `${multiYearData.optional_numerics.mentioned_ffo_affo_growth_pct}%`
+                      });
+                    }
+                    
+                    if (multiYearData.optional_numerics.mentioned_affo_payout_ratio_pct) {
+                      metrics.push({
+                        label: 'AFFO Payout Ratio',
+                        value: `${multiYearData.optional_numerics.mentioned_affo_payout_ratio_pct}%`
+                      });
+                    }
+                    
+                    if (multiYearData.optional_numerics.net_debt_to_ebitdare_range) {
+                      metrics.push({
+                        label: 'Net Debt/EBITDAre',
+                        value: multiYearData.optional_numerics.net_debt_to_ebitdare_range
+                      });
+                    }
+                    
+                    if (multiYearData.optional_numerics.fixed_vs_variable_debt_mix_pct) {
+                      metrics.push({
+                        label: 'Debt Mix (Fixed/Variable)',
+                        value: multiYearData.optional_numerics.fixed_vs_variable_debt_mix_pct
+                      });
+                    }
+                    
+                    if (multiYearData.optional_numerics.walt_years) {
+                      metrics.push({
+                        label: 'WALT (Years)',
+                        value: `${multiYearData.optional_numerics.walt_years} years`
+                      });
+                    }
+
+                    return (
+                      <div>
+                        <h4 className="font-semibold mb-3">Additional Quantitative Metrics</h4>
+                        <div className="space-y-4">
+                          {/* Dynamic Grid for Available Metrics */}
+                          {metrics.length > 0 && (
+                            <div className={`grid gap-4 p-4 bg-blue-50 rounded-lg ${
+                              metrics.length === 1 ? 'grid-cols-1' :
+                              metrics.length === 2 ? 'md:grid-cols-2' :
+                              'md:grid-cols-3'
+                            }`}>
+                              {metrics.map((metric, index) => (
+                                <div key={index} className="text-center">
+                                  <h5 className="font-medium text-sm">{metric.label}</h5>
+                                  <p className="text-lg font-bold">{metric.value}</p>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+
+                          {/* Cap Rate Notes Details */}
+                          {multiYearData.optional_numerics.cap_rate_notes && (
+                            <div className="p-4 bg-green-50 rounded-lg border-l-4 border-green-400">
+                              <h5 className="font-medium text-sm text-green-800 mb-2">Cap Rate Notes</h5>
+                              <p className="text-sm text-green-700">{multiYearData.optional_numerics.cap_rate_notes}</p>
+                            </div>
+                          )}
+
+                          {/* General Notes */}
+                          {multiYearData.optional_numerics.notes && (
+                            <div className="p-3 bg-slate-100 rounded-lg border">
+                              <h5 className="font-medium text-sm text-slate-800 mb-1">Additional Notes</h5>
+                              <p className="text-sm text-slate-700">{multiYearData.optional_numerics.notes}</p>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })()
+                )}
+
+                {/* Enhanced Classification */}
+                <div>
+                  <h4 className="font-semibold mb-3">REIT Classification</h4>
+                  <div className="p-4 bg-gray-50 rounded-lg">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Badge className="bg-blue-100 text-blue-800">{multiYearData.classification.primary}</Badge>
+                      {multiYearData.classification.secondary.map((sec, index) => (
+                        <Badge key={index} variant="outline">{sec}</Badge>
                       ))}
-                    </ul>
+                    </div>
+                    <div className="flex flex-wrap gap-1 mb-3">
+                      {multiYearData.classification.reit_profile_tags.map((tag, index) => (
+                        <Badge key={index} className="bg-purple-100 text-purple-800 text-xs">{tag}</Badge>
+                      ))}
+                    </div>
+                    <p className="text-sm text-muted-foreground">{multiYearData.classification.rationale}</p>
+                  </div>
+                </div>
+
+                {/* Distribution Analysis */}
+                {multiYearData.distribution_analysis?.applies && (
+                  <div className="p-4 border rounded-lg bg-gradient-to-r from-purple-50 to-indigo-50 border-purple-200">
+                    <h4 className="font-semibold mb-3 text-purple-800">💰 Distribution Analysis</h4>
+                    <div className="space-y-4">
+                      {/* Policy Overview */}
+                      <div className="grid md:grid-cols-2 gap-4">
+                        <div className="p-4 border rounded-lg bg-white shadow-sm">
+                          <h5 className="font-medium mb-2">Policy Characterization</h5>
+                          <Badge variant="outline" className="mb-2">
+                            {multiYearData.distribution_analysis.policy_characterization}
+                          </Badge>
+                          <div className="text-sm space-y-1">
+                            <div><strong>Philosophy:</strong> {multiYearData.distribution_analysis.policy_philosophy}</div>
+                            <div><strong>Yield Profile:</strong> {multiYearData.distribution_analysis.yield_profile.characterization} ({multiYearData.distribution_analysis.yield_profile.trend})</div>
+                            {multiYearData.distribution_analysis.cadence && (
+                              <div><strong>Cadence:</strong> {multiYearData.distribution_analysis.cadence}</div>
+                            )}
+                          </div>
+                        </div>
+                        
+                        <div className="p-4 border rounded-lg bg-white shadow-sm">
+                          <h5 className="font-medium mb-2">Sustainability Assessment</h5>
+                          <div className="space-y-3">
+                            {/* Coverage Signals */}
+                            <div>
+                              <h6 className="font-medium text-xs text-slate-600 mb-2 uppercase tracking-wide">Coverage Signals</h6>
+                              <div className="space-y-2 text-sm">
+                                <div className="flex justify-between">
+                                  <span>AFFO Coverage:</span>
+                                  <Badge className={
+                                    multiYearData.distribution_analysis.sustainability_signals.affo_coverage === 'Strong' ? 'bg-green-100 text-green-800' :
+                                    multiYearData.distribution_analysis.sustainability_signals.affo_coverage === 'Adequate' ? 'bg-blue-100 text-blue-800' :
+                                    multiYearData.distribution_analysis.sustainability_signals.affo_coverage === 'Stretched' ? 'bg-yellow-100 text-yellow-800' :
+                                    'bg-red-100 text-red-800'
+                                  }>
+                                    {multiYearData.distribution_analysis.sustainability_signals.affo_coverage}
+                                  </Badge>
+                                </div>
+                                <div className="flex justify-between">
+                                  <span>FFO Coverage:</span>
+                                  <Badge className={
+                                    multiYearData.distribution_analysis.sustainability_signals.ffo_coverage === 'Strong' ? 'bg-green-100 text-green-800' :
+                                    multiYearData.distribution_analysis.sustainability_signals.ffo_coverage === 'Adequate' ? 'bg-blue-100 text-blue-800' :
+                                    multiYearData.distribution_analysis.sustainability_signals.ffo_coverage === 'Stretched' ? 'bg-yellow-100 text-yellow-800' :
+                                    'bg-red-100 text-red-800'
+                                  }>
+                                    {multiYearData.distribution_analysis.sustainability_signals.ffo_coverage}
+                                  </Badge>
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* Policy & Management Signals */}
+                            <div>
+                              <h6 className="font-medium text-xs text-slate-600 mb-2 uppercase tracking-wide">Policy & Management</h6>
+                              <div className="space-y-2 text-sm">
+                                <div className="flex justify-between">
+                                  <span>Policy Consistency:</span>
+                                  <Badge className={
+                                    multiYearData.distribution_analysis.sustainability_signals.policy_consistency === 'Consistent' ? 'bg-green-100 text-green-800' :
+                                    multiYearData.distribution_analysis.sustainability_signals.policy_consistency === 'Variable' ? 'bg-yellow-100 text-yellow-800' :
+                                    multiYearData.distribution_analysis.sustainability_signals.policy_consistency === 'Reactive' ? 'bg-red-100 text-red-800' :
+                                    'bg-gray-100 text-gray-800'
+                                  }>
+                                    {multiYearData.distribution_analysis.sustainability_signals.policy_consistency}
+                                  </Badge>
+                                </div>
+                                <div className="flex justify-between">
+                                  <span>Management Commitment:</span>
+                                  <Badge className={
+                                    multiYearData.distribution_analysis.sustainability_signals.management_commitment === 'High' ? 'bg-green-100 text-green-800' :
+                                    multiYearData.distribution_analysis.sustainability_signals.management_commitment === 'Medium' ? 'bg-yellow-100 text-yellow-800' :
+                                    multiYearData.distribution_analysis.sustainability_signals.management_commitment === 'Low' ? 'bg-red-100 text-red-800' :
+                                    'bg-gray-100 text-gray-800'
+                                  }>
+                                    {multiYearData.distribution_analysis.sustainability_signals.management_commitment}
+                                  </Badge>
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* Coverage Metrics */}
+                            <div>
+                              <h6 className="font-medium text-xs text-slate-600 mb-2 uppercase tracking-wide">Payout Ratios</h6>
+                              <div className="space-y-2 text-sm">
+                                <div className="flex justify-between">
+                                  <span>AFFO Payout Ratio:</span>
+                                  <Badge className={
+                                    multiYearData.distribution_analysis.coverage_metrics.affo_payout_ratio_bucket.includes('Conservative') ? 'bg-green-100 text-green-800' :
+                                    multiYearData.distribution_analysis.coverage_metrics.affo_payout_ratio_bucket.includes('Balanced') ? 'bg-blue-100 text-blue-800' :
+                                    multiYearData.distribution_analysis.coverage_metrics.affo_payout_ratio_bucket.includes('High') ? 'bg-yellow-100 text-yellow-800' :
+                                    'bg-red-100 text-red-800'
+                                  }>
+                                    {multiYearData.distribution_analysis.coverage_metrics.affo_payout_ratio_bucket}
+                                  </Badge>
+                                </div>
+                                <div className="flex justify-between">
+                                  <span>FFO Payout Ratio:</span>
+                                  <Badge className={
+                                    multiYearData.distribution_analysis.coverage_metrics.ffo_payout_ratio_bucket.includes('Conservative') ? 'bg-green-100 text-green-800' :
+                                    multiYearData.distribution_analysis.coverage_metrics.ffo_payout_ratio_bucket.includes('Balanced') ? 'bg-blue-100 text-blue-800' :
+                                    multiYearData.distribution_analysis.coverage_metrics.ffo_payout_ratio_bucket.includes('High') ? 'bg-yellow-100 text-yellow-800' :
+                                    'bg-red-100 text-red-800'
+                                  }>
+                                    {multiYearData.distribution_analysis.coverage_metrics.ffo_payout_ratio_bucket}
+                                  </Badge>
+                                </div>
+                                <div className="flex justify-between">
+                                  <span>Coverage Trend:</span>
+                                  <Badge variant="outline">{multiYearData.distribution_analysis.coverage_metrics.coverage_trend}</Badge>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* REIT-Specific Factors */}
+                      <div className="p-4 border rounded-lg bg-white shadow-sm">
+                        <h5 className="font-medium mb-3">REIT-Specific Distribution Factors</h5>
+                        <div className="grid md:grid-cols-3 gap-4 text-sm">
+                          <div className="text-center">
+                            <div className="font-medium text-slate-600 mb-1">Taxable Income Requirement</div>
+                            <Badge className={multiYearData.distribution_analysis.reit_specific_factors.taxable_income_requirement_mentioned ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800'}>
+                              {multiYearData.distribution_analysis.reit_specific_factors.taxable_income_requirement_mentioned ? 'Mentioned' : 'Not Mentioned'}
+                            </Badge>
+                          </div>
+                          <div className="text-center">
+                            <div className="font-medium text-slate-600 mb-1">Return of Capital</div>
+                            <Badge variant="outline">
+                              {multiYearData.distribution_analysis.reit_specific_factors.return_of_capital_component}
+                            </Badge>
+                          </div>
+                          <div className="text-center">
+                            <div className="font-medium text-slate-600 mb-1">Capital Recycling Impact</div>
+                            <Badge variant="outline">
+                              {multiYearData.distribution_analysis.reit_specific_factors.capital_recycling_impact}
+                            </Badge>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Distribution Actions Timeline */}
+                      {multiYearData.distribution_analysis.distribution_actions.length > 0 && (
+                        <div>
+                          <h5 className="font-medium mb-3">Distribution Actions by Filing Year</h5>
+                          <div className="space-y-3">
+                            {multiYearData.distribution_analysis.distribution_actions.map((action, index) => (
+                              <div key={index} className="p-3 border-l-4 border-blue-400 bg-blue-50 rounded-r-lg">
+                                <div className="flex items-center gap-2 mb-1">
+                                  <Badge variant="outline">{action.year}</Badge>
+                                  <Badge className={
+                                    action.action === 'Increased' ? 'bg-green-100 text-green-800' :
+                                    action.action === 'Cut' || action.action === 'Suspended' ? 'bg-red-100 text-red-800' :
+                                    action.action === 'Initiated' ? 'bg-blue-100 text-blue-800' :
+                                    'bg-gray-100 text-gray-800'
+                                  }>
+                                    {action.action}
+                                  </Badge>
+                                </div>
+                                <p className="text-sm text-blue-700">{action.context}</p>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Sustainability Factors */}
+                      {multiYearData.distribution_analysis.sustainability_factors.length > 0 && (
+                        <div>
+                          <h5 className="font-medium mb-3">Sustainability Factors</h5>
+                          <div className="flex flex-wrap gap-2">
+                            {multiYearData.distribution_analysis.sustainability_factors.map((factor, index) => (
+                              <Badge key={index} variant="outline" className="text-xs">{factor}</Badge>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Additional Notes */}
+                      {multiYearData.distribution_analysis.notes && (
+                        <div className="p-3 bg-slate-50 rounded-lg border">
+                          <h5 className="font-medium mb-2">Policy Insights</h5>
+                          <p className="text-sm text-slate-700">{multiYearData.distribution_analysis.notes}</p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {/* Risk Register */}
+                {multiYearData.semantic_themes.risk_register.length > 0 && (
+                  <div>
+                    <h4 className="font-semibold mb-3">Risk Register</h4>
+                    <div className="space-y-3">
+                      {multiYearData.semantic_themes.risk_register.map((risk, index) => (
+                        <div key={index} className="p-3 border rounded-lg">
+                          <div className="flex items-center justify-between mb-2">
+                            <h5 className="font-semibold">{risk.name}</h5>
+                            <Badge className={getSeverityColor(risk.severity)}>
+                              {risk.severity} Risk
+                            </Badge>
+                          </div>
+                          <p className="text-sm text-muted-foreground mb-2">{risk.note}</p>
+                          <p className="text-xs text-muted-foreground">
+                            Mentioned in: {risk.recurrence_years.join(', ')}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 )}
 
