@@ -19,7 +19,9 @@ import {
   Zap,
   DollarSign,
   Home,
-  MapPin
+  MapPin,
+  Target,
+  Award
 } from 'lucide-react';
 
 // Type definitions based on REIT schemas
@@ -451,9 +453,12 @@ function REITEquityReportContent({
   };
 
   const getCredibilityTierColor = (tier: string) => {
-    if (tier === 'High') return 'bg-green-500 text-white';
-    if (tier === 'Medium') return 'bg-yellow-500 text-white';
-    return 'bg-red-500 text-white';
+    switch (tier.toLowerCase()) {
+      case 'high': return 'bg-green-100 text-green-800 border-green-300';
+      case 'medium': return 'bg-yellow-100 text-yellow-800 border-yellow-300';
+      case 'low': return 'bg-red-100 text-red-800 border-red-300';
+      default: return 'bg-gray-100 text-gray-800 border-gray-300';
+    }
   };
 
   const getViabilityColor = (tier: string) => {
@@ -1445,8 +1450,7 @@ function REITEquityReportContent({
         )}
 
         {/* Management Credibility */}
-        {expandedSections.has('management') && (
-          managementData ? (
+        {expandedSections.has('management') && managementData && (
           <Card>
             <CardHeader className="pb-3">
               <h3 className="text-lg font-semibold text-slate-800 flex items-center gap-2">
@@ -1455,113 +1459,517 @@ function REITEquityReportContent({
               </h3>
             </CardHeader>
             <CardContent>
-              <div className="space-y-6">
-                {/* Management Synopsis */}
-                {managementData.ui_summaries?.synopsis && (
-                  <div className="bg-slate-50 p-4 rounded-lg border-l-4 border-slate-400">
-                    <h4 className="font-semibold mb-2 text-slate-800">Management Synopsis</h4>
-                    <p className="text-sm text-slate-700">{managementData.ui_summaries.synopsis}</p>
-                  </div>
-                )}
-
-                {/* Credibility Score */}
-                <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                  <div>
-                    <h4 className="font-semibold mb-1">Credibility Score</h4>
-                    <p className="text-sm text-muted-foreground">
-                      Overall assessment of REIT management's past actions and communication
-                    </p>
-                  </div>
-                  {managementData.scores?.credibility_tier && (
-                    <Badge className={`text-lg px-4 py-2 ${getCredibilityTierColor(managementData.scores.credibility_tier)}`}>
-                      {managementData.scores.credibility_tier}
-                    </Badge>
-                  )}
+            <div className="space-y-6">
+              {/* Management Synopsis */}
+              {managementData.ui_summaries?.synopsis && (
+                <div className="bg-slate-50 p-4 rounded-lg border-l-4 border-slate-400">
+                  <h4 className="font-semibold mb-2 text-slate-800">Management Synopsis</h4>
+                  <p className="text-sm text-slate-700">{managementData.ui_summaries.synopsis}</p>
                 </div>
+              )}
 
-                {/* REIT-Specific Disclosure Quality */}
-                <div className="p-4 border rounded-lg bg-gradient-to-r from-indigo-50 to-purple-50 border-indigo-200">
-                  <h4 className="font-semibold mb-3 text-indigo-800">
-                    📊 REIT-Specific Disclosure Quality
-                  </h4>
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div className="space-y-3">
-                      <div className="flex justify-between items-center">
-                        <span className="font-medium text-sm">NAREIT FFO Clarity:</span>
-                        <Badge className="text-xs">{managementData.credibility_assessment.disclosure_hygiene.nareit_ffo_definition_clarity}</Badge>
+              {/* Credibility Component Analysis */}
+              <div>
+                <h4 className="font-semibold mb-3">Credibility Component Analysis</h4>
+                <div className="grid md:grid-cols-2 gap-4">
+                  {[
+                    { name: 'Promise Follow-through', score: managementData.scores.promise_follow_through },
+                    { name: 'Tone Discipline', score: managementData.scores.tone_discipline },
+                    { name: 'Disclosure Hygiene', score: managementData.scores.disclosure_hygiene },
+                    { name: 'Risk Candor', score: managementData.scores.risk_candor },
+                    { name: 'Strategic Coherence', score: managementData.scores.strategic_coherence },
+                    { name: 'Capital Allocation Consistency', score: managementData.scores.capital_allocation_consistency },
+                    { name: 'Metric Definition Stability', score: managementData.scores.metric_definition_stability },
+                    { name: 'Red Flags (inverse)', score: managementData.scores.red_flags }
+                  ].map((component, index) => (
+                    <div key={index} className="p-3 border rounded-lg">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-sm font-medium">{component.name}</span>
+                        <span className="text-sm font-bold">{component.score}/10</span>
                       </div>
-                      <div className="flex justify-between items-center">
-                        <span className="font-medium text-sm">AFFO Definition Stability:</span>
-                        <Badge className="text-xs">{managementData.credibility_assessment.disclosure_hygiene.affo_definition_stability}</Badge>
-                      </div>
+                      <Progress value={component.score * 10} className="h-2" />
                     </div>
-                    <div className="space-y-3">
-                      <div className="flex justify-between items-center">
-                        <span className="font-medium text-sm">Same Store Cohort Integrity:</span>
-                        <Badge className="text-xs">{managementData.credibility_assessment.disclosure_hygiene.same_store_cohort_integrity}</Badge>
-                      </div>
-                      <div className="flex justify-between items-center">
-                        <span className="font-medium text-sm">Reconciliation Quality:</span>
-                        <Badge className="text-xs">{managementData.credibility_assessment.disclosure_hygiene.reconciliation_quality}</Badge>
-                      </div>
+                  ))}
+                </div>
+                
+                <div className="mt-4 p-4 bg-slate-100 rounded-lg border-2 border-slate-300">
+                  <div className="flex justify-between items-center">
+                    <span className="font-semibold">Overall Credibility Score</span>
+                    <div className="flex items-center gap-3">
+                      <span className="font-bold text-xl">{managementData.scores.composite_score.toFixed(2)}/10</span>
+                      <Badge className={`text-lg px-3 py-1 ${getCredibilityTierColor(managementData.scores.credibility_tier)}`}>
+                        {managementData.scores.credibility_tier} Tier
+                      </Badge>
                     </div>
                   </div>
-                </div>
-
-                {/* Red and Green Flags */}
-                <div className="grid md:grid-cols-2 gap-6">
-                  {managementData.credibility_assessment.red_flags.length > 0 && (
-                    <div>
-                      <h4 className="font-semibold mb-2 text-red-600">Red Flags</h4>
-                      <ul className="list-disc list-inside space-y-1 text-sm text-red-500">
-                        {managementData.credibility_assessment.red_flags.map((flag, index) => (
-                          <li key={index}>{flag}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-                  {managementData.credibility_assessment.green_flags.length > 0 && (
-                    <div>
-                      <h4 className="font-semibold mb-2 text-green-600">Green Flags</h4>
-                      <ul className="list-disc list-inside space-y-1 text-sm text-green-500">
-                        {managementData.credibility_assessment.green_flags.map((flag, index) => (
-                          <li key={index}>{flag}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-                </div>
-
-                {/* Disclaimer */}
-                <div className="mt-6 p-3 bg-slate-100 border border-slate-300 rounded-lg">
-                  <p className="text-xs text-slate-600 text-center">
-                    <strong>Disclaimer:</strong> For informational purposes only. Operational analysis of historical disclosures. Not investment advice or a recommendation.
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Weighted composite assessment
                   </p>
                 </div>
               </div>
-            </CardContent>
-          </Card>
-          ) : (
-            <Card>
-              <CardHeader className="pb-3">
-                <h3 className="text-lg font-semibold text-slate-800 flex items-center gap-2">
-                  <Shield className="h-5 w-5 text-emerald-600" />
-                  Management Credibility Assessment
-                </h3>
-              </CardHeader>
-              <CardContent>
-                <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
-                  <div className="flex items-center gap-2 mb-2">
-                    <AlertTriangle className="h-4 w-4 text-blue-600" />
-                    <span className="font-medium text-blue-800">Data Processing</span>
+
+              {/* Promise Follow-through Analysis */}
+              {managementData.credibility_assessment.commitment_followthrough && managementData.credibility_assessment.commitment_followthrough.length > 0 && (
+                <div>
+                  <h4 className="font-semibold mb-4 flex items-center gap-2">
+                    <Target className="h-5 w-5 text-blue-600" />
+                    Promise Follow-through Analysis
+                  </h4>
+                  <div className="space-y-4">
+                    {managementData.credibility_assessment.commitment_followthrough.map((commitment, index) => (
+                      <div key={index} className="border rounded-lg p-4 bg-blue-50">
+                        <div className="flex items-start justify-between mb-2">
+                          <div className="text-sm font-medium text-blue-800">
+                            Filing Year {commitment.commitment_year} - {commitment.commitment_type}
+                          </div>
+                          <Badge className={`${
+                            commitment.outcome_label === 'Achieved' ? 'bg-green-100 text-green-800' :
+                            commitment.outcome_label === 'Progressing' ? 'bg-blue-100 text-blue-800' :
+                            commitment.outcome_label === 'Stalled' ? 'bg-yellow-100 text-yellow-800' :
+                            commitment.outcome_label === 'Reversed' ? 'bg-red-100 text-red-800' :
+                            'bg-gray-100 text-gray-800'
+                          }`}>
+                            {commitment.outcome_label}
+                          </Badge>
+                        </div>
+                        <p className="text-sm text-blue-700 mb-2">&ldquo;{commitment.commitment}&rdquo;</p>
+                        <div className="text-xs text-blue-600 mb-2">
+                          Tracked in: Filing Year {commitment.subsequent_followup_years.join(', Filing Year ')}
+                        </div>
+                        <p className="text-xs text-blue-600"><span className="font-medium">Rationale:</span> {commitment.rationale}</p>
+                      </div>
+                    ))}
                   </div>
-                  <p className="text-sm text-blue-700">
-                    Management credibility analysis is being processed and will be available in the enhanced interface soon.
-                  </p>
                 </div>
-              </CardContent>
-            </Card>
-          )
+              )}
+
+              {/* Tone Profile */}
+              <div>
+                <h4 className="font-semibold mb-4 flex items-center gap-2">
+                  <Building2 className="h-5 w-5 text-purple-600" />
+                  Communication Style & Tone Profile
+                </h4>
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div className="space-y-3">
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm">Tone Balance</span>
+                      <Badge className="bg-purple-100 text-purple-800">
+                        {managementData.credibility_assessment.tone_profile.tone_balance_label}
+                      </Badge>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm">Superlative Frequency</span>
+                      <Badge className="bg-purple-100 text-purple-800">
+                        {managementData.credibility_assessment.tone_profile.superlative_frequency_label}
+                      </Badge>
+                    </div>
+                  </div>
+                  <div className="space-y-3">
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm">Guidance Style</span>
+                      <Badge className="bg-purple-100 text-purple-800">
+                        {managementData.credibility_assessment.tone_profile.guidance_style_label}
+                      </Badge>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm">Tone Trend</span>
+                      <Badge className="bg-purple-100 text-purple-800">
+                        {managementData.credibility_assessment.tone_profile.change_in_tone_label}
+                      </Badge>
+                    </div>
+                  </div>
+                </div>
+                {managementData.credibility_assessment.tone_profile.notes && (
+                  <div className="mt-4 p-3 bg-purple-50 rounded-lg">
+                    <p className="text-sm text-purple-700">{managementData.credibility_assessment.tone_profile.notes}</p>
+                  </div>
+                )}
+              </div>
+
+              {/* REIT-Specific Disclosure Hygiene */}
+              <div>
+                <h4 className="font-semibold mb-4 flex items-center gap-2">
+                  <Shield className="h-5 w-5 text-teal-600" />
+                  REIT-Specific Disclosure Hygiene Assessment
+                </h4>
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div className="space-y-3">
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm">NAREIT FFO Definition Clarity</span>
+                      <Badge className="bg-teal-100 text-teal-800">
+                        {managementData.credibility_assessment.disclosure_hygiene.nareit_ffo_definition_clarity}
+                      </Badge>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm">AFFO Definition Stability</span>
+                      <Badge className="bg-teal-100 text-teal-800">
+                        {managementData.credibility_assessment.disclosure_hygiene.affo_definition_stability}
+                      </Badge>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm">Reconciliation Quality</span>
+                      <Badge className="bg-teal-100 text-teal-800">
+                        {managementData.credibility_assessment.disclosure_hygiene.reconciliation_quality}
+                      </Badge>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm">Same Store Cohort Integrity</span>
+                      <Badge className="bg-teal-100 text-teal-800">
+                        {managementData.credibility_assessment.disclosure_hygiene.same_store_cohort_integrity}
+                      </Badge>
+                    </div>
+                  </div>
+                  <div className="space-y-3">
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm">Impairment/Restructure Clarity</span>
+                      <Badge className="bg-teal-100 text-teal-800">
+                        {managementData.credibility_assessment.disclosure_hygiene.impairment_restructure_clarity}
+                      </Badge>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm">Restatement/Weakness Mentions</span>
+                      <Badge className="bg-teal-100 text-teal-800">
+                        {managementData.credibility_assessment.disclosure_hygiene.restatement_or_weakness_mentions}
+                      </Badge>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm">Segment Bridge Quality</span>
+                      <Badge className="bg-teal-100 text-teal-800">
+                        {managementData.credibility_assessment.disclosure_hygiene.segment_bridge_quality}
+                      </Badge>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Risk Candor */}
+              <div>
+                <h4 className="font-semibold mb-4 flex items-center gap-2">
+                  <AlertTriangle className="h-5 w-5 text-red-600" />
+                  Risk Candor Analysis
+                </h4>
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center p-3 bg-red-50 rounded-lg">
+                    <span className="text-sm font-medium">Realized Issues Acknowledged</span>
+                    <Badge className="bg-red-100 text-red-800">
+                      {managementData.credibility_assessment.risk_candor.realized_issues_acknowledged_label}
+                    </Badge>
+                  </div>
+                  
+                  {managementData.credibility_assessment.risk_candor.recurring_risks && managementData.credibility_assessment.risk_candor.recurring_risks.length > 0 && (
+                    <div>
+                      <h5 className="font-medium mb-3 text-red-700">Recurring Risk Disclosures</h5>
+                      <div className="grid gap-3">
+                        {managementData.credibility_assessment.risk_candor.recurring_risks.map((risk, index) => (
+                          <div key={index} className="border rounded-lg p-3 bg-red-50">
+                            <div className="flex items-start justify-between mb-2">
+                              <div className="font-medium text-red-800">{risk.name}</div>
+                              <Badge className="bg-red-100 text-red-800">{risk.candor_label}</Badge>
+                            </div>
+                            <div className="text-xs text-red-600 mb-2">
+                              Mentioned in: Filing Year {risk.recurrence_years.join(', Filing Year ')}
+                            </div>
+                            <p className="text-sm text-red-700">{risk.note}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Strategic Coherence */}
+              <div>
+                <h4 className="font-semibold mb-4 flex items-center gap-2">
+                  <Target className="h-5 w-5 text-indigo-600" />
+                  Strategic Coherence Assessment
+                </h4>
+                <div className="grid md:grid-cols-4 gap-4 mb-4">
+                  <div className="text-center p-3 bg-indigo-50 rounded-lg">
+                    <div className="text-sm font-medium text-indigo-800">Pivot Frequency</div>
+                    <Badge className="mt-2 bg-indigo-100 text-indigo-800">
+                      {managementData.credibility_assessment.strategic_coherence.pivot_frequency_label}
+                    </Badge>
+                  </div>
+                  <div className="text-center p-3 bg-indigo-50 rounded-lg">
+                    <div className="text-sm font-medium text-indigo-800">Rationalization Quality</div>
+                    <Badge className="mt-2 bg-indigo-100 text-indigo-800">
+                      {managementData.credibility_assessment.strategic_coherence.rationalization_quality_label}
+                    </Badge>
+                  </div>
+                  <div className="text-center p-3 bg-indigo-50 rounded-lg">
+                    <div className="text-sm font-medium text-indigo-800">Resegmentation Transparency</div>
+                    <Badge className="mt-2 bg-indigo-100 text-indigo-800">
+                      {managementData.credibility_assessment.strategic_coherence.resegmentation_transparency_label}
+                    </Badge>
+                  </div>
+                  <div className="text-center p-3 bg-indigo-50 rounded-lg">
+                    <div className="text-sm font-medium text-indigo-800">Same Store Definition Changes</div>
+                    <Badge className="mt-2 bg-indigo-100 text-indigo-800">
+                      {managementData.credibility_assessment.strategic_coherence.same_store_definition_changes_label}
+                    </Badge>
+                  </div>
+                </div>
+                
+                {managementData.credibility_assessment.strategic_coherence.examples && managementData.credibility_assessment.strategic_coherence.examples.length > 0 && (
+                  <div>
+                    <h5 className="font-medium mb-3 text-indigo-700">Strategic Examples</h5>
+                    <ul className="space-y-2">
+                      {managementData.credibility_assessment.strategic_coherence.examples.map((example, index) => (
+                        <li key={index} className="text-sm flex items-start gap-2">
+                          <div className="w-2 h-2 bg-indigo-400 rounded-full mt-2 flex-shrink-0"></div>
+                          <span className="text-indigo-700">{example}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+
+              {/* Capital Allocation Consistency */}
+              <div className="p-6 border-2 border-slate-200 rounded-lg bg-gradient-to-r from-slate-50 to-gray-50">
+                <h4 className="font-semibold mb-4 flex items-center gap-2">
+                  <TrendingUp className="h-5 w-5 text-green-600" />
+                  Capital Allocation Consistency Analysis
+                </h4>
+                <div className="space-y-6">
+                  {/* Stated Priorities */}
+                  {managementData.credibility_assessment.capital_allocation_consistency.stated_priorities && managementData.credibility_assessment.capital_allocation_consistency.stated_priorities.length > 0 && (
+                    <div className="p-4 border rounded-lg bg-green-50">
+                      <h5 className="font-medium mb-3 text-green-800">
+                        Management&apos;s Stated Capital Priorities
+                      </h5>
+                      <div className="flex flex-wrap gap-2">
+                        {managementData.credibility_assessment.capital_allocation_consistency.stated_priorities.map((priority, index) => (
+                          <Badge key={index} className="bg-green-100 text-green-800 border border-green-300">
+                            {priority.replace(/_/g, ' ')}
+                          </Badge>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  
+                  {/* Execution Examples */}
+                  {managementData.credibility_assessment.capital_allocation_consistency.examples && managementData.credibility_assessment.capital_allocation_consistency.examples.length > 0 && (
+                    <div className="p-4 border rounded-lg bg-blue-50">
+                      <h5 className="font-medium mb-3 text-blue-800">
+                        Actual Execution Track Record
+                      </h5>
+                      <ul className="space-y-2">
+                        {managementData.credibility_assessment.capital_allocation_consistency.examples.map((example, index) => (
+                          <li key={index} className="text-sm flex items-start gap-2">
+                            <div className="w-2 h-2 bg-blue-400 rounded-full mt-2 flex-shrink-0"></div>
+                            <span className="text-blue-700">{example}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                  
+                  {/* Assessment Result */}
+                  <div className="p-4 border-2 rounded-lg bg-white">
+                    <h5 className="font-medium mb-3 text-slate-800">
+                      Behavior Alignment Assessment
+                    </h5>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm">Stated priorities vs. actual execution:</span>
+                      <Badge className={`text-lg px-3 py-1 ${
+                        managementData.credibility_assessment.capital_allocation_consistency.behavior_alignment_label === 'Aligned' ? 'bg-green-100 text-green-800 border-green-300' :
+                        managementData.credibility_assessment.capital_allocation_consistency.behavior_alignment_label === 'Mixed' ? 'bg-yellow-100 text-yellow-800 border-yellow-300' :
+                        managementData.credibility_assessment.capital_allocation_consistency.behavior_alignment_label === 'NotAligned' ? 'bg-red-100 text-red-800 border-red-300' :
+                        'bg-slate-100 text-slate-800 border-slate-300'
+                      }`}>
+                        {managementData.credibility_assessment.capital_allocation_consistency.behavior_alignment_label}
+                      </Badge>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Metric Definition Stability */}
+              {managementData.credibility_assessment.metric_definition_stability && managementData.credibility_assessment.metric_definition_stability.length > 0 && (
+                <div>
+                  <h4 className="font-semibold mb-4 flex items-center gap-2">
+                    <Brain className="h-5 w-5 text-cyan-600" />
+                    REIT Metric Definition Stability
+                  </h4>
+                  <div className="space-y-3">
+                    {managementData.credibility_assessment.metric_definition_stability.map((metric, index) => (
+                      <div key={index} className="border rounded-lg p-3 bg-cyan-50">
+                        <div className="flex items-start justify-between mb-2">
+                          <div className="font-medium text-cyan-800">{metric.metric}</div>
+                          <Badge className="bg-cyan-100 text-cyan-800">{metric.stability_label}</Badge>
+                        </div>
+                        <p className="text-sm text-cyan-700">{metric.notes}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Distribution Policy Communication */}
+              {managementData.credibility_assessment.distribution_policy_communication && (
+                <div>
+                  <h4 className="font-semibold mb-4 flex items-center gap-2">
+                    <DollarSign className="h-5 w-5 text-purple-600" />
+                    Distribution Policy Communication
+                  </h4>
+                  <div className="grid md:grid-cols-3 gap-4 mb-4">
+                    <div className="text-center p-3 bg-purple-50 rounded-lg">
+                      <div className="text-sm font-medium text-purple-800">Cadence</div>
+                      <Badge className="mt-2 bg-purple-100 text-purple-800">
+                        {managementData.credibility_assessment.distribution_policy_communication.cadence_label}
+                      </Badge>
+                    </div>
+                    <div className="text-center p-3 bg-purple-50 rounded-lg">
+                      <div className="text-sm font-medium text-purple-800">Change Communication</div>
+                      <Badge className="mt-2 bg-purple-100 text-purple-800">
+                        {managementData.credibility_assessment.distribution_policy_communication.change_communication_label}
+                      </Badge>
+                    </div>
+                    <div className="text-center p-3 bg-purple-50 rounded-lg">
+                      <div className="text-sm font-medium text-purple-800">Coverage Context</div>
+                      <Badge className="mt-2 bg-purple-100 text-purple-800">
+                        {managementData.credibility_assessment.distribution_policy_communication.coverage_context_label}
+                      </Badge>
+                    </div>
+                  </div>
+                  {managementData.credibility_assessment.distribution_policy_communication.notes && (
+                    <div className="p-3 bg-purple-50 rounded-lg">
+                      <p className="text-sm text-purple-700">{managementData.credibility_assessment.distribution_policy_communication.notes}</p>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Overall Classification Summary */}
+              {managementData.classification && (
+                <div>
+                  <h4 className="font-semibold mb-4 flex items-center gap-2">
+                    <Building2 className="h-5 w-5 text-slate-600" />
+                    Management Classification Summary
+                  </h4>
+                  <div className="p-4 border rounded-lg bg-slate-50">
+                    <div className="grid md:grid-cols-3 gap-4 mb-4">
+                      <div className="text-center">
+                        <div className="text-sm font-medium text-slate-700 mb-2">Communication Style</div>
+                        <Badge className="bg-slate-100 text-slate-800">
+                          {managementData.classification.communication_style}
+                        </Badge>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-sm font-medium text-slate-700 mb-2">Credibility Trend</div>
+                        <Badge className={`${
+                          managementData.classification.credibility_trend === 'Improving' ? 'bg-green-100 text-green-800' :
+                          managementData.classification.credibility_trend === 'Deteriorating' ? 'bg-red-100 text-red-800' :
+                          managementData.classification.credibility_trend === 'Mixed' ? 'bg-yellow-100 text-yellow-800' :
+                          'bg-slate-100 text-slate-800'
+                        }`}>
+                          {managementData.classification.credibility_trend}
+                        </Badge>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-sm font-medium text-slate-700 mb-2">Disclosure Quality</div>
+                        <Badge className={`${
+                          managementData.classification.disclosure_quality_tier === 'High' ? 'bg-green-100 text-green-800' :
+                          managementData.classification.disclosure_quality_tier === 'Moderate' ? 'bg-yellow-100 text-yellow-800' :
+                          managementData.classification.disclosure_quality_tier === 'Low' ? 'bg-red-100 text-red-800' :
+                          'bg-slate-100 text-slate-800'
+                        }`}>
+                          {managementData.classification.disclosure_quality_tier}
+                        </Badge>
+                      </div>
+                    </div>
+                    
+                    {managementData.classification.rationale && (
+                      <div className="border-t pt-4">
+                        <h5 className="font-medium mb-2 text-slate-700">Assessment Rationale</h5>
+                        <p className="text-sm text-slate-600">{managementData.classification.rationale}</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* Bullet Highlights and Watch Items */}
+              {(managementData.ui_summaries?.bullet_highlights || managementData.ui_summaries?.watch_items) && (
+                <div className="grid md:grid-cols-2 gap-6">
+                  {managementData.ui_summaries?.bullet_highlights && managementData.ui_summaries.bullet_highlights.length > 0 && (
+                    <div>
+                      <h4 className="font-semibold mb-3 text-blue-700 flex items-center gap-2">
+                        <Award className="h-5 w-5" />
+                        Key Highlights
+                      </h4>
+                      <ul className="space-y-2">
+                        {managementData.ui_summaries.bullet_highlights.map((highlight, index) => (
+                          <li key={index} className="text-sm flex items-start gap-2">
+                            <div className="w-2 h-2 bg-blue-400 rounded-full mt-2 flex-shrink-0"></div>
+                            <span className="text-blue-700">{highlight}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                  
+                  {managementData.ui_summaries?.watch_items && managementData.ui_summaries.watch_items.length > 0 && (
+                    <div>
+                      <h4 className="font-semibold mb-3 text-orange-700 flex items-center gap-2">
+                        <AlertTriangle className="h-5 w-5" />
+                        Watch Items
+                      </h4>
+                      <ul className="space-y-2">
+                        {managementData.ui_summaries.watch_items.map((item, index) => (
+                          <li key={index} className="text-sm flex items-start gap-2">
+                            <AlertTriangle className="h-4 w-4 text-orange-500 mt-0.5 flex-shrink-0" />
+                            <span className="text-orange-700">{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Red and Green Flags */}
+              <div className="grid md:grid-cols-2 gap-6">
+                {managementData.credibility_assessment.red_flags.length > 0 && (
+                  <div>
+                    <h4 className="font-semibold mb-3 text-red-700">Red Flags</h4>
+                    <ul className="space-y-2">
+                      {managementData.credibility_assessment.red_flags.map((flag, index) => (
+                        <li key={index} className="text-sm flex items-start gap-2">
+                          <AlertTriangle className="h-4 w-4 text-red-500 mt-0.5 flex-shrink-0" />
+                          {flag}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                
+                {managementData.credibility_assessment.green_flags.length > 0 && (
+                  <div>
+                    <h4 className="font-semibold mb-3 text-green-700">Green Flags</h4>
+                    <ul className="space-y-2">
+                      {managementData.credibility_assessment.green_flags.map((flag, index) => (
+                        <li key={index} className="text-sm flex items-start gap-2">
+                          <Award className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
+                          {flag}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+
+              {/* Disclaimer */}
+              <div className="mt-6 p-4 bg-gray-50 rounded-lg border-l-4 border-gray-400">
+                <p className="text-xs text-gray-600">
+                  For informational purposes only. Operational analysis of historical disclosures. Not investment advice or a recommendation.
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
         )}
 
         {/* Predictive Analysis */}

@@ -184,6 +184,7 @@ export interface ManagementCredibilityAnalysis {
   credibility_assessment: {
     commitment_followthrough: Array<{
       commitment_year: number;
+      commitment_type: string;
       commitment: string;
       subsequent_followup_years: number[];
       outcome_label: string;
@@ -197,10 +198,12 @@ export interface ManagementCredibilityAnalysis {
       notes: string;
     };
     disclosure_hygiene: {
-      non_gaap_policy_clarity: string;
+      nareit_ffo_definition_clarity: string;
+      affo_definition_stability: string;
+      reconciliation_quality: string;
+      same_store_cohort_integrity: string;
       impairment_restructure_clarity: string;
       restatement_or_weakness_mentions: string;
-      accounting_policy_change_transparency: string;
       segment_bridge_quality: string;
     };
     risk_candor: {
@@ -216,6 +219,7 @@ export interface ManagementCredibilityAnalysis {
       pivot_frequency_label: string;
       rationalization_quality_label: string;
       resegmentation_transparency_label: string;
+      same_store_definition_changes_label: string;
       examples: string[];
     };
     capital_allocation_consistency: {
@@ -228,6 +232,12 @@ export interface ManagementCredibilityAnalysis {
       stability_label: string;
       notes: string;
     }>;
+    distribution_policy_communication: {
+      cadence_label: string;
+      change_communication_label: string;
+      coverage_context_label: string;
+      notes: string;
+    };
     red_flags: string[];
     green_flags: string[];
   };
@@ -249,6 +259,17 @@ export interface ManagementCredibilityAnalysis {
     weights: number[];
     composite_score: number;
     credibility_tier: string;
+  };
+  features_for_downstream: {
+    followthrough_label: string;
+    tone_label: string;
+    disclosure_tier: string;
+    risk_candor_label: string;
+    strategy_pivot_intensity: string;
+    capital_allocation_alignment: string;
+    kpi_stability: string;
+    red_flag_pressure: string;
+    distribution_communication: string;
   };
   ui_summaries: {
     one_liner: string;
