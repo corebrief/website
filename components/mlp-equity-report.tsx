@@ -13,10 +13,8 @@ import {
   Eye,
   ChevronDown,
   ChevronUp,
-  Zap,
   Gauge,
   DollarSign,
-  Users,
   MapPin,
   AlertTriangle,
   Target,
@@ -1708,10 +1706,10 @@ function MLPEquityReportContent({
 }
 
 // Helper function to safely parse JSON content
-function parseJSONContent(content: string): any {
+function parseJSONContent(content: string): unknown {
   try {
     return JSON.parse(content);
-  } catch (error) {
+  } catch {
     return null;
   }
 }

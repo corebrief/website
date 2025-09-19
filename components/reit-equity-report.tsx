@@ -19,7 +19,6 @@ import {
   Zap,
   DollarSign,
   Home,
-  MapPin,
   Target,
   Award
 } from 'lucide-react';
@@ -2515,10 +2514,10 @@ function REITEquityReportContent({
 }
 
 // Helper function to safely parse JSON content
-function parseJSONContent(content: string): any {
+function parseJSONContent(content: string): unknown {
   try {
     return JSON.parse(content);
-  } catch (error) {
+  } catch {
     return null;
   }
 }
