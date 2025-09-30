@@ -2821,51 +2821,57 @@ function REITEquityReportContent({
                   </div>
                 </div>
 
-                {/* Transition Triggers */}
-                {thesisData.transition_triggers && thesisData.transition_triggers.length > 0 && (
-                  <div className="p-4 border rounded-lg bg-gradient-to-r from-yellow-50 to-orange-50 border-yellow-200">
-                    <div className="flex justify-between items-center cursor-pointer" onClick={() => setShowThesisUpdateTriggers(!showThesisUpdateTriggers)}>
-                      <div className="flex items-center gap-2">
-                        <Zap className="h-4 w-4 text-yellow-600" />
-                        <h4 className="font-semibold text-yellow-800">
-                          Thesis Update Triggers ({thesisData.transition_triggers.length})
-                        </h4>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs text-yellow-600">
-                          {showThesisUpdateTriggers ? 'Hide details' : 'Show details'}
-                        </span>
-                        {showThesisUpdateTriggers ? (
-                          <ChevronDown className="h-4 w-4 text-yellow-600" />
-                        ) : (
-                          <ChevronRight className="h-4 w-4 text-yellow-600" />
-                        )}
-                      </div>
+              {/* Transition Triggers - Collapsible */}
+              {thesisData.transition_triggers && thesisData.transition_triggers.length > 0 && (
+                <div>
+                  <button 
+                    onClick={() => setShowThesisUpdateTriggers(!showThesisUpdateTriggers)}
+                    className="w-full flex items-center justify-between p-3 bg-yellow-50 border border-yellow-200 rounded-lg hover:bg-yellow-100 transition-colors"
+                  >
+                    <div className="flex items-center gap-2">
+                      <Zap className="h-4 w-4 text-yellow-600" />
+                      <h4 className="font-semibold text-yellow-800">
+                        REIT Thesis Update Triggers ({thesisData.transition_triggers.length})
+                      </h4>
                     </div>
-                    {showThesisUpdateTriggers && (
-                      <div className="mt-4 space-y-4">
-                        {thesisData.transition_triggers.map((trigger, index) => (
-                          <div key={index} className="p-4 border rounded-lg bg-white">
-                            <h6 className="font-medium text-sm mb-2">{trigger.event}</h6>
-                            <div className="grid md:grid-cols-3 gap-3 mb-2">
-                              <div className="text-xs">
-                                <span className="font-medium text-slate-600">Interpretation:</span>
-                                <Badge className={`ml-1 text-xs ${trigger.interpretation === 'Positive' ? 'bg-green-100 text-green-800' : trigger.interpretation === 'Negative' ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800'}`}>
-                                  {trigger.interpretation}
-                                </Badge>
-                              </div>
-                              <div className="text-xs">
-                                <span className="font-medium text-slate-600">Expected Effect:</span>
-                                <p className="text-slate-700">{trigger.expected_effect}</p>
-                              </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs text-yellow-600">
+                        {showThesisUpdateTriggers ? 'Hide details' : 'Show details'}
+                      </span>
+                      <ChevronDown className={`h-4 w-4 text-yellow-600 transition-transform ${
+                        showThesisUpdateTriggers ? 'rotate-180' : ''
+                      }`} />
+                    </div>
+                  </button>
+                  
+                  {showThesisUpdateTriggers && (
+                    <div className="mt-3 space-y-3">
+                      {thesisData.transition_triggers.map((trigger, index) => (
+                        <div key={index} className="p-4 border rounded-lg bg-yellow-50">
+                          <div className="flex items-start justify-between mb-2">
+                            <h6 className="font-medium text-sm text-yellow-800">{trigger.event}</h6>
+                            <div className="flex gap-2">
+                              <Badge className={`text-xs ${
+                                trigger.interpretation === 'Positive' ? 'bg-green-100 text-green-800' :
+                                trigger.interpretation === 'Negative' ? 'bg-red-100 text-red-800' :
+                                'bg-slate-100 text-slate-800'
+                              }`}>
+                                {trigger.interpretation}
+                              </Badge>
+                              <Badge variant="outline" className="text-xs">
+                                {trigger.expected_effect}
+                              </Badge>
                             </div>
-                            <p className="text-xs text-slate-700"><strong>Update Rule:</strong> {trigger.thesis_update_rule}</p>
                           </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                )}
+                          <p className="text-xs text-yellow-700 italic">
+                            <span className="font-medium">Update Rule:</span> {trigger.thesis_update_rule}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
 
                 {/* Disclaimer */}
                 <div className="mt-6 p-3 bg-slate-100 border border-slate-300 rounded-lg">
