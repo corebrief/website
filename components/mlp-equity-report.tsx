@@ -1717,25 +1717,40 @@ function parseJSONContent(content: string): unknown {
 // Main wrapper component that handles ParsedReport structure
 export default function MLPEquityReport({ report }: MLPReportProps) {
   // Try to get structured data from each section first, fallback to parsing content
-  const multiYearData = report.sections.multi_year_analysis.structured_data || parseJSONContent(report.sections.multi_year_analysis.content);
-  const managementData = report.sections.management_credibility.structured_data || parseJSONContent(report.sections.management_credibility.content);
-  const predictiveData = report.sections.predictive_inference.structured_data || parseJSONContent(report.sections.predictive_inference.content);
-  const thesisData = report.sections.final_thesis?.structured_data || parseJSONContent(report.sections.final_thesis?.content || '');
+  const rawMultiYearData = report.sections.multi_year_analysis.structured_data || parseJSONContent(report.sections.multi_year_analysis.content);
+  const rawManagementData = report.sections.management_credibility.structured_data || parseJSONContent(report.sections.management_credibility.content);
+  const rawPredictiveData = report.sections.predictive_inference.structured_data || parseJSONContent(report.sections.predictive_inference.content);
+  const rawThesisData = report.sections.final_thesis?.structured_data || parseJSONContent(report.sections.final_thesis?.content || '');
 
-  // Check if we have any valid objects (not just truthy values)
-  const hasMultiYear = multiYearData && typeof multiYearData === 'object' && Object.keys(multiYearData).length > 0;
-  const hasManagement = managementData && typeof managementData === 'object' && Object.keys(managementData).length > 0;
-  const hasPredictive = predictiveData && typeof predictiveData === 'object' && Object.keys(predictiveData).length > 0;
-  const hasThesis = thesisData && typeof thesisData === 'object' && Object.keys(thesisData).length > 0;
+  // Type guard function to check if data has the expected MLP structure
+  const isValidMLPData = (data: unknown, requiredKeys: string[]): boolean => {
+    return data && 
+           typeof data === 'object' && 
+           data !== null &&
+           Object.keys(data).length > 0 &&
+           requiredKeys.some(key => key in data);
+  };
+
+  // Check if we have valid MLP structured data and cast to proper types
+  const hasMultiYear = isValidMLPData(rawMultiYearData, ['company', 'window', 'semantic_themes']);
+  const hasManagement = isValidMLPData(rawManagementData, ['company', 'window', 'credibility_assessment']);
+  const hasPredictive = isValidMLPData(rawPredictiveData, ['company', 'window', 'scenarios']);
+  const hasThesis = isValidMLPData(rawThesisData, ['company', 'window', 'mlp_thesis']);
+
+  // Cast to proper types only if validation passes
+  const multiYearData = hasMultiYear ? rawMultiYearData as MLPMultiYearData : null;
+  const managementData = hasManagement ? rawManagementData as MLPManagementData : null;
+  const predictiveData = hasPredictive ? rawPredictiveData as MLPPredictiveData : null;
+  const thesisData = hasThesis ? rawThesisData as MLPThesisData : null;
 
   // If we have any structured JSON data, use the full MLP component
   if (hasMultiYear || hasManagement || hasPredictive || hasThesis) {
     return (
       <MLPEquityReportContent
-        multiYearData={hasMultiYear ? multiYearData : null}
-        managementData={hasManagement ? managementData : null}
-        predictiveData={hasPredictive ? predictiveData : null}
-        thesisData={hasThesis ? thesisData : null}
+        multiYearData={multiYearData}
+        managementData={managementData}
+        predictiveData={predictiveData}
+        thesisData={thesisData}
       />
     );
   }
