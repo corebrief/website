@@ -2651,7 +2651,10 @@ function REITEquityReportContent({
 
                 {/* Portfolio Engine */}
                 <div>
-                  <h4 className="font-semibold mb-4 text-slate-800">🏢 Portfolio Engine</h4>
+                  <h4 className="font-semibold mb-4 flex items-center gap-2">
+                    <Home className="h-5 w-5 text-green-600" />
+                    Portfolio Engine
+                  </h4>
                   <div className="space-y-4">
                     <div className="grid md:grid-cols-2 gap-6">
                       <div className="p-4 border rounded-lg bg-green-50">
@@ -2753,7 +2756,10 @@ function REITEquityReportContent({
                 {/* Scenarios Bridge */}
                   {thesisData.scenarios_bridge && (
                     <div>
-                      <h4 className="font-semibold mb-4 text-slate-800">🌉 Scenario Outlook & Triggers</h4>
+                      <h4 className="font-semibold mb-4 flex items-center gap-2">
+                        <Activity className="h-5 w-5 text-teal-600" />
+                        Scenario Outlook & Triggers
+                      </h4>
                     <div className="space-y-4">
                       <div className="p-4 border rounded-lg bg-teal-50 mb-4">
                         <h5 className="font-semibold mb-2 text-teal-800">Base Path Expectation</h5>
@@ -2783,7 +2789,10 @@ function REITEquityReportContent({
 
                 {/* Monitoring Watchlist */}
                 <div>
-                  <h4 className="font-semibold mb-4 text-slate-800">👁️ Monitoring Watchlist</h4>
+                  <h4 className="font-semibold mb-4 flex items-center gap-2">
+                    <Eye className="h-5 w-5 text-gray-600" />
+                    Monitoring Watchlist
+                  </h4>
                   <div className="space-y-4">
                     <div className="grid md:grid-cols-2 gap-6">
                       <div className="p-4 border rounded-lg bg-blue-50">
