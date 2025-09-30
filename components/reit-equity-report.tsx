@@ -760,6 +760,430 @@ function REITEquityReportContent({
                   </div>
                 </div>
 
+              {/* Distribution Analysis */}
+              {multiYearData.distribution_analysis?.applies && (
+                  <div className="p-4 border rounded-lg bg-gradient-to-r from-purple-50 to-indigo-50 border-purple-200">
+                    <h4 className="font-semibold mb-3 text-purple-800">💰 Distribution Analysis</h4>
+                    <div className="space-y-4">
+                      {/* Policy Overview */}
+                      <div className="grid md:grid-cols-2 gap-4">
+                        <div className="p-4 border rounded-lg bg-white shadow-sm">
+                          <h5 className="font-medium mb-2">Policy Characterization</h5>
+                          <Badge variant="outline" className="mb-2">
+                            {multiYearData.distribution_analysis.policy_characterization}
+                          </Badge>
+                          <div className="text-sm space-y-1">
+                            <div><strong>Philosophy:</strong> {multiYearData.distribution_analysis.policy_philosophy}</div>
+                            <div><strong>Yield Profile:</strong> {multiYearData.distribution_analysis.yield_profile.characterization} ({multiYearData.distribution_analysis.yield_profile.trend})</div>
+                            {multiYearData.distribution_analysis.cadence && (
+                              <div><strong>Cadence:</strong> {multiYearData.distribution_analysis.cadence}</div>
+                            )}
+                          </div>
+                        </div>
+                        
+                        <div className="p-4 border rounded-lg bg-white shadow-sm">
+                          <h5 className="font-medium mb-2">Sustainability Assessment</h5>
+                          <div className="space-y-3">
+                            {/* Coverage Signals */}
+                            <div>
+                              <h6 className="font-medium text-xs text-slate-600 mb-2 uppercase tracking-wide">Coverage Signals</h6>
+                              <div className="space-y-2 text-sm">
+                                <div className="flex justify-between">
+                                  <span>AFFO Coverage:</span>
+                                  <Badge className={
+                                    multiYearData.distribution_analysis.sustainability_signals.affo_coverage === 'Strong' ? 'bg-green-100 text-green-800' :
+                                    multiYearData.distribution_analysis.sustainability_signals.affo_coverage === 'Adequate' ? 'bg-blue-100 text-blue-800' :
+                                    multiYearData.distribution_analysis.sustainability_signals.affo_coverage === 'Stretched' ? 'bg-yellow-100 text-yellow-800' :
+                                    'bg-red-100 text-red-800'
+                                  }>
+                                    {multiYearData.distribution_analysis.sustainability_signals.affo_coverage}
+                                  </Badge>
+                                </div>
+                                <div className="flex justify-between">
+                                  <span>FFO Coverage:</span>
+                                  <Badge className={
+                                    multiYearData.distribution_analysis.sustainability_signals.ffo_coverage === 'Strong' ? 'bg-green-100 text-green-800' :
+                                    multiYearData.distribution_analysis.sustainability_signals.ffo_coverage === 'Adequate' ? 'bg-blue-100 text-blue-800' :
+                                    multiYearData.distribution_analysis.sustainability_signals.ffo_coverage === 'Stretched' ? 'bg-yellow-100 text-yellow-800' :
+                                    'bg-red-100 text-red-800'
+                                  }>
+                                    {multiYearData.distribution_analysis.sustainability_signals.ffo_coverage}
+                                  </Badge>
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* Policy & Management Signals */}
+                            <div>
+                              <h6 className="font-medium text-xs text-slate-600 mb-2 uppercase tracking-wide">Policy & Management</h6>
+                              <div className="space-y-2 text-sm">
+                                <div className="flex justify-between">
+                                  <span>Policy Consistency:</span>
+                                  <Badge className={
+                                    multiYearData.distribution_analysis.sustainability_signals.policy_consistency === 'Consistent' ? 'bg-green-100 text-green-800' :
+                                    multiYearData.distribution_analysis.sustainability_signals.policy_consistency === 'Variable' ? 'bg-yellow-100 text-yellow-800' :
+                                    multiYearData.distribution_analysis.sustainability_signals.policy_consistency === 'Reactive' ? 'bg-red-100 text-red-800' :
+                                    'bg-gray-100 text-gray-800'
+                                  }>
+                                    {multiYearData.distribution_analysis.sustainability_signals.policy_consistency}
+                                  </Badge>
+                                </div>
+                                <div className="flex justify-between">
+                                  <span>Management Commitment:</span>
+                                  <Badge className={
+                                    multiYearData.distribution_analysis.sustainability_signals.management_commitment === 'High' ? 'bg-green-100 text-green-800' :
+                                    multiYearData.distribution_analysis.sustainability_signals.management_commitment === 'Medium' ? 'bg-yellow-100 text-yellow-800' :
+                                    multiYearData.distribution_analysis.sustainability_signals.management_commitment === 'Low' ? 'bg-red-100 text-red-800' :
+                                    'bg-gray-100 text-gray-800'
+                                  }>
+                                    {multiYearData.distribution_analysis.sustainability_signals.management_commitment}
+                                  </Badge>
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* Coverage Metrics */}
+                            <div>
+                              <h6 className="font-medium text-xs text-slate-600 mb-2 uppercase tracking-wide">Payout Ratios</h6>
+                              <div className="space-y-2 text-sm">
+                                <div className="flex justify-between">
+                                  <span>AFFO Payout Ratio:</span>
+                                  <Badge className={
+                                    multiYearData.distribution_analysis.coverage_metrics.affo_payout_ratio_bucket.includes('Conservative') ? 'bg-green-100 text-green-800' :
+                                    multiYearData.distribution_analysis.coverage_metrics.affo_payout_ratio_bucket.includes('Balanced') ? 'bg-blue-100 text-blue-800' :
+                                    multiYearData.distribution_analysis.coverage_metrics.affo_payout_ratio_bucket.includes('High') ? 'bg-yellow-100 text-yellow-800' :
+                                    'bg-red-100 text-red-800'
+                                  }>
+                                    {multiYearData.distribution_analysis.coverage_metrics.affo_payout_ratio_bucket}
+                                  </Badge>
+                                </div>
+                                <div className="flex justify-between">
+                                  <span>FFO Payout Ratio:</span>
+                                  <Badge className={
+                                    multiYearData.distribution_analysis.coverage_metrics.ffo_payout_ratio_bucket.includes('Conservative') ? 'bg-green-100 text-green-800' :
+                                    multiYearData.distribution_analysis.coverage_metrics.ffo_payout_ratio_bucket.includes('Balanced') ? 'bg-blue-100 text-blue-800' :
+                                    multiYearData.distribution_analysis.coverage_metrics.ffo_payout_ratio_bucket.includes('High') ? 'bg-yellow-100 text-yellow-800' :
+                                    'bg-red-100 text-red-800'
+                                  }>
+                                    {multiYearData.distribution_analysis.coverage_metrics.ffo_payout_ratio_bucket}
+                                  </Badge>
+                                </div>
+                                <div className="flex justify-between">
+                                  <span>Coverage Trend:</span>
+                                  <Badge variant="outline">{multiYearData.distribution_analysis.coverage_metrics.coverage_trend}</Badge>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* REIT-Specific Factors */}
+                      <div className="p-4 border rounded-lg bg-white shadow-sm">
+                        <h5 className="font-medium mb-3">REIT-Specific Distribution Factors</h5>
+                        <div className="grid md:grid-cols-3 gap-4 text-sm">
+                          <div className="text-center">
+                            <div className="font-medium text-slate-600 mb-1">Taxable Income Requirement</div>
+                            <Badge className={multiYearData.distribution_analysis.reit_specific_factors.taxable_income_requirement_mentioned ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800'}>
+                              {multiYearData.distribution_analysis.reit_specific_factors.taxable_income_requirement_mentioned ? 'Mentioned' : 'Not Mentioned'}
+                            </Badge>
+                          </div>
+                          <div className="text-center">
+                            <div className="font-medium text-slate-600 mb-1">Return of Capital</div>
+                            <Badge variant="outline">
+                              {multiYearData.distribution_analysis.reit_specific_factors.return_of_capital_component}
+                            </Badge>
+                          </div>
+                          <div className="text-center">
+                            <div className="font-medium text-slate-600 mb-1">Capital Recycling Impact</div>
+                            <Badge variant="outline">
+                              {multiYearData.distribution_analysis.reit_specific_factors.capital_recycling_impact}
+                            </Badge>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Distribution Actions Timeline */}
+                      {multiYearData.distribution_analysis.distribution_actions.length > 0 && (
+                        <div>
+                          <h5 className="font-medium mb-3">Distribution Actions by Filing Year</h5>
+                          <div className="space-y-3">
+                            {multiYearData.distribution_analysis.distribution_actions.map((action, index) => (
+                              <div key={index} className="p-3 border-l-4 border-blue-400 bg-blue-50 rounded-r-lg">
+                                <div className="flex items-center gap-2 mb-1">
+                                  <Badge variant="outline">{action.year}</Badge>
+                                  <Badge className={
+                                    action.action === 'Increased' ? 'bg-green-100 text-green-800' :
+                                    action.action === 'Cut' || action.action === 'Suspended' ? 'bg-red-100 text-red-800' :
+                                    action.action === 'Initiated' ? 'bg-blue-100 text-blue-800' :
+                                    'bg-gray-100 text-gray-800'
+                                  }>
+                                    {action.action}
+                                  </Badge>
+                                </div>
+                                <p className="text-sm text-blue-700">{action.context}</p>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Sustainability Factors */}
+                      {multiYearData.distribution_analysis.sustainability_factors.length > 0 && (
+                        <div>
+                          <h5 className="font-medium mb-3">Sustainability Factors</h5>
+                          <div className="flex flex-wrap gap-2">
+                            {multiYearData.distribution_analysis.sustainability_factors.map((factor, index) => (
+                              <Badge key={index} variant="outline" className="text-xs">{factor}</Badge>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Additional Notes */}
+                      {multiYearData.distribution_analysis.notes && (
+                        <div className="p-3 bg-slate-50 rounded-lg border">
+                          <h5 className="font-medium mb-2">Policy Insights</h5>
+                          <p className="text-sm text-slate-700">{multiYearData.distribution_analysis.notes}</p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+            {/* Enhanced Classification */}
+                <div>
+                  <h4 className="font-semibold mb-3">REIT Classification</h4>
+                  <div className="p-4 bg-gray-50 rounded-lg">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Badge className="bg-blue-100 text-blue-800">{multiYearData.classification.primary}</Badge>
+                      {multiYearData.classification.secondary.map((sec, index) => (
+                        <Badge key={index} variant="outline">{sec}</Badge>
+                      ))}
+                    </div>
+                    <div className="flex flex-wrap gap-1 mb-3">
+                      {multiYearData.classification.reit_profile_tags.map((tag, index) => (
+                        <Badge key={index} className="bg-purple-100 text-purple-800 text-xs">{tag}</Badge>
+                      ))}
+                    </div>
+                    <p className="text-sm text-muted-foreground">{multiYearData.classification.rationale}</p>
+                  </div>
+                </div>
+
+                {/* Time Series Analysis */}
+                {multiYearData.timeseries_semantic && (
+                  <div>
+                    <h4 className="font-semibold mb-3">Filing Year Trends</h4>
+                    <div className="grid md:grid-cols-3 gap-4">
+                      <div className="p-3 border rounded-lg">
+                        <h5 className="font-medium mb-2">Same Store NOI by Filing Year</h5>
+                        <div className="space-y-1">
+                          {multiYearData.timeseries_semantic.same_store_noi_by_year.map((item, index) => (
+                            <div key={index} className="flex justify-between text-sm">
+                              <span>{item.year}:</span>
+                              <Badge variant="outline" className="text-xs">
+                                {item.label}
+                              </Badge>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                      
+                      <div className="p-3 border rounded-lg">
+                        <h5 className="font-medium mb-2">Occupancy by Filing Year</h5>
+                        <div className="space-y-1">
+                          {multiYearData.timeseries_semantic.occupancy_by_year.map((item, index) => (
+                            <div key={index} className="flex justify-between text-sm">
+                              <span>{item.year}:</span>
+                              <Badge variant="outline" className="text-xs">
+                                {item.label}
+                              </Badge>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                      
+                      <div className="p-3 border rounded-lg">
+                        <h5 className="font-medium mb-2">Distribution Policy by Filing Year</h5>
+                        <div className="space-y-1">
+                          {multiYearData.timeseries_semantic.distribution_policy_by_year.map((item, index) => (
+                            <div key={index} className="flex justify-between text-sm">
+                              <span>{item.year}:</span>
+                              <Badge variant="outline" className="text-xs">
+                                {item.label}
+                              </Badge>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Optional Numerics */}
+                {multiYearData.optional_numerics && (
+                  (() => {
+                    const hasAnyData = 
+                      multiYearData.optional_numerics.mentioned_ffo_affo_growth_pct ||
+                      multiYearData.optional_numerics.mentioned_affo_payout_ratio_pct ||
+                      multiYearData.optional_numerics.net_debt_to_ebitdare_range ||
+                      multiYearData.optional_numerics.fixed_vs_variable_debt_mix_pct ||
+                      multiYearData.optional_numerics.walt_years ||
+                      multiYearData.optional_numerics.cap_rate_notes ||
+                      multiYearData.optional_numerics.notes;
+
+                    if (!hasAnyData) return null;
+
+                    const metrics = [];
+                    
+                    // Build array of available metrics
+                    if (multiYearData.optional_numerics.mentioned_ffo_affo_growth_pct) {
+                      metrics.push({
+                        label: 'FFO/AFFO Growth',
+                        value: `${multiYearData.optional_numerics.mentioned_ffo_affo_growth_pct}%`
+                      });
+                    }
+                    
+                    if (multiYearData.optional_numerics.mentioned_affo_payout_ratio_pct) {
+                      metrics.push({
+                        label: 'AFFO Payout Ratio',
+                        value: `${multiYearData.optional_numerics.mentioned_affo_payout_ratio_pct}%`
+                      });
+                    }
+                    
+                    if (multiYearData.optional_numerics.net_debt_to_ebitdare_range) {
+                      metrics.push({
+                        label: 'Net Debt/EBITDAre',
+                        value: multiYearData.optional_numerics.net_debt_to_ebitdare_range
+                      });
+                    }
+                    
+                    if (multiYearData.optional_numerics.fixed_vs_variable_debt_mix_pct) {
+                      metrics.push({
+                        label: 'Debt Mix (Fixed/Variable)',
+                        value: multiYearData.optional_numerics.fixed_vs_variable_debt_mix_pct
+                      });
+                    }
+                    
+                    if (multiYearData.optional_numerics.walt_years) {
+                      metrics.push({
+                        label: 'WALT (Years)',
+                        value: `${multiYearData.optional_numerics.walt_years} years`
+                      });
+                    }
+
+                    return (
+                      <div>
+                        <h4 className="font-semibold mb-3">Additional Quantitative Metrics</h4>
+                        <div className="space-y-4">
+                          {/* Dynamic Grid for Available Metrics */}
+                          {metrics.length > 0 && (
+                            <div className={`grid gap-4 p-4 bg-blue-50 rounded-lg ${
+                              metrics.length === 1 ? 'grid-cols-1' :
+                              metrics.length === 2 ? 'md:grid-cols-2' :
+                              'md:grid-cols-3'
+                            }`}>
+                              {metrics.map((metric, index) => (
+                                <div key={index} className="text-center">
+                                  <h5 className="font-medium text-sm">{metric.label}</h5>
+                                  <p className="text-lg font-bold">{metric.value}</p>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+
+                          {/* Cap Rate Notes Details */}
+                          {multiYearData.optional_numerics.cap_rate_notes && (
+                            <div className="p-4 bg-green-50 rounded-lg border-l-4 border-green-400">
+                              <h5 className="font-medium text-sm text-green-800 mb-2">Cap Rate Notes</h5>
+                              <p className="text-sm text-green-700">{multiYearData.optional_numerics.cap_rate_notes}</p>
+                            </div>
+                          )}
+
+                          {/* General Notes */}
+                          {multiYearData.optional_numerics.notes && (
+                            <div className="p-3 bg-slate-100 rounded-lg border">
+                              <h5 className="font-medium text-sm text-slate-800 mb-1">Additional Notes</h5>
+                              <p className="text-sm text-slate-700">{multiYearData.optional_numerics.notes}</p>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })()
+                )}
+
+                {/* Strategy Evolution */}
+                {multiYearData.semantic_themes.strategy_evolution && multiYearData.semantic_themes.strategy_evolution.length > 0 && (
+                  <div>
+                    <h4 className="font-semibold mb-3">Strategic Evolution</h4>
+                    <div className="space-y-3">
+                      {multiYearData.semantic_themes.strategy_evolution.map((evolution, index) => (
+                        <div key={index} className="p-3 border-l-4 border-blue-400 bg-blue-50 rounded-r-lg">
+                          <div className="flex items-center gap-2 mb-1">
+                            <Badge variant="outline">{evolution.year}</Badge>
+                            <span className="font-medium">Strategic Shift</span>
+                          </div>
+                          <p className="text-sm">{evolution.change}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Competitive Position */}
+                <div>
+                  <h4 className="font-semibold mb-3">Competitive Position</h4>
+                  <div className="p-4 border rounded-lg">
+                    <div className="flex items-center gap-2 mb-3">
+                      <Badge className={
+                        multiYearData.semantic_themes.competitive_posture.label.includes('Strengthening') 
+                          ? 'bg-green-100 text-green-800' 
+                          : multiYearData.semantic_themes.competitive_posture.label.includes('Eroding')
+                          ? 'bg-red-100 text-red-800'
+                          : 'bg-gray-100 text-gray-800'
+                      }>
+                        {multiYearData.semantic_themes.competitive_posture.label}
+                      </Badge>
+                    </div>
+                    <div>
+                      <h5 className="font-medium mb-2">Key Competitive Drivers:</h5>
+                      <ul className="space-y-1">
+                        {multiYearData.semantic_themes.competitive_posture.drivers.map((driver, index) => (
+                          <li key={index} className="text-sm flex items-start gap-2">
+                            <span className="text-blue-500 mt-1">•</span>
+                            {driver}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+
+                {/* Risk Register */}
+                {multiYearData.semantic_themes.risk_register.length > 0 && (
+                  <div>
+                    <h4 className="font-semibold mb-3">Risk Register</h4>
+                    <div className="space-y-3">
+                      {multiYearData.semantic_themes.risk_register.map((risk, index) => (
+                        <div key={index} className="p-3 border rounded-lg">
+                          <div className="flex items-center justify-between mb-2">
+                            <h5 className="font-semibold">{risk.name}</h5>
+                            <Badge className={getSeverityColor(risk.severity)}>
+                              {risk.severity} Risk
+                            </Badge>
+                          </div>
+                          <p className="text-sm text-muted-foreground mb-2">{risk.note}</p>
+                          <p className="text-xs text-muted-foreground">
+                            Mentioned in: {risk.recurrence_years.join(', ')}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+
                 {/* Lease Profile */}
                 <div>
                   <h4 className="font-semibold mb-3">Lease Profile</h4>
@@ -1010,429 +1434,6 @@ function REITEquityReportContent({
                           </div>
                         </div>
                       )}
-                    </div>
-                  </div>
-                )}
-
-                {/* Strategy Evolution */}
-                {multiYearData.semantic_themes.strategy_evolution && multiYearData.semantic_themes.strategy_evolution.length > 0 && (
-                  <div>
-                    <h4 className="font-semibold mb-3">Strategic Evolution</h4>
-                    <div className="space-y-3">
-                      {multiYearData.semantic_themes.strategy_evolution.map((evolution, index) => (
-                        <div key={index} className="p-3 border-l-4 border-blue-400 bg-blue-50 rounded-r-lg">
-                          <div className="flex items-center gap-2 mb-1">
-                            <Badge variant="outline">{evolution.year}</Badge>
-                            <span className="font-medium">Strategic Shift</span>
-                          </div>
-                          <p className="text-sm">{evolution.change}</p>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {/* Competitive Position */}
-                <div>
-                  <h4 className="font-semibold mb-3">Competitive Position</h4>
-                  <div className="p-4 border rounded-lg">
-                    <div className="flex items-center gap-2 mb-3">
-                      <Badge className={
-                        multiYearData.semantic_themes.competitive_posture.label.includes('Strengthening') 
-                          ? 'bg-green-100 text-green-800' 
-                          : multiYearData.semantic_themes.competitive_posture.label.includes('Eroding')
-                          ? 'bg-red-100 text-red-800'
-                          : 'bg-gray-100 text-gray-800'
-                      }>
-                        {multiYearData.semantic_themes.competitive_posture.label}
-                      </Badge>
-                    </div>
-                    <div>
-                      <h5 className="font-medium mb-2">Key Competitive Drivers:</h5>
-                      <ul className="space-y-1">
-                        {multiYearData.semantic_themes.competitive_posture.drivers.map((driver, index) => (
-                          <li key={index} className="text-sm flex items-start gap-2">
-                            <span className="text-blue-500 mt-1">•</span>
-                            {driver}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Time Series Analysis */}
-                {multiYearData.timeseries_semantic && (
-                  <div>
-                    <h4 className="font-semibold mb-3">Filing Year Trends</h4>
-                    <div className="grid md:grid-cols-3 gap-4">
-                      <div className="p-3 border rounded-lg">
-                        <h5 className="font-medium mb-2">Same Store NOI by Filing Year</h5>
-                        <div className="space-y-1">
-                          {multiYearData.timeseries_semantic.same_store_noi_by_year.map((item, index) => (
-                            <div key={index} className="flex justify-between text-sm">
-                              <span>{item.year}:</span>
-                              <Badge variant="outline" className="text-xs">
-                                {item.label}
-                              </Badge>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                      
-                      <div className="p-3 border rounded-lg">
-                        <h5 className="font-medium mb-2">Occupancy by Filing Year</h5>
-                        <div className="space-y-1">
-                          {multiYearData.timeseries_semantic.occupancy_by_year.map((item, index) => (
-                            <div key={index} className="flex justify-between text-sm">
-                              <span>{item.year}:</span>
-                              <Badge variant="outline" className="text-xs">
-                                {item.label}
-                              </Badge>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                      
-                      <div className="p-3 border rounded-lg">
-                        <h5 className="font-medium mb-2">Distribution Policy by Filing Year</h5>
-                        <div className="space-y-1">
-                          {multiYearData.timeseries_semantic.distribution_policy_by_year.map((item, index) => (
-                            <div key={index} className="flex justify-between text-sm">
-                              <span>{item.year}:</span>
-                              <Badge variant="outline" className="text-xs">
-                                {item.label}
-                              </Badge>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {/* Optional Numerics */}
-                {multiYearData.optional_numerics && (
-                  (() => {
-                    const hasAnyData = 
-                      multiYearData.optional_numerics.mentioned_ffo_affo_growth_pct ||
-                      multiYearData.optional_numerics.mentioned_affo_payout_ratio_pct ||
-                      multiYearData.optional_numerics.net_debt_to_ebitdare_range ||
-                      multiYearData.optional_numerics.fixed_vs_variable_debt_mix_pct ||
-                      multiYearData.optional_numerics.walt_years ||
-                      multiYearData.optional_numerics.cap_rate_notes ||
-                      multiYearData.optional_numerics.notes;
-
-                    if (!hasAnyData) return null;
-
-                    const metrics = [];
-                    
-                    // Build array of available metrics
-                    if (multiYearData.optional_numerics.mentioned_ffo_affo_growth_pct) {
-                      metrics.push({
-                        label: 'FFO/AFFO Growth',
-                        value: `${multiYearData.optional_numerics.mentioned_ffo_affo_growth_pct}%`
-                      });
-                    }
-                    
-                    if (multiYearData.optional_numerics.mentioned_affo_payout_ratio_pct) {
-                      metrics.push({
-                        label: 'AFFO Payout Ratio',
-                        value: `${multiYearData.optional_numerics.mentioned_affo_payout_ratio_pct}%`
-                      });
-                    }
-                    
-                    if (multiYearData.optional_numerics.net_debt_to_ebitdare_range) {
-                      metrics.push({
-                        label: 'Net Debt/EBITDAre',
-                        value: multiYearData.optional_numerics.net_debt_to_ebitdare_range
-                      });
-                    }
-                    
-                    if (multiYearData.optional_numerics.fixed_vs_variable_debt_mix_pct) {
-                      metrics.push({
-                        label: 'Debt Mix (Fixed/Variable)',
-                        value: multiYearData.optional_numerics.fixed_vs_variable_debt_mix_pct
-                      });
-                    }
-                    
-                    if (multiYearData.optional_numerics.walt_years) {
-                      metrics.push({
-                        label: 'WALT (Years)',
-                        value: `${multiYearData.optional_numerics.walt_years} years`
-                      });
-                    }
-
-                    return (
-                      <div>
-                        <h4 className="font-semibold mb-3">Additional Quantitative Metrics</h4>
-                        <div className="space-y-4">
-                          {/* Dynamic Grid for Available Metrics */}
-                          {metrics.length > 0 && (
-                            <div className={`grid gap-4 p-4 bg-blue-50 rounded-lg ${
-                              metrics.length === 1 ? 'grid-cols-1' :
-                              metrics.length === 2 ? 'md:grid-cols-2' :
-                              'md:grid-cols-3'
-                            }`}>
-                              {metrics.map((metric, index) => (
-                                <div key={index} className="text-center">
-                                  <h5 className="font-medium text-sm">{metric.label}</h5>
-                                  <p className="text-lg font-bold">{metric.value}</p>
-                                </div>
-                              ))}
-                            </div>
-                          )}
-
-                          {/* Cap Rate Notes Details */}
-                          {multiYearData.optional_numerics.cap_rate_notes && (
-                            <div className="p-4 bg-green-50 rounded-lg border-l-4 border-green-400">
-                              <h5 className="font-medium text-sm text-green-800 mb-2">Cap Rate Notes</h5>
-                              <p className="text-sm text-green-700">{multiYearData.optional_numerics.cap_rate_notes}</p>
-                            </div>
-                          )}
-
-                          {/* General Notes */}
-                          {multiYearData.optional_numerics.notes && (
-                            <div className="p-3 bg-slate-100 rounded-lg border">
-                              <h5 className="font-medium text-sm text-slate-800 mb-1">Additional Notes</h5>
-                              <p className="text-sm text-slate-700">{multiYearData.optional_numerics.notes}</p>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    );
-                  })()
-                )}
-
-                {/* Enhanced Classification */}
-                <div>
-                  <h4 className="font-semibold mb-3">REIT Classification</h4>
-                  <div className="p-4 bg-gray-50 rounded-lg">
-                    <div className="flex items-center gap-2 mb-2">
-                      <Badge className="bg-blue-100 text-blue-800">{multiYearData.classification.primary}</Badge>
-                      {multiYearData.classification.secondary.map((sec, index) => (
-                        <Badge key={index} variant="outline">{sec}</Badge>
-                      ))}
-                    </div>
-                    <div className="flex flex-wrap gap-1 mb-3">
-                      {multiYearData.classification.reit_profile_tags.map((tag, index) => (
-                        <Badge key={index} className="bg-purple-100 text-purple-800 text-xs">{tag}</Badge>
-                      ))}
-                    </div>
-                    <p className="text-sm text-muted-foreground">{multiYearData.classification.rationale}</p>
-                  </div>
-                </div>
-
-                {/* Distribution Analysis */}
-                {multiYearData.distribution_analysis?.applies && (
-                  <div className="p-4 border rounded-lg bg-gradient-to-r from-purple-50 to-indigo-50 border-purple-200">
-                    <h4 className="font-semibold mb-3 text-purple-800">💰 Distribution Analysis</h4>
-                    <div className="space-y-4">
-                      {/* Policy Overview */}
-                      <div className="grid md:grid-cols-2 gap-4">
-                        <div className="p-4 border rounded-lg bg-white shadow-sm">
-                          <h5 className="font-medium mb-2">Policy Characterization</h5>
-                          <Badge variant="outline" className="mb-2">
-                            {multiYearData.distribution_analysis.policy_characterization}
-                          </Badge>
-                          <div className="text-sm space-y-1">
-                            <div><strong>Philosophy:</strong> {multiYearData.distribution_analysis.policy_philosophy}</div>
-                            <div><strong>Yield Profile:</strong> {multiYearData.distribution_analysis.yield_profile.characterization} ({multiYearData.distribution_analysis.yield_profile.trend})</div>
-                            {multiYearData.distribution_analysis.cadence && (
-                              <div><strong>Cadence:</strong> {multiYearData.distribution_analysis.cadence}</div>
-                            )}
-                          </div>
-                        </div>
-                        
-                        <div className="p-4 border rounded-lg bg-white shadow-sm">
-                          <h5 className="font-medium mb-2">Sustainability Assessment</h5>
-                          <div className="space-y-3">
-                            {/* Coverage Signals */}
-                            <div>
-                              <h6 className="font-medium text-xs text-slate-600 mb-2 uppercase tracking-wide">Coverage Signals</h6>
-                              <div className="space-y-2 text-sm">
-                                <div className="flex justify-between">
-                                  <span>AFFO Coverage:</span>
-                                  <Badge className={
-                                    multiYearData.distribution_analysis.sustainability_signals.affo_coverage === 'Strong' ? 'bg-green-100 text-green-800' :
-                                    multiYearData.distribution_analysis.sustainability_signals.affo_coverage === 'Adequate' ? 'bg-blue-100 text-blue-800' :
-                                    multiYearData.distribution_analysis.sustainability_signals.affo_coverage === 'Stretched' ? 'bg-yellow-100 text-yellow-800' :
-                                    'bg-red-100 text-red-800'
-                                  }>
-                                    {multiYearData.distribution_analysis.sustainability_signals.affo_coverage}
-                                  </Badge>
-                                </div>
-                                <div className="flex justify-between">
-                                  <span>FFO Coverage:</span>
-                                  <Badge className={
-                                    multiYearData.distribution_analysis.sustainability_signals.ffo_coverage === 'Strong' ? 'bg-green-100 text-green-800' :
-                                    multiYearData.distribution_analysis.sustainability_signals.ffo_coverage === 'Adequate' ? 'bg-blue-100 text-blue-800' :
-                                    multiYearData.distribution_analysis.sustainability_signals.ffo_coverage === 'Stretched' ? 'bg-yellow-100 text-yellow-800' :
-                                    'bg-red-100 text-red-800'
-                                  }>
-                                    {multiYearData.distribution_analysis.sustainability_signals.ffo_coverage}
-                                  </Badge>
-                                </div>
-                              </div>
-                            </div>
-
-                            {/* Policy & Management Signals */}
-                            <div>
-                              <h6 className="font-medium text-xs text-slate-600 mb-2 uppercase tracking-wide">Policy & Management</h6>
-                              <div className="space-y-2 text-sm">
-                                <div className="flex justify-between">
-                                  <span>Policy Consistency:</span>
-                                  <Badge className={
-                                    multiYearData.distribution_analysis.sustainability_signals.policy_consistency === 'Consistent' ? 'bg-green-100 text-green-800' :
-                                    multiYearData.distribution_analysis.sustainability_signals.policy_consistency === 'Variable' ? 'bg-yellow-100 text-yellow-800' :
-                                    multiYearData.distribution_analysis.sustainability_signals.policy_consistency === 'Reactive' ? 'bg-red-100 text-red-800' :
-                                    'bg-gray-100 text-gray-800'
-                                  }>
-                                    {multiYearData.distribution_analysis.sustainability_signals.policy_consistency}
-                                  </Badge>
-                                </div>
-                                <div className="flex justify-between">
-                                  <span>Management Commitment:</span>
-                                  <Badge className={
-                                    multiYearData.distribution_analysis.sustainability_signals.management_commitment === 'High' ? 'bg-green-100 text-green-800' :
-                                    multiYearData.distribution_analysis.sustainability_signals.management_commitment === 'Medium' ? 'bg-yellow-100 text-yellow-800' :
-                                    multiYearData.distribution_analysis.sustainability_signals.management_commitment === 'Low' ? 'bg-red-100 text-red-800' :
-                                    'bg-gray-100 text-gray-800'
-                                  }>
-                                    {multiYearData.distribution_analysis.sustainability_signals.management_commitment}
-                                  </Badge>
-                                </div>
-                              </div>
-                            </div>
-
-                            {/* Coverage Metrics */}
-                            <div>
-                              <h6 className="font-medium text-xs text-slate-600 mb-2 uppercase tracking-wide">Payout Ratios</h6>
-                              <div className="space-y-2 text-sm">
-                                <div className="flex justify-between">
-                                  <span>AFFO Payout Ratio:</span>
-                                  <Badge className={
-                                    multiYearData.distribution_analysis.coverage_metrics.affo_payout_ratio_bucket.includes('Conservative') ? 'bg-green-100 text-green-800' :
-                                    multiYearData.distribution_analysis.coverage_metrics.affo_payout_ratio_bucket.includes('Balanced') ? 'bg-blue-100 text-blue-800' :
-                                    multiYearData.distribution_analysis.coverage_metrics.affo_payout_ratio_bucket.includes('High') ? 'bg-yellow-100 text-yellow-800' :
-                                    'bg-red-100 text-red-800'
-                                  }>
-                                    {multiYearData.distribution_analysis.coverage_metrics.affo_payout_ratio_bucket}
-                                  </Badge>
-                                </div>
-                                <div className="flex justify-between">
-                                  <span>FFO Payout Ratio:</span>
-                                  <Badge className={
-                                    multiYearData.distribution_analysis.coverage_metrics.ffo_payout_ratio_bucket.includes('Conservative') ? 'bg-green-100 text-green-800' :
-                                    multiYearData.distribution_analysis.coverage_metrics.ffo_payout_ratio_bucket.includes('Balanced') ? 'bg-blue-100 text-blue-800' :
-                                    multiYearData.distribution_analysis.coverage_metrics.ffo_payout_ratio_bucket.includes('High') ? 'bg-yellow-100 text-yellow-800' :
-                                    'bg-red-100 text-red-800'
-                                  }>
-                                    {multiYearData.distribution_analysis.coverage_metrics.ffo_payout_ratio_bucket}
-                                  </Badge>
-                                </div>
-                                <div className="flex justify-between">
-                                  <span>Coverage Trend:</span>
-                                  <Badge variant="outline">{multiYearData.distribution_analysis.coverage_metrics.coverage_trend}</Badge>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* REIT-Specific Factors */}
-                      <div className="p-4 border rounded-lg bg-white shadow-sm">
-                        <h5 className="font-medium mb-3">REIT-Specific Distribution Factors</h5>
-                        <div className="grid md:grid-cols-3 gap-4 text-sm">
-                          <div className="text-center">
-                            <div className="font-medium text-slate-600 mb-1">Taxable Income Requirement</div>
-                            <Badge className={multiYearData.distribution_analysis.reit_specific_factors.taxable_income_requirement_mentioned ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800'}>
-                              {multiYearData.distribution_analysis.reit_specific_factors.taxable_income_requirement_mentioned ? 'Mentioned' : 'Not Mentioned'}
-                            </Badge>
-                          </div>
-                          <div className="text-center">
-                            <div className="font-medium text-slate-600 mb-1">Return of Capital</div>
-                            <Badge variant="outline">
-                              {multiYearData.distribution_analysis.reit_specific_factors.return_of_capital_component}
-                            </Badge>
-                          </div>
-                          <div className="text-center">
-                            <div className="font-medium text-slate-600 mb-1">Capital Recycling Impact</div>
-                            <Badge variant="outline">
-                              {multiYearData.distribution_analysis.reit_specific_factors.capital_recycling_impact}
-                            </Badge>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Distribution Actions Timeline */}
-                      {multiYearData.distribution_analysis.distribution_actions.length > 0 && (
-                        <div>
-                          <h5 className="font-medium mb-3">Distribution Actions by Filing Year</h5>
-                          <div className="space-y-3">
-                            {multiYearData.distribution_analysis.distribution_actions.map((action, index) => (
-                              <div key={index} className="p-3 border-l-4 border-blue-400 bg-blue-50 rounded-r-lg">
-                                <div className="flex items-center gap-2 mb-1">
-                                  <Badge variant="outline">{action.year}</Badge>
-                                  <Badge className={
-                                    action.action === 'Increased' ? 'bg-green-100 text-green-800' :
-                                    action.action === 'Cut' || action.action === 'Suspended' ? 'bg-red-100 text-red-800' :
-                                    action.action === 'Initiated' ? 'bg-blue-100 text-blue-800' :
-                                    'bg-gray-100 text-gray-800'
-                                  }>
-                                    {action.action}
-                                  </Badge>
-                                </div>
-                                <p className="text-sm text-blue-700">{action.context}</p>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Sustainability Factors */}
-                      {multiYearData.distribution_analysis.sustainability_factors.length > 0 && (
-                        <div>
-                          <h5 className="font-medium mb-3">Sustainability Factors</h5>
-                          <div className="flex flex-wrap gap-2">
-                            {multiYearData.distribution_analysis.sustainability_factors.map((factor, index) => (
-                              <Badge key={index} variant="outline" className="text-xs">{factor}</Badge>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Additional Notes */}
-                      {multiYearData.distribution_analysis.notes && (
-                        <div className="p-3 bg-slate-50 rounded-lg border">
-                          <h5 className="font-medium mb-2">Policy Insights</h5>
-                          <p className="text-sm text-slate-700">{multiYearData.distribution_analysis.notes}</p>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                )}
-
-                {/* Risk Register */}
-                {multiYearData.semantic_themes.risk_register.length > 0 && (
-                  <div>
-                    <h4 className="font-semibold mb-3">Risk Register</h4>
-                    <div className="space-y-3">
-                      {multiYearData.semantic_themes.risk_register.map((risk, index) => (
-                        <div key={index} className="p-3 border rounded-lg">
-                          <div className="flex items-center justify-between mb-2">
-                            <h5 className="font-semibold">{risk.name}</h5>
-                            <Badge className={getSeverityColor(risk.severity)}>
-                              {risk.severity} Risk
-                            </Badge>
-                          </div>
-                          <p className="text-sm text-muted-foreground mb-2">{risk.note}</p>
-                          <p className="text-xs text-muted-foreground">
-                            Mentioned in: {risk.recurrence_years.join(', ')}
-                          </p>
-                        </div>
-                      ))}
                     </div>
                   </div>
                 )}

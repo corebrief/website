@@ -169,8 +169,110 @@ export interface GeneralEquityAnalysis {
   version: string;
 }
 
-// Management Credibility Analysis schema
-export interface ManagementCredibilityAnalysis {
+// General Equity Management Credibility Analysis schema
+export interface GeneralManagementCredibilityAnalysis {
+  company: string;
+  window: {
+    start_fy: number;
+    end_fy: number;
+    num_years: number;
+  };
+  coverage: {
+    years_received: number[];
+    notes: string[];
+  };
+  credibility_assessment: {
+    commitment_followthrough: Array<{
+      commitment_year: number;
+      commitment_type?: string;
+      commitment: string;
+      subsequent_followup_years: number[];
+      outcome_label: string;
+      rationale: string;
+    }>;
+    tone_profile: {
+      tone_balance_label: string;
+      superlative_frequency_label: string;
+      guidance_style_label: string;
+      change_in_tone_label: string;
+      notes: string;
+    };
+    disclosure_hygiene: {
+      non_gaap_policy_clarity: string;
+      impairment_restructure_clarity: string;
+      restatement_or_weakness_mentions: string;
+      accounting_policy_change_transparency: string;
+      segment_bridge_quality: string;
+    };
+    risk_candor: {
+      recurring_risks: Array<{
+        name: string;
+        recurrence_years: number[];
+        candor_label: string;
+        note: string;
+      }>;
+      realized_issues_acknowledged_label: string;
+    };
+    strategic_coherence: {
+      pivot_frequency_label: string;
+      rationalization_quality_label: string;
+      resegmentation_transparency_label: string;
+      examples: string[];
+    };
+    capital_allocation_consistency: {
+      stated_priorities: string[];
+      behavior_alignment_label: string;
+      examples: string[];
+    };
+    metric_definition_stability: Array<{
+      metric: string;
+      stability_label: string;
+      notes: string;
+    }>;
+    red_flags: string[];
+    green_flags: string[];
+  };
+  classification: {
+    communication_style: string;
+    credibility_trend: string;
+    disclosure_quality_tier: string;
+    rationale: string;
+  };
+  scores: {
+    promise_follow_through: number;
+    tone_discipline: number;
+    disclosure_hygiene: number;
+    risk_candor: number;
+    strategic_coherence: number;
+    capital_allocation_consistency: number;
+    metric_definition_stability: number;
+    red_flags: number;
+    weights: number[];
+    composite_score: number;
+    credibility_tier: string;
+  };
+  features_for_downstream: {
+    followthrough_label: string;
+    tone_label: string;
+    disclosure_tier: string;
+    risk_candor_label: string;
+    strategy_pivot_intensity: string;
+    capital_allocation_alignment: string;
+    kpi_stability: string;
+    red_flag_pressure: string;
+  };
+  ui_summaries: {
+    one_liner: string;
+    synopsis: string;
+    bullet_highlights: string[];
+    watch_items: string[];
+    disclaimer: string;
+  };
+  version: string;
+}
+
+// REIT Management Credibility Analysis schema
+export interface REITManagementCredibilityAnalysis {
   company: string;
   window: {
     start_fy: number;
@@ -278,7 +380,11 @@ export interface ManagementCredibilityAnalysis {
     watch_items: string[];
     disclaimer: string;
   };
+  version: string;
 }
+
+// Backward compatibility alias - defaults to REIT version for existing code
+export type ManagementCredibilityAnalysis = REITManagementCredibilityAnalysis;
 
 // Predictive Inference Analysis schema
 export interface PredictiveInferenceAnalysis {
@@ -530,9 +636,9 @@ Overall Grade: ${analysis.grading.letter} (Composite Score: ${analysis.scores.co
 ${analysis.ui_summaries.synopsis}`;
   }
 
-  // Handle ManagementCredibilityAnalysis schema (management_credibility)
+  // Handle ManagementCredibilityAnalysis schema (management_credibility) - both General and REIT versions
   if (dataObj.company && dataObj.window && dataObj.credibility_assessment && dataObj.scores) {
-    const analysis = data as ManagementCredibilityAnalysis;
+    const analysis = data as GeneralManagementCredibilityAnalysis | REITManagementCredibilityAnalysis;
     return `Management credibility assessment of ${analysis.company} covering ${analysis.window.num_years} years (FY${analysis.window.start_fy}-${analysis.window.end_fy}).
 
 Credibility Tier: ${analysis.scores.credibility_tier}

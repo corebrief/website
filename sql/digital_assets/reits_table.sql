@@ -164,15 +164,3 @@ INSERT INTO reits (ticker) VALUES
     ('ALX')
 ON CONFLICT (ticker) DO NOTHING;
 
--- Simple function to check if ticker is a REIT (created AFTER table exists)
-CREATE OR REPLACE FUNCTION is_reit(ticker_symbol TEXT)
-RETURNS BOOLEAN AS $$
-BEGIN
-    RETURN EXISTS (SELECT 1 FROM reits WHERE ticker = UPPER(ticker_symbol));
-END;
-$$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = '';
-
--- Test it
-SELECT 
-    'PLD is REIT: ' || is_reit('PLD') as test1,
-    'AAPL is REIT: ' || is_reit('AAPL') as test2;
