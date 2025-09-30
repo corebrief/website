@@ -22,6 +22,7 @@ import {
   Target,
   Award
 } from 'lucide-react';
+import { type REITManagementCredibilityAnalysis } from '@/utils/report-parsers';
 
 // Type definitions based on REIT schemas
 interface REITMultiYearData {
@@ -199,53 +200,8 @@ interface REITMultiYearData {
   version: string;
 }
 
-interface REITManagementData {
-  company: string;
-  window: {
-    start_fy: number;
-    end_fy: number;
-    num_years: number;
-  };
-  credibility_assessment: {
-    commitment_followthrough: Array<{
-      commitment_year: number;
-      commitment_type: string;
-      commitment: string;
-      outcome_label: string;
-      rationale: string;
-    }>;
-    tone_profile: {
-      tone_balance_label: string;
-      superlative_frequency_label: string;
-      guidance_style_label: string;
-      change_in_tone_label: string;
-      notes: string;
-    };
-    disclosure_hygiene: {
-      nareit_ffo_definition_clarity: string;
-      affo_definition_stability: string;
-      reconciliation_quality: string;
-      same_store_cohort_integrity: string;
-    };
-    red_flags: string[];
-    green_flags: string[];
-  };
-  scores: {
-    promise_follow_through: number;
-    tone_discipline: number;
-    disclosure_hygiene: number;
-    risk_candor: number;
-    strategic_coherence: number;
-    capital_allocation_consistency: number;
-    composite_score: number;
-    credibility_tier: string;
-  };
-  ui_summaries: {
-    synopsis: string;
-    bullet_highlights: string[];
-    watch_items: string[];
-  };
-}
+// Use the centralized interface from utils/report-parsers.ts
+type REITManagementData = REITManagementCredibilityAnalysis;
 
 interface REITPredictiveData {
   company: string;
@@ -2526,26 +2482,41 @@ function parseJSONContent(content: string): unknown {
 // Main wrapper component that handles ParsedReport structure
 export default function REITEquityReport({ report }: REITReportProps) {
   // Try to get structured data from each section first, fallback to parsing content
-  const multiYearData = report.sections.multi_year_analysis.structured_data || parseJSONContent(report.sections.multi_year_analysis.content);
-  const managementData = report.sections.management_credibility.structured_data || parseJSONContent(report.sections.management_credibility.content);
-  const predictiveData = report.sections.predictive_inference.structured_data || parseJSONContent(report.sections.predictive_inference.content);
-  const thesisData = report.sections.final_thesis.structured_data || parseJSONContent(report.sections.final_thesis.content);
+  const rawMultiYearData = report.sections.multi_year_analysis.structured_data || parseJSONContent(report.sections.multi_year_analysis.content);
+  const rawManagementData = report.sections.management_credibility.structured_data || parseJSONContent(report.sections.management_credibility.content);
+  const rawPredictiveData = report.sections.predictive_inference.structured_data || parseJSONContent(report.sections.predictive_inference.content);
+  const rawThesisData = report.sections.final_thesis.structured_data || parseJSONContent(report.sections.final_thesis.content);
 
-  // Check if we have any valid objects (not just truthy values)
-  const hasMultiYear = multiYearData && typeof multiYearData === 'object' && Object.keys(multiYearData).length > 0;
-  const hasManagement = managementData && typeof managementData === 'object' && Object.keys(managementData).length > 0;
-  const hasPredictive = predictiveData && typeof predictiveData === 'object' && Object.keys(predictiveData).length > 0;
-  const hasThesis = thesisData && typeof thesisData === 'object' && Object.keys(thesisData).length > 0;
+  // Type guard function to check if data has the expected REIT structure
+  const isValidREITData = (data: unknown, requiredKeys: string[]): boolean => {
+    return Boolean(data) && 
+           typeof data === 'object' && 
+           data !== null &&
+           Object.keys(data).length > 0 &&
+           requiredKeys.some(key => key in data);
+  };
+
+  // Check if we have valid REIT structured data and cast to proper types
+  const hasMultiYear = isValidREITData(rawMultiYearData, ['company', 'window', 'semantic_themes']);
+  const hasManagement = isValidREITData(rawManagementData, ['company', 'window', 'credibility_assessment']);
+  const hasPredictive = isValidREITData(rawPredictiveData, ['company', 'window', 'scenarios']);
+  const hasThesis = isValidREITData(rawThesisData, ['company', 'window', 'reit_thesis']);
+
+  // Cast to proper types only if validation passes
+  const multiYearData = hasMultiYear ? rawMultiYearData as REITMultiYearData : null;
+  const managementData = hasManagement ? rawManagementData as REITManagementData : null;
+  const predictiveData = hasPredictive ? rawPredictiveData as REITPredictiveData : null;
+  const thesisData = hasThesis ? rawThesisData as REITThesisData : null;
 
   // If we have any structured JSON data, use the full REIT component
   // But we need to handle mixed scenarios where some sections have JSON and others are text
   if (hasMultiYear || hasManagement || hasPredictive || hasThesis) {
     return (
       <REITEquityReportContent
-        multiYearData={hasMultiYear ? multiYearData : null}
-        managementData={hasManagement ? managementData : null}
-        predictiveData={hasPredictive ? predictiveData : null}
-        thesisData={hasThesis ? thesisData : null}
+        multiYearData={multiYearData}
+        managementData={managementData}
+        predictiveData={predictiveData}
+        thesisData={thesisData}
       />
     );
   }
