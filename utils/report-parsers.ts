@@ -481,6 +481,121 @@ export interface PredictiveInferenceAnalysis {
   };
 }
 
+// REIT Predictive Inference Analysis schema
+export interface REITPredictiveInferenceAnalysis {
+  company: string;
+  window: {
+    start_fy: number;
+    end_fy: number;
+    num_years: number;
+  };
+  coverage: {
+    years_received: number[];
+    notes: string[];
+  };
+  horizon_selection: {
+    type: string;
+    length: number;
+    reason: string;
+  };
+  assumption_journal: string[];
+  base_state: {
+    starting_point: {
+      ssnoi: string;
+      occupancy: string;
+      leasing_spreads: string;
+      affo: string;
+      risk_level: string;
+    };
+    recent_inflections: string[];
+  };
+  scenarios: Array<{
+    name: string;
+    outcomes: {
+      ssnoi: string;
+      occupancy: string;
+      leasing_spreads: string;
+      affo: string;
+      distribution_trajectory: string;
+      coverage_direction: string;
+      development_pace: string;
+      external_growth: string;
+      leverage: string;
+      liquidity_refi: string;
+      rate_sensitivity: string;
+      releasing_risk: string;
+      supply_pressure: string;
+    };
+    coarse_numeric_notes: {
+      ssnoi_range_pct: string | null;
+      leasing_spread_range_pct: string | null;
+      affo_change_direction: string | null;
+    };
+    key_drivers: string[];
+    leading_indicators: string[];
+    falsifiers: string[];
+    confidence: number;
+  }>;
+  uncertainty: {
+    dominant_unknowns: string[];
+    black_swan_notes: string | null;
+    confidence_check: string;
+  };
+  transition_map: Array<{
+    from: string;
+    to: string;
+    trigger: string;
+    early_signals: string[];
+  }>;
+  distribution_forward_analysis: {
+    applies: boolean;
+    base_outlook: string;
+    sustainability_drivers: {
+      affo_trajectory: string;
+      coverage_trend: string;
+      taxable_income_alignment: string;
+      capital_allocation_priority: string;
+    };
+    reit_specific_factors: {
+      distribution_source_mix: string;
+      tax_distribution_pressure: string;
+      special_distribution_risk: string;
+      payout_ratio_sustainability: string;
+    };
+    scenario_differentiation: {
+      upside_distribution_case: string | null;
+      downside_distribution_risk: string | null;
+    };
+    policy_inflection_signals: string[];
+    management_signaling: {
+      distribution_commitment_strength: string;
+      recent_messaging_tone: string;
+      coverage_target_guidance: string | null;
+    };
+    reit_distribution_mechanics: {
+      typical_payout_timing: string;
+      historical_volatility: string;
+      roc_component_trend: string;
+    };
+    notes: string | null;
+  };
+  features_for_downstream: {
+    directional_tilt: string;
+    confidence_bucket: string;
+    key_drivers_top3: string[];
+    key_falsifiers_top3: string[];
+    watchlist_metrics: string[];
+  };
+  ui_summaries: {
+    one_liner: string;
+    synopsis: string;
+    bullet_highlights: string[];
+    watch_items: string[];
+    disclaimer: string;
+  };
+  version: string;
+}
+
 // Business Thesis Analysis schema
 export interface BusinessThesisAnalysis {
   company: string;

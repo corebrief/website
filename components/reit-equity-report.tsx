@@ -5,10 +5,10 @@ import { Card, CardContent, CardHeader } from './ui/card';
 import { Badge } from './ui/badge';
 import { Progress } from './ui/progress';
 import { 
-  Building2, 
-  TrendingUp, 
-  Shield, 
-  Brain, 
+  Building2,
+  TrendingUp,
+  Shield,
+  Brain,
   Eye,
   Activity,
   AlertTriangle,
@@ -20,9 +20,12 @@ import {
   DollarSign,
   Home,
   Target,
-  Award
+  Award,
+  Star,
+  HelpCircle,
+  AlertCircle
 } from 'lucide-react';
-import { type REITManagementCredibilityAnalysis } from '@/utils/report-parsers';
+import { type REITManagementCredibilityAnalysis, type REITPredictiveInferenceAnalysis } from '@/utils/report-parsers';
 
 // Type definitions based on REIT schemas
 interface REITMultiYearData {
@@ -203,54 +206,8 @@ interface REITMultiYearData {
 // Use the centralized interface from utils/report-parsers.ts
 type REITManagementData = REITManagementCredibilityAnalysis;
 
-interface REITPredictiveData {
-  company: string;
-  window: {
-    start_fy: number;
-    end_fy: number;
-    num_years: number;
-  };
-  horizon_selection: {
-    type: string;
-    length: number;
-    reason: string;
-  };
-  scenarios: Array<{
-    name: string;
-    outcomes: {
-      ssnoi: string;
-      occupancy: string;
-      leasing_spreads: string;
-      affo: string;
-      distribution_trajectory: string;
-      coverage_direction: string;
-      leverage: string;
-      releasing_risk: string;
-    };
-    key_drivers: string[];
-    leading_indicators: string[];
-    falsifiers: string[];
-    confidence: number;
-  }>;
-  distribution_forward_analysis: {
-    applies: boolean;
-    base_outlook: string;
-    sustainability_drivers: {
-      affo_trajectory: string;
-      coverage_trend: string;
-      capital_allocation_priority: string;
-    };
-    reit_specific_factors: {
-      payout_ratio_sustainability: string;
-      tax_distribution_pressure: string;
-    };
-  };
-  ui_summaries: {
-    synopsis: string;
-    bullet_highlights: string[];
-    watch_items: string[];
-  };
-}
+// Use the centralized interface from utils/report-parsers.ts
+type REITPredictiveData = REITPredictiveInferenceAnalysis;
 
 interface REITThesisData {
   company: string;
@@ -1947,140 +1904,587 @@ function REITEquityReportContent({
                   </div>
                 )}
 
-                {/* Horizon Selection */}
-                <div className="p-4 border rounded-lg bg-blue-50">
-                  <h4 className="font-semibold mb-2 text-blue-800">Analysis Horizon</h4>
-                  <p className="text-sm text-slate-700">
-                    {predictiveData.horizon_selection.length} {predictiveData.horizon_selection.type} - {predictiveData.horizon_selection.reason}
-                  </p>
+                {/* Key Highlights & Watch Items */}
+                {(predictiveData.ui_summaries.bullet_highlights || predictiveData.ui_summaries.watch_items) && (
+                  <div>
+                    <div className="grid md:grid-cols-2 gap-6">
+                      {/* Bullet Highlights */}
+                      {predictiveData.ui_summaries.bullet_highlights && predictiveData.ui_summaries.bullet_highlights.length > 0 && (
+                        <div className="p-4 border rounded-lg bg-blue-50">
+                          <h5 className="font-semibold mb-3 text-blue-800 flex items-center gap-2">
+                            <Star className="h-5 w-5" />
+                            Key Highlights
+                          </h5>
+                          <ul className="space-y-2">
+                            {predictiveData.ui_summaries.bullet_highlights.map((highlight, index) => (
+                              <li key={index} className="text-sm flex items-start gap-2">
+                                <div className="w-1.5 h-1.5 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
+                                <span className="text-blue-700">{highlight}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+
+                      {/* Watch Items */}
+                      {predictiveData.ui_summaries.watch_items && predictiveData.ui_summaries.watch_items.length > 0 && (
+                        <div className="p-4 border rounded-lg bg-purple-50">
+                          <h5 className="font-semibold mb-3 text-purple-800 flex items-center gap-2">
+                            <Eye className="h-5 w-5" />
+                            Priority Watch Items
+                          </h5>
+                          <ul className="space-y-2">
+                            {predictiveData.ui_summaries.watch_items.map((item, index) => (
+                              <li key={index} className="text-sm flex items-start gap-2">
+                                <div className="w-1.5 h-1.5 bg-purple-500 rounded-full mt-2 flex-shrink-0"></div>
+                                <span className="text-purple-700">{item}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {/* Horizon Selection & Base State */}
+                <div className="grid md:grid-cols-2 gap-6">
+                  {/* Horizon Selection */}
+                  <div className="p-4 border rounded-lg bg-blue-50">
+                    <h4 className="font-semibold mb-3 text-blue-800 flex items-center gap-2">
+                      <Brain className="h-5 w-5" />
+                      Forward Analysis Horizon
+                    </h4>
+                    <div className="space-y-2">
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm">Time Frame:</span>
+                        <Badge className="bg-blue-100 text-blue-800">
+                          {predictiveData.horizon_selection.length} {predictiveData.horizon_selection.type}
+                        </Badge>
+                      </div>
+                      <div className="text-xs text-blue-600">
+                        <span className="font-medium">Rationale:</span> {predictiveData.horizon_selection.reason}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Base State Assessment - REIT Specific */}
+                  <div className="p-4 border rounded-lg bg-green-50">
+                    <h4 className="font-semibold mb-3 text-green-800">Current State Assessment</h4>
+                    <div className="grid grid-cols-2 gap-2">
+                      <div className="flex justify-between items-center">
+                        <span className="text-xs">SSNOI:</span>
+                        <Badge className="bg-green-100 text-green-800 text-xs">
+                          {predictiveData.base_state.starting_point.ssnoi}
+                        </Badge>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-xs">Occupancy:</span>
+                        <Badge className="bg-green-100 text-green-800 text-xs">
+                          {predictiveData.base_state.starting_point.occupancy}
+                        </Badge>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-xs">Leasing:</span>
+                        <Badge className="bg-green-100 text-green-800 text-xs">
+                          {predictiveData.base_state.starting_point.leasing_spreads}
+                        </Badge>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-xs">AFFO:</span>
+                        <Badge className="bg-green-100 text-green-800 text-xs">
+                          {predictiveData.base_state.starting_point.affo}
+                        </Badge>
+                      </div>
+                      <div className="flex justify-between items-center col-span-2">
+                        <span className="text-xs">Risk Level:</span>
+                        <Badge className="bg-green-100 text-green-800 text-xs">
+                          {predictiveData.base_state.starting_point.risk_level}
+                        </Badge>
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
-                {/* Scenario Analysis */}
-                <div>
-                  <h4 className="font-semibold mb-3">Scenario Analysis</h4>
-                  {predictiveData.scenarios?.length > 0 ? (
-                    <div className="space-y-6">
-                      {predictiveData.scenarios.map((scenario, index) => (
-                        <Card key={index} className="p-4 bg-white shadow-sm">
-                          <h5 className="font-semibold mb-3 flex items-center gap-2">
-                            <Zap className="h-4 w-4 text-blue-600" />
-                            {scenario.name} Scenario ({(scenario.confidence * 100).toFixed(0)}% Confidence)
-                          </h5>
-                          <div className="space-y-4">
-                            <div className="grid md:grid-cols-3 gap-4 mb-4">
-                              <div className="space-y-2">
-                                <div className="flex justify-between items-center">
-                                  <span className="font-medium text-sm">Same Store NOI:</span>
-                                  <Badge className={`text-xs ${getTrendColor(scenario.outcomes.ssnoi)}`}>
-                                    {scenario.outcomes.ssnoi}
-                                  </Badge>
-                                </div>
-                                <div className="flex justify-between items-center">
-                                  <span className="font-medium text-sm">Occupancy:</span>
-                                  <Badge className={`text-xs ${getTrendColor(scenario.outcomes.occupancy)}`}>
-                                    {scenario.outcomes.occupancy}
-                                  </Badge>
-                                </div>
-                                <div className="flex justify-between items-center">
-                                  <span className="font-medium text-sm">Leasing Spreads:</span>
-                                  <Badge className={`text-xs ${getTrendColor(scenario.outcomes.leasing_spreads)}`}>
-                                    {scenario.outcomes.leasing_spreads}
-                                  </Badge>
-                                </div>
-                              </div>
-                              <div className="space-y-2">
-                                <div className="flex justify-between items-center">
-                                  <span className="font-medium text-sm">AFFO:</span>
-                                  <Badge className={`text-xs ${getTrendColor(scenario.outcomes.affo)}`}>
-                                    {scenario.outcomes.affo}
-                                  </Badge>
-                                </div>
-                                <div className="flex justify-between items-center">
-                                  <span className="font-medium text-sm">Distribution:</span>
-                                  <Badge className={`text-xs ${getTrendColor(scenario.outcomes.distribution_trajectory)}`}>
-                                    {scenario.outcomes.distribution_trajectory}
-                                  </Badge>
-                                </div>
-                                <div className="flex justify-between items-center">
-                                  <span className="font-medium text-sm">Coverage:</span>
-                                  <Badge className={`text-xs ${getTrendColor(scenario.outcomes.coverage_direction)}`}>
-                                    {scenario.outcomes.coverage_direction}
-                                  </Badge>
-                                </div>
-                              </div>
-                              <div className="space-y-2">
-                                <div className="flex justify-between items-center">
-                                  <span className="font-medium text-sm">Leverage:</span>
-                                  <Badge className={`text-xs ${getTrendColor(scenario.outcomes.leverage)}`}>
-                                    {scenario.outcomes.leverage}
-                                  </Badge>
-                                </div>
-                                <div className="flex justify-between items-center">
-                                  <span className="font-medium text-sm">Re-leasing Risk:</span>
-                                  <Badge className={`text-xs ${getTrendColor(scenario.outcomes.releasing_risk)}`}>
-                                    {scenario.outcomes.releasing_risk}
-                                  </Badge>
-                                </div>
-                              </div>
-                            </div>
-
-                            <div className="grid md:grid-cols-3 gap-6">
-                              {/* Key Drivers */}
-                              <div>
-                                <h5 className="font-medium mb-2">Key Drivers</h5>
-                                <ul className="list-disc list-inside space-y-1 text-sm text-slate-700">
-                                  {scenario.key_drivers.map((driver, i) => (
-                                    <li key={i}>{driver}</li>
-                                  ))}
-                                </ul>
-                              </div>
-                              {/* Leading Indicators */}
-                              <div>
-                                <h5 className="font-medium mb-2">Leading Indicators</h5>
-                                <ul className="list-disc list-inside space-y-1 text-sm text-slate-700">
-                                  {scenario.leading_indicators.map((indicator, i) => (
-                                    <li key={i}>{indicator}</li>
-                                  ))}
-                                </ul>
-                              </div>
-                              {/* Falsifiers */}
-                              <div>
-                                <h5 className="font-medium mb-2">Falsifiers</h5>
-                                <ul className="list-disc list-inside space-y-1 text-sm text-slate-700">
-                                  {scenario.falsifiers.map((falsifier, i) => (
-                                    <li key={i}>{falsifier}</li>
-                                  ))}
-                                </ul>
-                              </div>
-                            </div>
-                          </div>
-                        </Card>
+                {/* Assumption Journal */}
+                {predictiveData.assumption_journal && predictiveData.assumption_journal.length > 0 && (
+                  <div>
+                    <h4 className="font-semibold mb-3 flex items-center gap-2">
+                      <Target className="h-5 w-5 text-indigo-600" />
+                      Key Assumptions from Historical Analysis
+                    </h4>
+                    <div className="space-y-2">
+                      {predictiveData.assumption_journal.map((assumption, index) => (
+                        <div key={index} className="p-3 border rounded-lg bg-indigo-50">
+                          <p className="text-sm text-indigo-700">{assumption}</p>
+                        </div>
                       ))}
                     </div>
-                  ) : (
-                    <p className="text-sm text-muted-foreground">No detailed scenarios available.</p>
-                  )}
+                  </div>
+                )}
+
+                {/* Recent Inflections */}
+                {predictiveData.base_state.recent_inflections && predictiveData.base_state.recent_inflections.length > 0 && (
+                  <div>
+                    <h4 className="font-semibold mb-3 flex items-center gap-2">
+                      <TrendingUp className="h-5 w-5 text-orange-600" />
+                      Recent Operational Inflections
+                    </h4>
+                    <ul className="space-y-2">
+                      {predictiveData.base_state.recent_inflections.map((inflection, index) => (
+                        <li key={index} className="text-sm flex items-start gap-2">
+                          <div className="w-2 h-2 bg-orange-400 rounded-full mt-2 flex-shrink-0"></div>
+                          <span className="text-orange-700">{inflection}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {/* Forward Scenarios */}
+                <div>
+                  <h4 className="font-semibold mb-4">Forward-Looking Scenarios</h4>
+                  <div className="space-y-6">
+                    {predictiveData.scenarios.map((scenario, index) => (
+                      <div key={index} className={`p-6 border-2 rounded-lg ${
+                        scenario.name === 'Base' ? 'bg-slate-50 border-slate-300' :
+                        scenario.name === 'Upside' ? 'bg-green-50 border-green-300' :
+                        'bg-red-50 border-red-300'
+                      }`}>
+                        <div className="flex items-center justify-between mb-4">
+                          <h5 className="font-semibold text-lg">{scenario.name} Case</h5>
+                          <Badge className={`text-lg px-3 py-1 ${
+                            scenario.name === 'Base' ? 'bg-slate-100 text-slate-800' :
+                            scenario.name === 'Upside' ? 'bg-green-100 text-green-800' :
+                            'bg-red-100 text-red-800'
+                          }`}>
+                            {(scenario.confidence * 100).toFixed(0)}% Confidence
+                          </Badge>
+                        </div>
+                        
+                        {/* REIT-Specific Outcomes Grid */}
+                        <div className="grid md:grid-cols-4 gap-4 mb-4">
+                          <div className="space-y-2">
+                            <div className="flex justify-between items-center">
+                              <span className="text-sm font-medium">SSNOI:</span>
+                              <Badge variant="outline">{scenario.outcomes.ssnoi}</Badge>
+                            </div>
+                            <div className="flex justify-between items-center">
+                              <span className="text-sm font-medium">Occupancy:</span>
+                              <Badge variant="outline">{scenario.outcomes.occupancy}</Badge>
+                            </div>
+                            <div className="flex justify-between items-center">
+                              <span className="text-sm font-medium">Leasing Spreads:</span>
+                              <Badge variant="outline">{scenario.outcomes.leasing_spreads}</Badge>
+                            </div>
+                          </div>
+                          <div className="space-y-2">
+                            <div className="flex justify-between items-center">
+                              <span className="text-sm font-medium">AFFO:</span>
+                              <Badge variant="outline">{scenario.outcomes.affo}</Badge>
+                            </div>
+                            <div className="flex justify-between items-center">
+                              <span className="text-sm font-medium">Distribution:</span>
+                              <Badge variant="outline">{scenario.outcomes.distribution_trajectory}</Badge>
+                            </div>
+                            <div className="flex justify-between items-center">
+                              <span className="text-sm font-medium">Coverage:</span>
+                              <Badge variant="outline">{scenario.outcomes.coverage_direction}</Badge>
+                            </div>
+                          </div>
+                          <div className="space-y-2">
+                            <div className="flex justify-between items-center">
+                              <span className="text-sm font-medium">Development:</span>
+                              <Badge variant="outline">{scenario.outcomes.development_pace}</Badge>
+                            </div>
+                            <div className="flex justify-between items-center">
+                              <span className="text-sm font-medium">External Growth:</span>
+                              <Badge variant="outline">{scenario.outcomes.external_growth}</Badge>
+                            </div>
+                            <div className="flex justify-between items-center">
+                              <span className="text-sm font-medium">Leverage:</span>
+                              <Badge variant="outline">{scenario.outcomes.leverage}</Badge>
+                            </div>
+                          </div>
+                          <div className="space-y-2">
+                            <div className="flex justify-between items-center">
+                              <span className="text-sm font-medium">Rate Sensitivity:</span>
+                              <Badge variant="outline">{scenario.outcomes.rate_sensitivity}</Badge>
+                            </div>
+                            <div className="flex justify-between items-center">
+                              <span className="text-sm font-medium">Re-leasing Risk:</span>
+                              <Badge variant="outline">{scenario.outcomes.releasing_risk}</Badge>
+                            </div>
+                            <div className="flex justify-between items-center">
+                              <span className="text-sm font-medium">Supply Pressure:</span>
+                              <Badge variant="outline">{scenario.outcomes.supply_pressure}</Badge>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Numeric Notes */}
+                        {(scenario.coarse_numeric_notes.ssnoi_range_pct || scenario.coarse_numeric_notes.leasing_spread_range_pct || scenario.coarse_numeric_notes.affo_change_direction) && (
+                          <div className="mb-4 p-3 bg-white rounded-lg border">
+                            <h6 className="font-medium mb-2 text-sm">Quantitative Indicators</h6>
+                            <div className="grid md:grid-cols-3 gap-2">
+                              {scenario.coarse_numeric_notes.ssnoi_range_pct && (
+                                <div className="text-sm">
+                                  <span className="font-medium">SSNOI Range:</span> {scenario.coarse_numeric_notes.ssnoi_range_pct}
+                                </div>
+                              )}
+                              {scenario.coarse_numeric_notes.leasing_spread_range_pct && (
+                                <div className="text-sm">
+                                  <span className="font-medium">Leasing Spread:</span> {scenario.coarse_numeric_notes.leasing_spread_range_pct}
+                                </div>
+                              )}
+                              {scenario.coarse_numeric_notes.affo_change_direction && (
+                                <div className="text-sm">
+                                  <span className="font-medium">AFFO Direction:</span> {scenario.coarse_numeric_notes.affo_change_direction}
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        )}
+
+                        <div className="grid md:grid-cols-3 gap-6">
+                          {/* Key Drivers */}
+                          <div>
+                            <h6 className="font-medium mb-2 text-sm">Key Drivers</h6>
+                            <ul className="space-y-1">
+                              {scenario.key_drivers.map((driver, idx) => (
+                                <li key={idx} className="text-sm flex items-start gap-2">
+                                  <div className="w-1.5 h-1.5 bg-blue-400 rounded-full mt-2 flex-shrink-0"></div>
+                                  <span className="text-blue-700">{driver}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                          
+                          {/* Leading Indicators */}
+                          <div>
+                            <h6 className="font-medium mb-2 text-sm">Leading Indicators</h6>
+                            <ul className="space-y-1">
+                              {scenario.leading_indicators.map((indicator, idx) => (
+                                <li key={idx} className="text-sm flex items-start gap-2">
+                                  <div className="w-1.5 h-1.5 bg-green-400 rounded-full mt-2 flex-shrink-0"></div>
+                                  <span className="text-green-700">{indicator}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+
+                          {/* Falsifiers */}
+                          <div>
+                            <h6 className="font-medium mb-2 text-sm">Scenario Falsifiers</h6>
+                            <ul className="space-y-1">
+                              {scenario.falsifiers.map((falsifier, idx) => (
+                                <li key={idx} className="text-sm flex items-start gap-2">
+                                  <AlertTriangle className="h-3 w-3 text-red-500 mt-1 flex-shrink-0" />
+                                  <span className="text-red-700">{falsifier}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
 
-                {/* Distribution Forward Analysis */}
-                {predictiveData.distribution_forward_analysis?.applies && (
-                  <div className="p-4 border rounded-lg bg-gradient-to-r from-purple-50 to-indigo-50 border-purple-200">
-                    <h4 className="font-semibold mb-3 text-purple-800">💰 Distribution Forward Analysis</h4>
+                {/* Transition Map */}
+                {predictiveData.transition_map && predictiveData.transition_map.length > 0 && (
+                  <div>
+                    <h4 className="font-semibold mb-4 flex items-center gap-2">
+                      <Target className="h-5 w-5 text-indigo-600" />
+                      Scenario Transition Analysis
+                    </h4>
                     <div className="space-y-4">
-                      <div className="grid md:grid-cols-2 gap-6">
-                        <div className="p-4 border rounded-lg bg-white shadow-sm">
-                          <h5 className="font-medium mb-2">Base Distribution Outlook</h5>
-                          <Badge className={`${getTrendColor(predictiveData.distribution_forward_analysis.base_outlook)}`}>
+                      {predictiveData.transition_map.map((transition, index) => (
+                        <div key={index} className="p-4 border rounded-lg bg-indigo-50">
+                          <div className="flex items-center gap-4 mb-3">
+                            <div className="text-sm font-medium text-indigo-700">Scenario Shift:</div>
+                            <div className="flex items-center gap-3">
+                              <Badge className={`${
+                                transition.from === 'Base' ? 'bg-slate-100 text-slate-800' :
+                                transition.from === 'Upside' ? 'bg-green-100 text-green-800' :
+                                'bg-red-100 text-red-800'
+                              }`}>
+                                {transition.from} Case
+                              </Badge>
+                              <div className="text-indigo-600 font-bold text-3xl px-2">→</div>
+                              <Badge className={`${
+                                transition.to === 'Upside' ? 'bg-green-100 text-green-800' :
+                                transition.to === 'Downside' ? 'bg-red-100 text-red-800' :
+                                'bg-slate-100 text-slate-800'
+                              }`}>
+                                {transition.to} Case
+                              </Badge>
+                            </div>
+                          </div>
+                          
+                          <div className="space-y-3">
+                            <div>
+                              <h6 className="font-medium text-sm text-indigo-800 mb-1">Transition Trigger</h6>
+                              <p className="text-sm text-indigo-700">{transition.trigger}</p>
+                            </div>
+                            
+                            <div>
+                              <h6 className="font-medium text-sm text-indigo-800 mb-2">Early Warning Signals</h6>
+                              <ul className="space-y-1">
+                                {transition.early_signals.map((signal, idx) => (
+                                  <li key={idx} className="text-sm flex items-start gap-2">
+                                    <div className="w-1.5 h-1.5 bg-indigo-500 rounded-full mt-2 flex-shrink-0"></div>
+                                    <span className="text-indigo-700">{signal}</span>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Uncertainty Analysis */}
+                {predictiveData.uncertainty && (
+                  <div>
+                    <h4 className="font-semibold mb-4 flex items-center gap-2">
+                      <AlertCircle className="h-5 w-5 text-amber-600" />
+                      Uncertainty & Risk Assessment
+                    </h4>
+                    <div className="grid md:grid-cols-2 gap-6">
+                      {/* Dominant Unknowns */}
+                      <div className="p-4 border rounded-lg bg-amber-50">
+                        <h5 className="font-semibold mb-3 text-amber-800">Dominant Unknowns</h5>
+                        <ul className="space-y-2">
+                          {predictiveData.uncertainty.dominant_unknowns.map((unknown, index) => (
+                            <li key={index} className="text-sm flex items-start gap-2">
+                              <HelpCircle className="h-4 w-4 text-amber-600 mt-0.5 flex-shrink-0" />
+                              <span className="text-amber-700">{unknown}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+
+                      {/* Black Swan & Confidence */}
+                      <div className="space-y-4">
+                        {predictiveData.uncertainty.black_swan_notes && (
+                          <div className="p-4 border rounded-lg bg-red-50">
+                            <h5 className="font-semibold mb-2 text-red-800 flex items-center gap-2">
+                              <AlertTriangle className="h-4 w-4" />
+                              Black Swan Considerations
+                            </h5>
+                            <p className="text-sm text-red-700">{predictiveData.uncertainty.black_swan_notes}</p>
+                          </div>
+                        )}
+                        
+                        <div className="p-4 border rounded-lg bg-slate-50">
+                          <h5 className="font-semibold mb-2 text-slate-800">Overall Confidence</h5>
+                          <Badge className={`${
+                            predictiveData.uncertainty.confidence_check === 'High' ? 'bg-green-100 text-green-800' :
+                            predictiveData.uncertainty.confidence_check === 'Medium' ? 'bg-yellow-100 text-yellow-800' :
+                            'bg-red-100 text-red-800'
+                          }`}>
+                            {predictiveData.uncertainty.confidence_check}
+                          </Badge>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Distribution Forward Analysis - Enhanced */}
+                {predictiveData.distribution_forward_analysis?.applies && (
+                  <div className="p-6 border-2 rounded-lg bg-gradient-to-br from-slate-50 to-purple-50 border-slate-300">
+                    <h4 className="font-semibold mb-6 flex items-center gap-2 text-lg">
+                      <DollarSign className="h-6 w-6 text-purple-600" />
+                      Distribution Forward Analysis
+                    </h4>
+                    
+                    <div className="space-y-6">
+                      {/* Base Outlook & Key Metrics */}
+                      <div className="grid md:grid-cols-3 gap-6">
+                        <div className="p-4 border rounded-lg bg-purple-50">
+                          <h5 className="font-semibold mb-2 text-purple-800">Base Outlook</h5>
+                          <Badge className={`text-lg px-3 py-1 ${
+                            predictiveData.distribution_forward_analysis.base_outlook === 'Increase' ? 'bg-green-100 text-green-800' :
+                            predictiveData.distribution_forward_analysis.base_outlook === 'Stable' ? 'bg-blue-100 text-blue-800' :
+                            'bg-red-100 text-red-800'
+                          }`}>
                             {predictiveData.distribution_forward_analysis.base_outlook}
                           </Badge>
                         </div>
-                        <div className="p-4 border rounded-lg bg-white shadow-sm">
-                          <h5 className="font-medium mb-2">Sustainability Factors</h5>
-                          <div className="space-y-1 text-sm">
-                            <div>AFFO Trajectory: <Badge className="text-xs ml-1">{predictiveData.distribution_forward_analysis.sustainability_drivers.affo_trajectory}</Badge></div>
-                            <div>Coverage Trend: <Badge className="text-xs ml-1">{predictiveData.distribution_forward_analysis.sustainability_drivers.coverage_trend}</Badge></div>
+
+                        <div className="p-4 border rounded-lg bg-blue-50">
+                          <h5 className="font-semibold mb-3 text-blue-800">Sustainability Drivers</h5>
+                          <div className="space-y-2">
+                            <div className="flex justify-between items-center">
+                              <span className="text-xs">AFFO Trajectory:</span>
+                              <Badge variant="outline" className="text-xs">
+                                {predictiveData.distribution_forward_analysis.sustainability_drivers.affo_trajectory}
+                              </Badge>
+                            </div>
+                            <div className="flex justify-between items-center">
+                              <span className="text-xs">Coverage Trend:</span>
+                              <Badge variant="outline" className="text-xs">
+                                {predictiveData.distribution_forward_analysis.sustainability_drivers.coverage_trend}
+                              </Badge>
+                            </div>
+                            <div className="flex justify-between items-center">
+                              <span className="text-xs">Taxable Income:</span>
+                              <Badge variant="outline" className="text-xs">
+                                {predictiveData.distribution_forward_analysis.sustainability_drivers.taxable_income_alignment}
+                              </Badge>
+                            </div>
+                            <div className="flex justify-between items-center">
+                              <span className="text-xs">Capital Priority:</span>
+                              <Badge variant="outline" className="text-xs">
+                                {predictiveData.distribution_forward_analysis.sustainability_drivers.capital_allocation_priority}
+                              </Badge>
+                            </div>
                           </div>
                         </div>
+
+                        <div className="p-4 border rounded-lg bg-green-50">
+                          <h5 className="font-semibold mb-3 text-green-800">REIT Factors</h5>
+                          <div className="space-y-2">
+                            <div className="flex justify-between items-center">
+                              <span className="text-xs">Source Mix:</span>
+                              <Badge variant="outline" className="text-xs">
+                                {predictiveData.distribution_forward_analysis.reit_specific_factors.distribution_source_mix}
+                              </Badge>
+                            </div>
+                            <div className="flex justify-between items-center">
+                              <span className="text-xs">Tax Pressure:</span>
+                              <Badge variant="outline" className="text-xs">
+                                {predictiveData.distribution_forward_analysis.reit_specific_factors.tax_distribution_pressure}
+                              </Badge>
+                            </div>
+                            <div className="flex justify-between items-center">
+                              <span className="text-xs">Special Risk:</span>
+                              <Badge variant="outline" className="text-xs">
+                                {predictiveData.distribution_forward_analysis.reit_specific_factors.special_distribution_risk}
+                              </Badge>
+                            </div>
+                            <div className="flex justify-between items-center">
+                              <span className="text-xs">Payout Ratio:</span>
+                              <Badge variant="outline" className="text-xs">
+                                {predictiveData.distribution_forward_analysis.reit_specific_factors.payout_ratio_sustainability}
+                              </Badge>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Distribution Mechanics */}
+                      <div className="p-4 border rounded-lg bg-slate-50">
+                        <h5 className="font-semibold mb-3 text-slate-800">Distribution Mechanics</h5>
+                        <div className="grid md:grid-cols-3 gap-4">
+                          <div className="flex justify-between items-center">
+                            <span className="text-sm">Payout Timing:</span>
+                            <Badge variant="outline">
+                              {predictiveData.distribution_forward_analysis.reit_distribution_mechanics.typical_payout_timing}
+                            </Badge>
+                          </div>
+                          <div className="flex justify-between items-center">
+                            <span className="text-sm">Historical Volatility:</span>
+                            <Badge variant="outline">
+                              {predictiveData.distribution_forward_analysis.reit_distribution_mechanics.historical_volatility}
+                            </Badge>
+                          </div>
+                          <div className="flex justify-between items-center">
+                            <span className="text-sm">ROC Component:</span>
+                            <Badge variant="outline">
+                              {predictiveData.distribution_forward_analysis.reit_distribution_mechanics.roc_component_trend}
+                            </Badge>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Scenario Differentiation */}
+                      {(predictiveData.distribution_forward_analysis.scenario_differentiation.upside_distribution_case || 
+                        predictiveData.distribution_forward_analysis.scenario_differentiation.downside_distribution_risk) && (
+                        <div className="grid md:grid-cols-2 gap-6">
+                          {predictiveData.distribution_forward_analysis.scenario_differentiation.upside_distribution_case && (
+                            <div className="p-4 border rounded-lg bg-green-50">
+                              <h5 className="font-semibold mb-2 text-green-800 flex items-center gap-2">
+                                <TrendingUp className="h-4 w-4" />
+                                Upside Distribution Case
+                              </h5>
+                              <p className="text-sm text-green-700">
+                                {predictiveData.distribution_forward_analysis.scenario_differentiation.upside_distribution_case}
+                              </p>
+                            </div>
+                          )}
+                          
+                          {predictiveData.distribution_forward_analysis.scenario_differentiation.downside_distribution_risk && (
+                            <div className="p-4 border rounded-lg bg-red-50">
+                              <h5 className="font-semibold mb-2 text-red-800 flex items-center gap-2">
+                                <AlertTriangle className="h-4 w-4" />
+                                Downside Distribution Risk
+                              </h5>
+                              <p className="text-sm text-red-700">
+                                {predictiveData.distribution_forward_analysis.scenario_differentiation.downside_distribution_risk}
+                              </p>
+                            </div>
+                          )}
+                        </div>
+                      )}
+
+                      {/* Policy Inflection Signals */}
+                      {predictiveData.distribution_forward_analysis.policy_inflection_signals && 
+                       predictiveData.distribution_forward_analysis.policy_inflection_signals.length > 0 && (
+                        <div className="p-4 border rounded-lg bg-orange-50">
+                          <h5 className="font-semibold mb-3 text-orange-800 flex items-center gap-2">
+                            <AlertTriangle className="h-4 w-4" />
+                            Policy Inflection Signals
+                          </h5>
+                          <ul className="space-y-1">
+                            {predictiveData.distribution_forward_analysis.policy_inflection_signals.map((signal, index) => (
+                              <li key={index} className="text-sm flex items-start gap-2">
+                                <div className="w-1.5 h-1.5 bg-orange-500 rounded-full mt-2 flex-shrink-0"></div>
+                                <span className="text-orange-700">{signal}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+
+                      {/* Management Signaling & Notes */}
+                      <div className="grid md:grid-cols-2 gap-6">
+                        <div className="p-4 border rounded-lg bg-slate-50">
+                          <h5 className="font-semibold mb-3 text-slate-800">Management Signaling</h5>
+                          <div className="space-y-2">
+                            <div className="flex justify-between items-center">
+                              <span className="text-sm">Commitment Strength:</span>
+                              <Badge variant="outline">
+                                {predictiveData.distribution_forward_analysis.management_signaling.distribution_commitment_strength}
+                              </Badge>
+                            </div>
+                            <div className="flex justify-between items-center">
+                              <span className="text-sm">Recent Tone:</span>
+                              <Badge variant="outline">
+                                {predictiveData.distribution_forward_analysis.management_signaling.recent_messaging_tone}
+                              </Badge>
+                            </div>
+                            {predictiveData.distribution_forward_analysis.management_signaling.coverage_target_guidance && (
+                              <div className="mt-2">
+                                <span className="text-sm font-medium">Coverage Target:</span>
+                                <p className="text-xs text-slate-600 mt-1">
+                                  {predictiveData.distribution_forward_analysis.management_signaling.coverage_target_guidance}
+                                </p>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+
+                        {predictiveData.distribution_forward_analysis.notes && (
+                          <div className="p-4 border rounded-lg bg-indigo-50">
+                            <h5 className="font-semibold mb-2 text-indigo-800">Additional Notes</h5>
+                            <p className="text-sm text-indigo-700">{predictiveData.distribution_forward_analysis.notes}</p>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
