@@ -1724,7 +1724,7 @@ export default function MLPEquityReport({ report }: MLPReportProps) {
 
   // Type guard function to check if data has the expected MLP structure
   const isValidMLPData = (data: unknown, requiredKeys: string[]): boolean => {
-    return data && 
+    return Boolean(data) && 
            typeof data === 'object' && 
            data !== null &&
            Object.keys(data).length > 0 &&
