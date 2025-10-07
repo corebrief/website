@@ -6,8 +6,17 @@ export default async function ProtectedSidebar() {
       basePath="/protected"
       items={[
         {
+          label: "Your Reports",
+          href: "/reports",
+        },
+        {
+          label: "Purchase Reports",
+          href: "/purchase",
+          disabled: true,
+        },
+        {
           label: "Account",
-          href: "/",
+          href: "/account",
         },
         {
           label: "Privacy",
@@ -16,15 +25,6 @@ export default async function ProtectedSidebar() {
         {
           label: "Join Waitlist",
           href: "/waitlist",
-        },
-        {
-          label: "Purchase Reports",
-          href: "/purchase",
-          disabled: true,
-        },
-        {
-          label: "Your Reports",
-          href: "/reports",
         },
       ]}
     />
