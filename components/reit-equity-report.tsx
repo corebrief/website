@@ -1969,61 +1969,61 @@ function REITEquityReportContent({
                         </div>
                         
                         {/* REIT-Specific Outcomes Grid */}
-                        <div className="grid md:grid-cols-4 gap-4 mb-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-4">
                           <div className="space-y-2">
-                            <div className="flex justify-between items-center">
+                            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1">
                               <span className="text-sm font-medium">SSNOI:</span>
-                              <Badge variant="outline">{scenario.outcomes.ssnoi}</Badge>
+                              <Badge variant="outline" className="self-start sm:self-center">{scenario.outcomes.ssnoi}</Badge>
                             </div>
-                            <div className="flex justify-between items-center">
+                            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1">
                               <span className="text-sm font-medium">Occupancy:</span>
-                              <Badge variant="outline">{scenario.outcomes.occupancy}</Badge>
+                              <Badge variant="outline" className="self-start sm:self-center">{scenario.outcomes.occupancy}</Badge>
                             </div>
-                            <div className="flex justify-between items-center">
+                            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1">
                               <span className="text-sm font-medium">Leasing Spreads:</span>
-                              <Badge variant="outline">{scenario.outcomes.leasing_spreads}</Badge>
+                              <Badge variant="outline" className="self-start sm:self-center">{scenario.outcomes.leasing_spreads}</Badge>
                             </div>
                           </div>
                           <div className="space-y-2">
-                            <div className="flex justify-between items-center">
+                            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1">
                               <span className="text-sm font-medium">AFFO:</span>
-                              <Badge variant="outline">{scenario.outcomes.affo}</Badge>
+                              <Badge variant="outline" className="self-start sm:self-center">{scenario.outcomes.affo}</Badge>
                             </div>
-                            <div className="flex justify-between items-center">
+                            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1">
                               <span className="text-sm font-medium">Distribution:</span>
-                              <Badge variant="outline">{scenario.outcomes.distribution_trajectory}</Badge>
+                              <Badge variant="outline" className="self-start sm:self-center">{scenario.outcomes.distribution_trajectory}</Badge>
                             </div>
-                            <div className="flex justify-between items-center">
+                            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1">
                               <span className="text-sm font-medium">Coverage:</span>
-                              <Badge variant="outline">{scenario.outcomes.coverage_direction}</Badge>
+                              <Badge variant="outline" className="self-start sm:self-center">{scenario.outcomes.coverage_direction}</Badge>
                             </div>
                           </div>
                           <div className="space-y-2">
-                            <div className="flex justify-between items-center">
+                            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1">
                               <span className="text-sm font-medium">Development:</span>
-                              <Badge variant="outline">{scenario.outcomes.development_pace}</Badge>
+                              <Badge variant="outline" className="self-start sm:self-center">{scenario.outcomes.development_pace}</Badge>
                             </div>
-                            <div className="flex justify-between items-center">
+                            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1">
                               <span className="text-sm font-medium">External Growth:</span>
-                              <Badge variant="outline">{scenario.outcomes.external_growth}</Badge>
+                              <Badge variant="outline" className="self-start sm:self-center">{scenario.outcomes.external_growth}</Badge>
                             </div>
-                            <div className="flex justify-between items-center">
+                            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1">
                               <span className="text-sm font-medium">Leverage:</span>
-                              <Badge variant="outline">{scenario.outcomes.leverage}</Badge>
+                              <Badge variant="outline" className="self-start sm:self-center">{scenario.outcomes.leverage}</Badge>
                             </div>
                           </div>
                           <div className="space-y-2">
-                            <div className="flex justify-between items-center">
+                            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1">
                               <span className="text-sm font-medium">Rate Sensitivity:</span>
-                              <Badge variant="outline">{scenario.outcomes.rate_sensitivity}</Badge>
+                              <Badge variant="outline" className="self-start sm:self-center">{scenario.outcomes.rate_sensitivity}</Badge>
                             </div>
-                            <div className="flex justify-between items-center">
+                            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1">
                               <span className="text-sm font-medium">Re-leasing Risk:</span>
-                              <Badge variant="outline">{scenario.outcomes.releasing_risk}</Badge>
+                              <Badge variant="outline" className="self-start sm:self-center">{scenario.outcomes.releasing_risk}</Badge>
                             </div>
-                            <div className="flex justify-between items-center">
+                            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1">
                               <span className="text-sm font-medium">Supply Pressure:</span>
-                              <Badge variant="outline">{scenario.outcomes.supply_pressure}</Badge>
+                              <Badge variant="outline" className="self-start sm:self-center">{scenario.outcomes.supply_pressure}</Badge>
                             </div>
                           </div>
                         </div>
@@ -2209,43 +2209,44 @@ function REITEquityReportContent({
                     </h4>
                     
                     <div className="space-y-6">
-                      {/* Base Outlook & Key Metrics */}
-                      <div className="grid md:grid-cols-3 gap-6">
-                        <div className="p-4 border rounded-lg bg-purple-50">
-                          <h5 className="font-semibold mb-2 text-purple-800">Base Outlook</h5>
-                          <Badge className={`text-lg px-3 py-1 ${
-                            predictiveData.distribution_forward_analysis.base_outlook === 'Increase' ? 'bg-green-100 text-green-800' :
-                            predictiveData.distribution_forward_analysis.base_outlook === 'Stable' ? 'bg-blue-100 text-blue-800' :
-                            'bg-red-100 text-red-800'
-                          }`}>
-                            {predictiveData.distribution_forward_analysis.base_outlook}
-                          </Badge>
-                        </div>
+                      {/* Base Outlook */}
+                      <div className="p-4 border rounded-lg bg-purple-50 text-center">
+                        <h5 className="font-semibold mb-2 text-purple-800">Base Outlook</h5>
+                        <Badge className={`text-lg px-3 py-1 ${
+                          predictiveData.distribution_forward_analysis.base_outlook === 'Increase' ? 'bg-green-100 text-green-800' :
+                          predictiveData.distribution_forward_analysis.base_outlook === 'Stable' ? 'bg-blue-100 text-blue-800' :
+                          'bg-red-100 text-red-800'
+                        }`}>
+                          {predictiveData.distribution_forward_analysis.base_outlook}
+                        </Badge>
+                      </div>
 
+                      {/* Sustainability Drivers & REIT Factors - Stacked */}
+                      <div className="space-y-4">
                         <div className="p-4 border rounded-lg bg-blue-50">
                           <h5 className="font-semibold mb-3 text-blue-800">Sustainability Drivers</h5>
-                          <div className="space-y-2">
-                            <div className="flex justify-between items-center">
-                              <span className="text-xs">AFFO Trajectory:</span>
-                              <Badge variant="outline" className="text-xs">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1">
+                              <span className="text-xs font-medium">AFFO Trajectory:</span>
+                              <Badge variant="outline" className="text-xs self-start sm:self-center">
                                 {predictiveData.distribution_forward_analysis.sustainability_drivers.affo_trajectory}
                               </Badge>
                             </div>
-                            <div className="flex justify-between items-center">
-                              <span className="text-xs">Coverage Trend:</span>
-                              <Badge variant="outline" className="text-xs">
+                            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1">
+                              <span className="text-xs font-medium">Coverage Trend:</span>
+                              <Badge variant="outline" className="text-xs self-start sm:self-center">
                                 {predictiveData.distribution_forward_analysis.sustainability_drivers.coverage_trend}
                               </Badge>
                             </div>
-                            <div className="flex justify-between items-center">
-                              <span className="text-xs">Taxable Income:</span>
-                              <Badge variant="outline" className="text-xs">
+                            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1">
+                              <span className="text-xs font-medium">Taxable Income:</span>
+                              <Badge variant="outline" className="text-xs self-start sm:self-center">
                                 {predictiveData.distribution_forward_analysis.sustainability_drivers.taxable_income_alignment}
                               </Badge>
                             </div>
-                            <div className="flex justify-between items-center">
-                              <span className="text-xs">Capital Priority:</span>
-                              <Badge variant="outline" className="text-xs">
+                            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1">
+                              <span className="text-xs font-medium">Capital Priority:</span>
+                              <Badge variant="outline" className="text-xs self-start sm:self-center">
                                 {predictiveData.distribution_forward_analysis.sustainability_drivers.capital_allocation_priority}
                               </Badge>
                             </div>
@@ -2254,28 +2255,28 @@ function REITEquityReportContent({
 
                         <div className="p-4 border rounded-lg bg-green-50">
                           <h5 className="font-semibold mb-3 text-green-800">REIT Factors</h5>
-                          <div className="space-y-2">
-                            <div className="flex justify-between items-center">
-                              <span className="text-xs">Source Mix:</span>
-                              <Badge variant="outline" className="text-xs">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1">
+                              <span className="text-xs font-medium">Source Mix:</span>
+                              <Badge variant="outline" className="text-xs self-start sm:self-center">
                                 {predictiveData.distribution_forward_analysis.reit_specific_factors.distribution_source_mix}
                               </Badge>
                             </div>
-                            <div className="flex justify-between items-center">
-                              <span className="text-xs">Tax Pressure:</span>
-                              <Badge variant="outline" className="text-xs">
+                            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1">
+                              <span className="text-xs font-medium">Tax Pressure:</span>
+                              <Badge variant="outline" className="text-xs self-start sm:self-center">
                                 {predictiveData.distribution_forward_analysis.reit_specific_factors.tax_distribution_pressure}
                               </Badge>
                             </div>
-                            <div className="flex justify-between items-center">
-                              <span className="text-xs">Special Risk:</span>
-                              <Badge variant="outline" className="text-xs">
+                            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1">
+                              <span className="text-xs font-medium">Special Risk:</span>
+                              <Badge variant="outline" className="text-xs self-start sm:self-center">
                                 {predictiveData.distribution_forward_analysis.reit_specific_factors.special_distribution_risk}
                               </Badge>
                             </div>
-                            <div className="flex justify-between items-center">
-                              <span className="text-xs">Payout Ratio:</span>
-                              <Badge variant="outline" className="text-xs">
+                            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1">
+                              <span className="text-xs font-medium">Payout Ratio:</span>
+                              <Badge variant="outline" className="text-xs self-start sm:self-center">
                                 {predictiveData.distribution_forward_analysis.reit_specific_factors.payout_ratio_sustainability}
                               </Badge>
                             </div>
@@ -2286,22 +2287,22 @@ function REITEquityReportContent({
                       {/* Distribution Mechanics */}
                       <div className="p-4 border rounded-lg bg-slate-50">
                         <h5 className="font-semibold mb-3 text-slate-800">Distribution Mechanics</h5>
-                        <div className="grid md:grid-cols-3 gap-4">
-                          <div className="flex justify-between items-center">
-                            <span className="text-sm">Payout Timing:</span>
-                            <Badge variant="outline">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1">
+                            <span className="text-sm font-medium">Payout Timing:</span>
+                            <Badge variant="outline" className="self-start sm:self-center">
                               {predictiveData.distribution_forward_analysis.reit_distribution_mechanics.typical_payout_timing}
                             </Badge>
                           </div>
-                          <div className="flex justify-between items-center">
-                            <span className="text-sm">Historical Volatility:</span>
-                            <Badge variant="outline">
+                          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1">
+                            <span className="text-sm font-medium">Historical Volatility:</span>
+                            <Badge variant="outline" className="self-start sm:self-center">
                               {predictiveData.distribution_forward_analysis.reit_distribution_mechanics.historical_volatility}
                             </Badge>
                           </div>
-                          <div className="flex justify-between items-center">
-                            <span className="text-sm">ROC Component:</span>
-                            <Badge variant="outline">
+                          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1">
+                            <span className="text-sm font-medium">ROC Component:</span>
+                            <Badge variant="outline" className="self-start sm:self-center">
                               {predictiveData.distribution_forward_analysis.reit_distribution_mechanics.roc_component_trend}
                             </Badge>
                           </div>
@@ -2464,7 +2465,7 @@ function REITEquityReportContent({
                     <BarChart3 className="h-6 w-6 text-indigo-600" />
                     REIT Viability Assessment
                   </h4>
-                  <Badge className={`text-lg px-4 py-2 ${getViabilityColor(thesisData.viability_assessment.tier)}`}>
+                  <Badge className={`text-base px-3 py-1.5 ${getViabilityColor(thesisData.viability_assessment.tier)}`}>
                     {thesisData.viability_assessment.tier} ({thesisData.viability_assessment.composite.toFixed(1)}/10)
                   </Badge>
                 </div>
