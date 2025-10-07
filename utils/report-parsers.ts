@@ -169,8 +169,8 @@ export interface GeneralEquityAnalysis {
   version: string;
 }
 
-// Management Credibility Analysis schema
-export interface ManagementCredibilityAnalysis {
+// General Equity Management Credibility Analysis schema
+export interface GeneralManagementCredibilityAnalysis {
   company: string;
   window: {
     start_fy: number;
@@ -184,6 +184,7 @@ export interface ManagementCredibilityAnalysis {
   credibility_assessment: {
     commitment_followthrough: Array<{
       commitment_year: number;
+      commitment_type?: string;
       commitment: string;
       subsequent_followup_years: number[];
       outcome_label: string;
@@ -250,6 +251,16 @@ export interface ManagementCredibilityAnalysis {
     composite_score: number;
     credibility_tier: string;
   };
+  features_for_downstream: {
+    followthrough_label: string;
+    tone_label: string;
+    disclosure_tier: string;
+    risk_candor_label: string;
+    strategy_pivot_intensity: string;
+    capital_allocation_alignment: string;
+    kpi_stability: string;
+    red_flag_pressure: string;
+  };
   ui_summaries: {
     one_liner: string;
     synopsis: string;
@@ -257,7 +268,123 @@ export interface ManagementCredibilityAnalysis {
     watch_items: string[];
     disclaimer: string;
   };
+  version: string;
 }
+
+// REIT Management Credibility Analysis schema
+export interface REITManagementCredibilityAnalysis {
+  company: string;
+  window: {
+    start_fy: number;
+    end_fy: number;
+    num_years: number;
+  };
+  coverage: {
+    years_received: number[];
+    notes: string[];
+  };
+  credibility_assessment: {
+    commitment_followthrough: Array<{
+      commitment_year: number;
+      commitment_type: string;
+      commitment: string;
+      subsequent_followup_years: number[];
+      outcome_label: string;
+      rationale: string;
+    }>;
+    tone_profile: {
+      tone_balance_label: string;
+      superlative_frequency_label: string;
+      guidance_style_label: string;
+      change_in_tone_label: string;
+      notes: string;
+    };
+    disclosure_hygiene: {
+      nareit_ffo_definition_clarity: string;
+      affo_definition_stability: string;
+      reconciliation_quality: string;
+      same_store_cohort_integrity: string;
+      impairment_restructure_clarity: string;
+      restatement_or_weakness_mentions: string;
+      segment_bridge_quality: string;
+    };
+    risk_candor: {
+      recurring_risks: Array<{
+        name: string;
+        recurrence_years: number[];
+        candor_label: string;
+        note: string;
+      }>;
+      realized_issues_acknowledged_label: string;
+    };
+    strategic_coherence: {
+      pivot_frequency_label: string;
+      rationalization_quality_label: string;
+      resegmentation_transparency_label: string;
+      same_store_definition_changes_label: string;
+      examples: string[];
+    };
+    capital_allocation_consistency: {
+      stated_priorities: string[];
+      behavior_alignment_label: string;
+      examples: string[];
+    };
+    metric_definition_stability: Array<{
+      metric: string;
+      stability_label: string;
+      notes: string;
+    }>;
+    distribution_policy_communication: {
+      cadence_label: string;
+      change_communication_label: string;
+      coverage_context_label: string;
+      notes: string;
+    };
+    red_flags: string[];
+    green_flags: string[];
+  };
+  classification: {
+    communication_style: string;
+    credibility_trend: string;
+    disclosure_quality_tier: string;
+    rationale: string;
+  };
+  scores: {
+    promise_follow_through: number;
+    tone_discipline: number;
+    disclosure_hygiene: number;
+    risk_candor: number;
+    strategic_coherence: number;
+    capital_allocation_consistency: number;
+    metric_definition_stability: number;
+    red_flags: number;
+    weights: number[];
+    composite_score: number;
+    credibility_tier: string;
+  };
+  features_for_downstream: {
+    followthrough_label: string;
+    tone_label: string;
+    disclosure_tier: string;
+    risk_candor_label: string;
+    strategy_pivot_intensity: string;
+    capital_allocation_alignment: string;
+    kpi_stability: string;
+    red_flag_pressure: string;
+    distribution_communication: string;
+  };
+  ui_summaries: {
+    one_liner: string;
+    synopsis: string;
+    bullet_highlights: string[];
+    watch_items: string[];
+    disclaimer: string;
+  };
+  version: string;
+}
+
+// Backward compatibility alias - defaults to REIT version for existing code
+export type ManagementCredibilityAnalysis = REITManagementCredibilityAnalysis;
 
 // Predictive Inference Analysis schema
 export interface PredictiveInferenceAnalysis {
@@ -352,6 +479,221 @@ export interface PredictiveInferenceAnalysis {
     watch_items: string[];
     disclaimer: string;
   };
+}
+
+// REIT Predictive Inference Analysis schema
+export interface REITPredictiveInferenceAnalysis {
+  company: string;
+  window: {
+    start_fy: number;
+    end_fy: number;
+    num_years: number;
+  };
+  coverage: {
+    years_received: number[];
+    notes: string[];
+  };
+  horizon_selection: {
+    type: string;
+    length: number;
+    reason: string;
+  };
+  assumption_journal: string[];
+  base_state: {
+    starting_point: {
+      ssnoi: string;
+      occupancy: string;
+      leasing_spreads: string;
+      affo: string;
+      risk_level: string;
+    };
+    recent_inflections: string[];
+  };
+  scenarios: Array<{
+    name: string;
+    outcomes: {
+      ssnoi: string;
+      occupancy: string;
+      leasing_spreads: string;
+      affo: string;
+      distribution_trajectory: string;
+      coverage_direction: string;
+      development_pace: string;
+      external_growth: string;
+      leverage: string;
+      liquidity_refi: string;
+      rate_sensitivity: string;
+      releasing_risk: string;
+      supply_pressure: string;
+    };
+    coarse_numeric_notes: {
+      ssnoi_range_pct: string | null;
+      leasing_spread_range_pct: string | null;
+      affo_change_direction: string | null;
+    };
+    key_drivers: string[];
+    leading_indicators: string[];
+    falsifiers: string[];
+    confidence: number;
+  }>;
+  uncertainty: {
+    dominant_unknowns: string[];
+    black_swan_notes: string | null;
+    confidence_check: string;
+  };
+  transition_map: Array<{
+    from: string;
+    to: string;
+    trigger: string;
+    early_signals: string[];
+  }>;
+  distribution_forward_analysis: {
+    applies: boolean;
+    base_outlook: string;
+    sustainability_drivers: {
+      affo_trajectory: string;
+      coverage_trend: string;
+      taxable_income_alignment: string;
+      capital_allocation_priority: string;
+    };
+    reit_specific_factors: {
+      distribution_source_mix: string;
+      tax_distribution_pressure: string;
+      special_distribution_risk: string;
+      payout_ratio_sustainability: string;
+    };
+    scenario_differentiation: {
+      upside_distribution_case: string | null;
+      downside_distribution_risk: string | null;
+    };
+    policy_inflection_signals: string[];
+    management_signaling: {
+      distribution_commitment_strength: string;
+      recent_messaging_tone: string;
+      coverage_target_guidance: string | null;
+    };
+    reit_distribution_mechanics: {
+      typical_payout_timing: string;
+      historical_volatility: string;
+      roc_component_trend: string;
+    };
+    notes: string | null;
+  };
+  features_for_downstream: {
+    directional_tilt: string;
+    confidence_bucket: string;
+    key_drivers_top3: string[];
+    key_falsifiers_top3: string[];
+    watchlist_metrics: string[];
+  };
+  ui_summaries: {
+    one_liner: string;
+    synopsis: string;
+    bullet_highlights: string[];
+    watch_items: string[];
+    disclaimer: string;
+  };
+  version: string;
+}
+
+// REIT Business Thesis Analysis schema
+export interface REITBusinessThesisAnalysis {
+  company: string;
+  window: {
+    start_fy: number;
+    end_fy: number;
+    num_years: number;
+  };
+  coverage: {
+    years_received: number[];
+    source_versions: {
+      multi_year: string;
+      management: string;
+      predictive: string;
+    };
+    warnings: string[];
+  };
+  consensus_map: {
+    aligned_themes: string[];
+    tensions: Array<{
+      topic: string;
+      positions: {
+        multi_year: string;
+        management: string;
+        predictive: string;
+      };
+      diagnosis: string;
+    }>;
+    missing_info: string[];
+  };
+  reit_thesis: {
+    thesis_statement: string;
+    portfolio_engine: {
+      noi_drivers: string[];
+      constraints: string[];
+    };
+    value_creation_drivers: string[];
+    fragilities: string[];
+    capital_allocation_model: {
+      development_discipline: string;
+      acquisition_selectivity: string;
+      capital_recycling: string;
+      distribution_sustainability: string;
+      notes: string;
+    };
+  };
+  viability_assessment: {
+    tier: string;
+    subscores: {
+      portfolio_durability: number;
+      execution_quality: number;
+      financial_resilience: number;
+      risk_balance: number;
+      governance_quality: number;
+    };
+    weights: number[];
+    composite: number;
+    rationale: string;
+  };
+  agreement: {
+    alignment_score: number;
+    areas_of_agreement: string[];
+    areas_of_divergence: string[];
+  };
+  scenarios_bridge: {
+    base_path: string;
+    upside_falsifiers: string[];
+    downside_falsifiers: string[];
+  };
+  watchlist: {
+    leading_indicators: string[];
+    early_warnings: string[];
+    data_gaps: string[];
+  };
+  transition_triggers: Array<{
+    event: string;
+    interpretation: string;
+    expected_effect: string;
+    thesis_update_rule: string;
+  }>;
+  contribution_breakdown: {
+    weights: {
+      multi_year: number;
+      management: number;
+      predictive: number;
+    };
+    components: {
+      MY_comp: number;
+      MG_comp: number;
+      PR_comp: number;
+    };
+    viability_composite: number;
+    notes: string;
+  };
+  disclaimer: string;
+  version: string;
+  one_liner: string;
+  synopsis: string;
 }
 
 // Business Thesis Analysis schema
@@ -509,9 +851,9 @@ Overall Grade: ${analysis.grading.letter} (Composite Score: ${analysis.scores.co
 ${analysis.ui_summaries.synopsis}`;
   }
 
-  // Handle ManagementCredibilityAnalysis schema (management_credibility)
+  // Handle ManagementCredibilityAnalysis schema (management_credibility) - both General and REIT versions
   if (dataObj.company && dataObj.window && dataObj.credibility_assessment && dataObj.scores) {
-    const analysis = data as ManagementCredibilityAnalysis;
+    const analysis = data as GeneralManagementCredibilityAnalysis | REITManagementCredibilityAnalysis;
     return `Management credibility assessment of ${analysis.company} covering ${analysis.window.num_years} years (FY${analysis.window.start_fy}-${analysis.window.end_fy}).
 
 Credibility Tier: ${analysis.scores.credibility_tier}

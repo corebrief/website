@@ -15,6 +15,8 @@ import {
   type ParsedReport
 } from '@/utils/report-parsers';
 import GeneralEquityReport from '@/components/general-equity-report';
+import REITEquityReport from '@/components/reit-equity-report';
+import MLPEquityReport from '@/components/mlp-equity-report';
 import { Search, Filter, Eye, ShoppingCart, Clock } from 'lucide-react';
 
 interface ReportsDashboardProps {
@@ -181,6 +183,10 @@ export default function ReportsDashboard({ hasFullAccess }: ReportsDashboardProp
         {/* Render appropriate report component based on classification */}
         {selectedReport.classification === 'general' ? (
           <GeneralEquityReport report={selectedReport} />
+        ) : selectedReport.classification === 'reit' ? (
+          <REITEquityReport report={selectedReport} />
+        ) : selectedReport.classification === 'mlp' ? (
+          <MLPEquityReport report={selectedReport} />
         ) : (
           <div className="grid gap-6">
             {Object.entries(selectedReport.sections).map(([key, section]) => (

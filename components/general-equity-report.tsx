@@ -7,7 +7,7 @@ import { Progress } from '@/components/ui/progress';
 import { 
   type ParsedReport,
   type GeneralEquityAnalysis,
-  type ManagementCredibilityAnalysis,
+  type GeneralManagementCredibilityAnalysis,
   type PredictiveInferenceAnalysis,
   type BusinessThesisAnalysis
 } from '@/utils/report-parsers';
@@ -74,7 +74,7 @@ export default function GeneralEquityReport({ report }: GeneralEquityReportProps
 
   // Extract structured data from sections
   const multiYearData = report.sections.multi_year_analysis.structured_data as GeneralEquityAnalysis | undefined;
-  const managementData = report.sections.management_credibility.structured_data as ManagementCredibilityAnalysis | undefined;
+  const managementData = report.sections.management_credibility.structured_data as GeneralManagementCredibilityAnalysis | undefined;
   const predictiveData = report.sections.predictive_inference.structured_data as PredictiveInferenceAnalysis | undefined;
   const thesisData = report.sections.final_thesis.structured_data as BusinessThesisAnalysis | undefined;
 
