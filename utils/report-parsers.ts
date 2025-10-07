@@ -1016,6 +1016,175 @@ export function getClassificationDisplayName(classification: string): string {
 /**
  * Get classification color for UI display
  */
+// MLP Multi-Year Analysis Interface
+export interface MLPMultiYearAnalysis {
+  company: string;
+  window: {
+    start_fy: number;
+    end_fy: number;
+    num_years: number;
+  };
+  coverage: {
+    years_received: number[];
+    notes: string[];
+  };
+  semantic_themes: {
+    throughput_trend: {
+      label: string;
+      assets: string[];
+      persistence_years: number;
+      rationale: string;
+    };
+    utilization_trend: {
+      label: string;
+      notes: string;
+    };
+    fee_mix_contracts: {
+      fee_based_exposure_label: string;
+      take_or_pay_mvc_presence: string;
+      average_contract_tenor_label: string;
+      commodity_exposure_comment: string;
+    };
+    counterparty_profile: {
+      investment_grade_exposure_label: string;
+      top_customer_concentration_label: string;
+      notes: string;
+    };
+    asset_footprint_basin: Array<{
+      basin_or_region: string;
+      importance_label: string;
+    }>;
+    dcf_coverage_character: {
+      label: string;
+      stability_comment: string;
+    };
+    leverage_liquidity: {
+      leverage_label: string;
+      liquidity_comment: string;
+      rate_exposure_label: string;
+    };
+    external_growth_recycling: {
+      activity_label: string;
+      modes: string[];
+      discipline_note: string;
+    };
+    competitive_posture: {
+      label: string;
+      drivers: string[];
+    };
+    structure_notes: {
+      idrs_status: string;
+      c_corp_conversion_mentions: string;
+      notes: string;
+    };
+    risk_register: Array<{
+      name: string;
+      recurrence_years: number[];
+      severity: string;
+      note: string;
+    }>;
+  };
+  timeseries_semantic: {
+    volumes_by_year: Array<{
+      year: number;
+      label: string;
+    }>;
+    fee_mix_by_year: Array<{
+      year: number;
+      label: string;
+    }>;
+    distribution_policy_by_year: Array<{
+      year: number;
+      label: string;
+    }>;
+  };
+  optional_numerics: {
+    mentioned_throughput: Array<{
+      asset: string;
+      unit: string;
+      value_range: string | null;
+    }>;
+    mentioned_fee_based_pct: number | null;
+    mentioned_take_or_pay_mvc_pct: number | null;
+    mentioned_dcf_coverage_ratio: number | null;
+    mentioned_leverage_debt_to_ebitda: number | null;
+    capex_split_notes: string | null;
+    notes: string | null;
+  };
+  classification: {
+    primary: string;
+    secondary: string[];
+    mlp_profile_tags: string[];
+    rationale: string;
+  };
+  scores: {
+    throughput_stability_utilization: number;
+    fee_mix_contract_quality: number;
+    dcf_stability_coverage: number;
+    leverage_liquidity: number;
+    counterparty_quality_concentration: number;
+    asset_footprint_basin_quality: number;
+    external_growth_discipline: number;
+    risk_overhangs: number;
+    weights: number[];
+    composite_score: number;
+  };
+  grading: {
+    letter: string;
+    mapping_note: string;
+  };
+  distribution_analysis: {
+    applies: boolean;
+    cadence: string | null;
+    policy_characterization: string;
+    sustainability_signals: {
+      dcf_coverage: string;
+      policy_consistency: string;
+      management_commitment: string;
+    };
+    distribution_actions: Array<{
+      year: number;
+      action: string;
+      context: string;
+    }>;
+    policy_philosophy: string;
+    yield_profile: {
+      characterization: string;
+      trend: string;
+    };
+    coverage_metrics: {
+      dcf_coverage_bucket: string;
+      coverage_trend: string;
+    };
+    mlp_specific_factors: {
+      idrs_elimination_mentioned: boolean;
+      gp_lp_simplification: string;
+      c_corp_conversion_mentions: string;
+    };
+    sustainability_factors: string[];
+    notes: string | null;
+  };
+  features_for_downstream: {
+    throughput_direction: string;
+    fee_based_exposure: string;
+    take_or_pay_presence: string;
+    contract_tenor_bucket: string;
+    counterparty_quality: string;
+    leverage_bucket: string;
+    distribution_status: string;
+    growth_capex_intensity: string;
+    risk_highlights: string[];
+  };
+  ui_summaries: {
+    one_liner: string;
+    synopsis: string;
+    bullet_highlights: string[];
+    watch_items: string[];
+    disclaimer: string;
+  };
+  version: string;
+}
+
 export function getClassificationColor(classification: string): string {
   switch (classification) {
     case 'reit':
