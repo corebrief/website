@@ -15,7 +15,6 @@ import {
   CheckCircle,
   XCircle,
   ChevronDown,
-  ChevronRight,
   Zap,
   DollarSign,
   Home,
