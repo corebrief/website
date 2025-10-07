@@ -10,17 +10,11 @@ import {
   Shield,
   Brain,
   Building2,
-  Eye,
   Gauge,
   DollarSign,
   MapPin,
   AlertTriangle,
-  Target,
-  Activity,
-  BarChart3,
-  PieChart,
-  Calendar,
-  Fuel
+  Activity
 } from 'lucide-react';
 import { type ParsedReport, type MLPMultiYearAnalysis } from '@/utils/report-parsers';
 
@@ -116,21 +110,6 @@ interface MLPReportProps {
   report: ParsedReport;
 }
 
-// Helper function to get MLP profile tag colors
-function getMLPProfileColor(tag: string): string {
-  const colorMap: Record<string, string> = {
-    'Diversified Midstream': 'bg-blue-100 text-blue-800',
-    'NGL Pipeline': 'bg-purple-100 text-purple-800',
-    'Fractionation': 'bg-pink-100 text-pink-800',
-    'Storage & Terminalling': 'bg-gray-100 text-gray-800',
-    'Marine/Export': 'bg-teal-100 text-teal-800',
-    'Long-Haul Gas Pipeline': 'bg-green-100 text-green-800',
-    'Gathering & Processing': 'bg-indigo-100 text-indigo-800',
-    'Long-Haul Crude Pipeline': 'bg-yellow-100 text-yellow-800',
-    'Specialty': 'bg-orange-100 text-orange-800'
-  };
-  return colorMap[tag] || 'bg-slate-100 text-slate-800';
-}
 
 // Helper function to get grade color
 function getGradeColor(letter: string): string {
@@ -178,8 +157,6 @@ function MLPEquityReportContent({
     }
   };
 
-  const company = multiYearData?.company || managementData?.company || predictiveData?.company || thesisData?.company || 'MLP Analysis';
-  const yearsRange = multiYearData ? `FY${multiYearData.window.start_fy}-${multiYearData.window.end_fy}` : '';
 
   return (
     <div className="w-full space-y-8">
@@ -789,7 +766,7 @@ function MLPEquityReportContent({
                     <Card className="border-green-200">
                       <CardHeader>
                         <h4 className="font-semibold text-green-700 flex items-center gap-2">
-                          <Target className="h-5 w-5" />
+                          <Shield className="h-5 w-5" />
                           Green Flags
                         </h4>
                       </CardHeader>
