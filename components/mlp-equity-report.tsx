@@ -3,197 +3,23 @@
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
 import {
   TrendingUp,
   Shield,
   Brain,
   Building2,
-  Eye,
-  ChevronDown,
-  ChevronUp,
-  Gauge,
-  DollarSign,
-  MapPin,
   AlertTriangle,
+  Gauge,
   Target,
-  Activity,
-  BarChart3,
-  PieChart,
-  Calendar,
-  Fuel
+  FileText,
+  Award
 } from 'lucide-react';
-import { type ParsedReport } from '@/utils/report-parsers';
+import { Progress } from '@/components/ui/progress';
+import { type ParsedReport, type MLPMultiYearAnalysis } from '@/utils/report-parsers';
+import MLPEquityAnalysisComponent from './mlp-equity-analysis';
 
-// MLP Multi-Year Data Interface
-interface MLPMultiYearData {
-  company: string;
-  window: {
-    start_fy: number;
-    end_fy: number;
-    num_years: number;
-  };
-  coverage: {
-    years_received: number[];
-    notes: string[];
-  };
-  semantic_themes: {
-    throughput_trend: {
-      label: string;
-      assets: string[];
-      persistence_years: number;
-      rationale: string;
-    };
-    utilization_trend: {
-      label: string;
-      notes: string;
-    };
-    fee_mix_contracts: {
-      fee_based_exposure_label: string;
-      take_or_pay_mvc_presence: string;
-      average_contract_tenor_label: string;
-      commodity_exposure_comment: string;
-    };
-    counterparty_profile: {
-      investment_grade_exposure_label: string;
-      top_customer_concentration_label: string;
-      notes: string;
-    };
-    asset_footprint_basin: Array<{
-      basin_or_region: string;
-      importance_label: string;
-    }>;
-    dcf_coverage_character: {
-      label: string;
-      stability_comment: string;
-    };
-    leverage_liquidity: {
-      leverage_label: string;
-      liquidity_comment: string;
-      rate_exposure_label: string;
-    };
-    external_growth_recycling: {
-      activity_label: string;
-      modes: string[];
-      discipline_note: string;
-    };
-    competitive_posture: {
-      label: string;
-      drivers: string[];
-    };
-    structure_notes: {
-      idrs_status: string;
-      c_corp_conversion_mentions: string;
-      notes: string;
-    };
-    risk_register: Array<{
-      name: string;
-      recurrence_years: number[];
-      severity: string;
-      note: string;
-    }>;
-  };
-  timeseries_semantic: {
-    volumes_by_year: Array<{
-      year: number;
-      label: string;
-    }>;
-    fee_mix_by_year: Array<{
-      year: number;
-      label: string;
-    }>;
-    distribution_policy_by_year: Array<{
-      year: number;
-      label: string;
-    }>;
-  };
-  optional_numerics: {
-    mentioned_throughput: Array<{
-      asset: string;
-      unit: string;
-      value_range: string | null;
-    }>;
-    mentioned_fee_based_pct: number | null;
-    mentioned_take_or_pay_mvc_pct: number | null;
-    mentioned_dcf_coverage_ratio: number | null;
-    mentioned_leverage_debt_to_ebitda: number | null;
-    capex_split_notes: string | null;
-    notes: string;
-  };
-  classification: {
-    primary: string;
-    secondary: string[];
-    mlp_profile_tags: string[];
-    rationale: string;
-  };
-  scores: {
-    throughput_stability_utilization: number;
-    fee_mix_contract_quality: number;
-    dcf_stability_coverage: number;
-    leverage_liquidity: number;
-    counterparty_quality_concentration: number;
-    asset_footprint_basin_quality: number;
-    external_growth_discipline: number;
-    risk_overhangs: number;
-    weights: number[];
-    composite_score: number;
-  };
-  grading: {
-    letter: string;
-    mapping_note: string;
-  };
-  distribution_analysis: {
-    applies: boolean;
-    cadence: string | null;
-    policy_characterization: string;
-    sustainability_signals: {
-      dcf_coverage: string;
-      policy_consistency: string;
-      management_commitment: string;
-    };
-    distribution_actions: Array<{
-      year: number;
-      action: string;
-      context: string;
-    }>;
-    policy_philosophy: string;
-    yield_profile: {
-      characterization: string;
-      trend: string;
-    };
-    coverage_metrics: {
-      dcf_coverage_bucket: string;
-      coverage_trend: string;
-    };
-    mlp_specific_factors: {
-      idrs_elimination_mentioned: boolean;
-      gp_lp_simplification: string;
-      c_corp_conversion_mentions: string;
-    };
-    sustainability_factors: string[];
-    notes: string | null;
-  };
-  features_for_downstream: {
-    throughput_direction: string;
-    fee_based_exposure: string;
-    take_or_pay_presence: string;
-    contract_tenor_bucket: string;
-    counterparty_quality: string;
-    leverage_bucket: string;
-    distribution_status: string;
-    growth_capex_intensity: string;
-    risk_highlights: string[];
-  };
-  ui_summaries: {
-    one_liner: string;
-    synopsis: string;
-    bullet_highlights: string[];
-    watch_items: string[];
-    disclaimer: string;
-  };
-  version: string;
-}
+// Use the centralized interface
+type MLPMultiYearData = MLPMultiYearAnalysis;
 
 // MLP Management Data Interface
 interface MLPManagementData {
@@ -272,12 +98,6 @@ interface MLPManagementData {
     red_flags: string[];
     green_flags: string[];
   };
-  classification: {
-    communication_style: string;
-    credibility_trend: string;
-    disclosure_quality_tier: string;
-    rationale: string;
-  };
   scores: {
     promise_follow_through: number;
     tone_discipline: number;
@@ -303,6 +123,12 @@ interface MLPManagementData {
     distribution_communication: string;
     idrs_status: string;
   };
+  classification: {
+    communication_style: string;
+    credibility_trend: string;
+    disclosure_quality_tier: string;
+    rationale: string;
+  };
   ui_summaries: {
     one_liner: string;
     synopsis: string;
@@ -321,81 +147,18 @@ interface MLPPredictiveData {
     end_fy: number;
     num_years: number;
   };
-  coverage: {
-    years_received: number[];
-    notes: string[];
-  };
-  horizon_selection: {
-    type: string;
-    length: number;
-    reason: string;
-  };
-  assumption_journal: string[];
-  base_state: {
-    starting_point: {
-      throughput: string;
-      utilization: string;
-      fee_based_exposure: string;
-      contract_quality: string;
-      dcf: string;
-      risk_level: string;
-    };
-    recent_inflections: string[];
-  };
   scenarios: Array<{
     name: string;
-    outcomes: {
-      throughput: string;
-      utilization: string;
-      fee_based_exposure: string;
-      contract_quality: string;
-      dcf: string;
-      distribution_trajectory: string;
-      coverage_direction: string;
-      capex_mix: string;
-      leverage: string;
-      liquidity_refi: string;
-      rate_exposure: string;
-      risk_level: string;
-      external_growth: string;
-    };
-    numeric_context: string | null;
-    key_drivers: string[];
-    leading_indicators: string[];
-    falsifiers: string[];
-    confidence: number;
+    probability: number;
+    description: string;
   }>;
-  uncertainty: {
-    dominant_unknowns: string[];
-    black_swan_notes: string | null;
-    confidence_check: string;
-  };
-  transition_map: Array<{
-    from: string;
-    to: string;
-    trigger: string;
-    early_signals: string[];
-  }>;
-  distribution_outlook: {
-    applies: boolean;
-    trajectory: string;
-    key_factors: string[];
-    structure_notes: string | null;
-    policy_signals: string[];
-  };
-  features_for_downstream: {
-    directional_tilt: string;
-    confidence_bucket: string;
-    key_drivers_top3: string[];
-    key_falsifiers_top3: string[];
-    watchlist_metrics: string[];
-  };
+  key_drivers: string[];
+  leading_indicators: string[];
+  thesis_falsifiers: string[];
   ui_summaries: {
-    one_liner: string;
-    synopsis: string;
     bullet_highlights: string[];
     watch_items: string[];
-    disclaimer: string;
+    synopsis: string;
   };
   version: string;
 }
@@ -408,51 +171,6 @@ interface MLPThesisData {
     end_fy: number;
     num_years: number;
   };
-  coverage: {
-    years_received: number[];
-    source_versions: {
-      multi_year: string;
-      management: string;
-      predictive: string;
-    };
-    warnings: string[];
-  };
-  consensus_map: {
-    aligned_themes: string[];
-    tensions: Array<{
-      topic: string;
-      positions: {
-        multi_year: string;
-        management: string;
-        predictive: string;
-      };
-      diagnosis: string;
-    }>;
-    missing_info: string[];
-  };
-  mlp_thesis: {
-    thesis_statement: string;
-    throughput_engine: {
-      throughput_drivers: string[];
-      constraints: string[];
-    };
-    value_creation_drivers: string[];
-    fragilities: string[];
-    capital_allocation_model: {
-      growth_capex_discipline: string;
-      mna_selectivity: string;
-      dropdowns_usage: string;
-      leverage_policy: string;
-      distribution_sustainability: string;
-      notes: string;
-    };
-    structural_position: {
-      moat_label: string;
-      switching_costs: string;
-      regulatory_posture: string;
-      notes: string;
-    };
-  };
   viability_assessment: {
     tier: string;
     subscores: {
@@ -462,79 +180,38 @@ interface MLPThesisData {
       risk_balance: number;
       governance_quality: number;
     };
-    weights: number[];
-    composite: number;
-    rationale: string;
   };
-  agreement: {
-    alignment_score: number;
-    areas_of_agreement: string[];
-    areas_of_divergence: string[];
+  thesis_statement: string;
+  ui_summaries: {
+    synopsis: string;
   };
-  scenarios_bridge: {
-    base_path: string;
-    upside_falsifiers: string[];
-    downside_falsifiers: string[];
-  };
-  watchlist: {
-    leading_indicators: string[];
-    early_warnings: string[];
-    data_gaps: string[];
-  };
-  transition_triggers: Array<{
-    event: string;
-    interpretation: string;
-    expected_effect: string;
-    thesis_update_rule: string;
-  }>;
-  contribution_breakdown: {
-    weights: {
-      multi_year: number;
-      management: number;
-      predictive: number;
-    };
-    components: {
-      MY_comp: number;
-      MG_comp: number;
-      PR_comp: number;
-    };
-    viability_composite: number;
-    notes: string;
-  };
-  disclaimer: string;
   version: string;
-  one_liner: string;
-  synopsis: string;
 }
 
 interface MLPReportProps {
   report: ParsedReport;
 }
 
-// Helper function to get color for MLP profile tags
-function getMLPProfileColor(tag: string): string {
-  const colorMap: Record<string, string> = {
-    'Gathering & Processing': 'bg-blue-100 text-blue-800',
-    'Long-Haul Crude Pipeline': 'bg-amber-100 text-amber-800',
-    'Long-Haul Gas Pipeline': 'bg-green-100 text-green-800',
-    'NGL Pipeline': 'bg-purple-100 text-purple-800',
-    'Fractionation': 'bg-pink-100 text-pink-800',
-    'Storage & Terminalling': 'bg-gray-100 text-gray-800',
-    'Marine/Export': 'bg-teal-100 text-teal-800',
-    'LNG-Adjacent': 'bg-cyan-100 text-cyan-800',
-    'Diversified Midstream': 'bg-indigo-100 text-indigo-800',
-    'Specialty': 'bg-orange-100 text-orange-800'
-  };
-  return colorMap[tag] || 'bg-slate-100 text-slate-800';
-}
-
 // Helper function to get grade color
 function getGradeColor(letter: string): string {
-  if (letter.startsWith('A')) return 'text-green-600 bg-green-50';
-  if (letter.startsWith('B')) return 'text-blue-600 bg-blue-50';
-  if (letter.startsWith('C')) return 'text-amber-600 bg-amber-50';
-  return 'text-red-600 bg-red-50';
+  if (letter.startsWith('A')) return 'bg-green-100 text-green-800 border-green-300';
+  if (letter.startsWith('B')) return 'bg-blue-100 text-blue-800 border-blue-300';
+  if (letter.startsWith('C')) return 'bg-yellow-100 text-yellow-800 border-yellow-300';
+  return 'bg-red-100 text-red-800 border-red-300';
 }
+
+// Helper function to get credibility tier color
+function getCredibilityTierColor(tier: string): string {
+  switch (tier.toLowerCase()) {
+    case 'high': return 'bg-green-100 text-green-800 border-green-300';
+    case 'medium': return 'bg-yellow-100 text-yellow-800 border-yellow-300';
+    case 'low': return 'bg-red-100 text-red-800 border-red-300';
+    default: return 'bg-gray-100 text-gray-800 border-gray-300';
+  }
+}
+
+// Define section keys type
+type SectionKey = 'multi_year' | 'management' | 'predictive' | 'thesis';
 
 // Main content component for structured MLP data
 function MLPEquityReportContent({ 
@@ -548,512 +225,161 @@ function MLPEquityReportContent({
   predictiveData: MLPPredictiveData | null;
   thesisData: MLPThesisData | null;
 }) {
-  const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set());
+  const [expandedSections, setExpandedSections] = useState<Set<SectionKey>>(new Set());
 
-  const toggleSection = (section: string) => {
-    const newExpanded = new Set<string>();
-    if (!expandedSections.has(section)) {
-      newExpanded.add(section);
+  const toggleSection = (section: SectionKey) => {
+    if (expandedSections.has(section)) {
+      // If clicking the currently open section, close it
+      setExpandedSections(new Set());
+    } else {
+      // If clicking a different section, show only that section
+      setExpandedSections(new Set([section]));
     }
-    setExpandedSections(newExpanded);
   };
 
-  const company = multiYearData?.company || managementData?.company || predictiveData?.company || thesisData?.company || 'MLP Analysis';
-  const yearsRange = multiYearData ? `FY${multiYearData.window.start_fy}-${multiYearData.window.end_fy}` : '';
-
   return (
-    <div className="max-w-7xl mx-auto space-y-6">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <h2 className="text-2xl font-bold">{company}</h2>
-          <Badge className="bg-purple-100 text-purple-800">MLP</Badge>
-          {yearsRange && <span className="text-muted-foreground">({yearsRange})</span>}
-        </div>
-        
-        {multiYearData && (
-          <div className="flex items-center gap-4">
-            <div className={`px-3 py-1 rounded-full text-sm font-medium ${getGradeColor(multiYearData.grading.letter)}`}>
-              Historical Performance Grade: {multiYearData.grading.letter}
+    <div className="w-full space-y-8">
+      {/* Mobile-Responsive Navigation Header */}
+      <div className="sticky top-0 z-10 bg-white/95 backdrop-blur-sm border-b border-slate-200 mb-4">
+        <div className="py-3 px-4">
+          {/* Title - Always on top */}
+          <div className="text-center lg:text-left mb-3 lg:mb-0">
+            <h2 className="text-base font-semibold text-slate-800">Business Analysis Framework</h2>
+            <div className="text-xs text-slate-500">
+              {multiYearData?.window?.num_years || 5} Years • Filing Year {multiYearData?.window?.start_fy || 'XXXX'}–{multiYearData?.window?.end_fy || 'XXXX'}
             </div>
           </div>
-        )}
+          
+          {/* Desktop: Horizontal Layout */}
+          <div className="hidden lg:flex items-center justify-end gap-2">
+            <button 
+              className={`px-3 py-2 text-xs rounded-md border transition-all duration-200 ${
+                expandedSections.has('multi_year') 
+                  ? 'bg-blue-500 text-white border-blue-500 shadow-md' 
+                  : 'bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100 hover:shadow-sm'
+              }`}
+              onClick={() => toggleSection('multi_year')}
+            >
+              <div className="text-center">
+                <div className="font-medium">Multi-Year Analysis</div>
+                {!expandedSections.has('multi_year') && <div className="text-[10px] opacity-75 mt-0.5">Click to View</div>}
+              </div>
+            </button>
+            <button 
+              className={`px-3 py-2 text-xs rounded-md border transition-all duration-200 ${
+                expandedSections.has('management') 
+                  ? 'bg-emerald-500 text-white border-emerald-500 shadow-md' 
+                  : 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100 hover:shadow-sm'
+              }`}
+              onClick={() => toggleSection('management')}
+            >
+              <div className="text-center">
+                <div className="font-medium">Management Assessment</div>
+                {!expandedSections.has('management') && <div className="text-[10px] opacity-75 mt-0.5">Click to View</div>}
+              </div>
+            </button>
+            <button 
+              className={`px-3 py-2 text-xs rounded-md border transition-all duration-200 ${
+                expandedSections.has('predictive') 
+                  ? 'bg-amber-500 text-white border-amber-500 shadow-md' 
+                  : 'bg-amber-50 text-amber-700 border-amber-200 hover:bg-amber-100 hover:shadow-sm'
+              }`}
+              onClick={() => toggleSection('predictive')}
+            >
+              <div className="text-center">
+                <div className="font-medium">Predictive Inference</div>
+                {!expandedSections.has('predictive') && <div className="text-[10px] opacity-75 mt-0.5">Click to View</div>}
+              </div>
+            </button>
+            <div className="text-slate-400 text-xs px-1">→</div>
+            <button 
+              className={`px-3 py-2 text-xs rounded-md border-2 transition-all duration-200 font-medium ${
+                expandedSections.has('thesis') 
+                  ? 'bg-orange-500 text-white border-orange-500 shadow-md' 
+                  : 'bg-orange-50 text-orange-700 border-orange-300 hover:bg-orange-100 hover:shadow-sm'
+              }`}
+              onClick={() => toggleSection('thesis')}
+            >
+              <div className="text-center">
+                <div className="font-semibold">Business Thesis</div>
+                {!expandedSections.has('thesis') && <div className="text-[10px] opacity-75 mt-0.5">Click to View</div>}
+              </div>
+            </button>
+          </div>
+
+          {/* Mobile: Grid Layout */}
+          <div className="lg:hidden grid grid-cols-2 gap-2">
+            <button 
+              className={`px-3 py-3 text-xs rounded-md border transition-all duration-200 ${
+                expandedSections.has('multi_year') 
+                  ? 'bg-blue-500 text-white border-blue-500 shadow-md' 
+                  : 'bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100'
+              }`}
+              onClick={() => toggleSection('multi_year')}
+            >
+              <div className="text-center">
+                <div className="font-medium">Multi-Year</div>
+                {!expandedSections.has('multi_year') && <div className="text-[10px] opacity-75 mt-1">Tap to View</div>}
+              </div>
+            </button>
+            <button 
+              className={`px-3 py-3 text-xs rounded-md border transition-all duration-200 ${
+                expandedSections.has('management') 
+                  ? 'bg-emerald-500 text-white border-emerald-500 shadow-md' 
+                  : 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100'
+              }`}
+              onClick={() => toggleSection('management')}
+            >
+              <div className="text-center">
+                <div className="font-medium">Management</div>
+                {!expandedSections.has('management') && <div className="text-[10px] opacity-75 mt-1">Tap to View</div>}
+              </div>
+            </button>
+            <button 
+              className={`px-3 py-3 text-xs rounded-md border transition-all duration-200 ${
+                expandedSections.has('predictive') 
+                  ? 'bg-amber-500 text-white border-amber-500 shadow-md' 
+                  : 'bg-amber-50 text-amber-700 border-amber-200 hover:bg-amber-100'
+              }`}
+              onClick={() => toggleSection('predictive')}
+            >
+              <div className="text-center">
+                <div className="font-medium">Predictive</div>
+                {!expandedSections.has('predictive') && <div className="text-[10px] opacity-75 mt-1">Tap to View</div>}
+              </div>
+            </button>
+            <button 
+              className={`px-3 py-3 text-xs rounded-md border-2 transition-all duration-200 font-medium ${
+                expandedSections.has('thesis') 
+                  ? 'bg-orange-500 text-white border-orange-500 shadow-md' 
+                  : 'bg-orange-50 text-orange-700 border-orange-300 hover:bg-orange-100'
+              }`}
+              onClick={() => toggleSection('thesis')}
+            >
+              <div className="text-center">
+                <div className="font-semibold">Business Thesis</div>
+                {!expandedSections.has('thesis') && <div className="text-[10px] opacity-75 mt-1">Tap to View</div>}
+              </div>
+            </button>
+          </div>
+        </div>
       </div>
-
-      {/* MLP Profile Tags */}
-      {multiYearData && multiYearData.classification.mlp_profile_tags.length > 0 && (
-        <div className="flex flex-wrap gap-2">
-          {multiYearData.classification.mlp_profile_tags.map((tag, index) => (
-            <Badge key={index} className={getMLPProfileColor(tag)}>
-              {tag}
-            </Badge>
-          ))}
-        </div>
-      )}
-
-      {/* Action Buttons */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-        <Button
-          onClick={() => toggleSection('multi_year')}
-          variant={expandedSections.has('multi_year') ? 'default' : 'outline'}
-          className="h-auto p-4 justify-start"
-        >
-          <div className="flex items-center gap-3">
-            <TrendingUp className="h-5 w-5 text-blue-600" />
-            <div className="text-left">
-              <div className="font-medium">Multi-Year Analysis</div>
-              <div className="text-xs text-muted-foreground">Operational Trends</div>
-            </div>
-          </div>
-          {expandedSections.has('multi_year') ? 
-            <ChevronUp className="h-4 w-4 ml-auto" /> : 
-            <ChevronDown className="h-4 w-4 ml-auto" />
-          }
-        </Button>
-
-        <Button
-          onClick={() => toggleSection('management')}
-          variant={expandedSections.has('management') ? 'default' : 'outline'}
-          className="h-auto p-4 justify-start"
-        >
-          <div className="flex items-center gap-3">
-            <Shield className="h-5 w-5 text-emerald-600" />
-            <div className="text-left">
-              <div className="font-medium">Management Assessment</div>
-              <div className="text-xs text-muted-foreground">Credibility Analysis</div>
-            </div>
-          </div>
-          {expandedSections.has('management') ? 
-            <ChevronUp className="h-4 w-4 ml-auto" /> : 
-            <ChevronDown className="h-4 w-4 ml-auto" />
-          }
-        </Button>
-
-        <Button
-          onClick={() => toggleSection('predictive')}
-          variant={expandedSections.has('predictive') ? 'default' : 'outline'}
-          className="h-auto p-4 justify-start"
-        >
-          <div className="flex items-center gap-3">
-            <Brain className="h-5 w-5 text-amber-600" />
-            <div className="text-left">
-              <div className="font-medium">Predictive Inference</div>
-              <div className="text-xs text-muted-foreground">Scenario Analysis</div>
-            </div>
-          </div>
-          {expandedSections.has('predictive') ? 
-            <ChevronUp className="h-4 w-4 ml-auto" /> : 
-            <ChevronDown className="h-4 w-4 ml-auto" />
-          }
-        </Button>
-
-        <Button
-          onClick={() => toggleSection('thesis')}
-          variant={expandedSections.has('thesis') ? 'default' : 'outline'}
-          className="h-auto p-4 justify-start"
-        >
-          <div className="flex items-center gap-3">
-            <Building2 className="h-5 w-5 text-orange-600" />
-            <div className="text-left">
-              <div className="font-medium">Business Thesis</div>
-              <div className="text-xs text-muted-foreground">Synthesis</div>
-            </div>
-          </div>
-          {expandedSections.has('thesis') ? 
-            <ChevronUp className="h-4 w-4 ml-auto" /> : 
-            <ChevronDown className="h-4 w-4 ml-auto" />
-          }
-        </Button>
-      </div>
-
-      {/* Getting Started Indicator */}
-      {expandedSections.size === 0 && (
-        <div className="text-center py-12">
-          <div className="max-w-md mx-auto">
-            <div className="mb-4">
-              <Eye className="h-12 w-12 text-slate-400 mx-auto mb-3" />
-            </div>
-            <h3 className="text-lg font-semibold text-slate-700 mb-2">
-              Choose an Analysis to Begin
-            </h3>
-            <p className="text-sm text-slate-500 mb-4">
-              Select one of the analysis buttons above to view detailed insights from our multi-agent AI system specialized for MLP analysis.
-            </p>
-            <div className="flex items-center justify-center gap-1 text-xs text-slate-400">
-              <span>Click</span>
-              <div className="px-2 py-1 bg-blue-100 text-blue-700 rounded text-[10px] font-medium">Multi-Year Analysis</div>
-              <span>to get started</span>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Multi-Year Analysis Section */}
       {expandedSections.has('multi_year') && (
         <Card>
-          <CardHeader className="sticky top-0 z-10 bg-white border-b">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <TrendingUp className="h-6 w-6 text-blue-600" />
-                <div>
-                  <h3 className="text-xl font-semibold">Multi-Year MLP Performance Analysis</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Operational trends and financial patterns analysis
-                  </p>
-                </div>
-              </div>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => toggleSection('multi_year')}
-              >
-                <ChevronUp className="h-4 w-4" />
-              </Button>
-            </div>
+          <CardHeader className="pb-3">
+            <h3 className="text-lg font-semibold text-slate-800 flex items-center gap-2">
+              <TrendingUp className="h-5 w-5 text-blue-600" />
+              Multi-Year Operational Analysis
+            </h3>
           </CardHeader>
-          <CardContent className="space-y-8">
+          <CardContent>
             {multiYearData ? (
-              <>
-                {/* Executive Summary */}
-                <div className="bg-blue-50 p-6 rounded-lg">
-                  <h4 className="font-semibold text-blue-800 mb-3">Historical Performance Synopsis</h4>
-                  <p className="text-blue-700 mb-4">{multiYearData.ui_summaries.synopsis}</p>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                      <h5 className="font-medium text-blue-800 mb-2">Key Highlights</h5>
-                      <ul className="space-y-1">
-                        {multiYearData.ui_summaries.bullet_highlights.map((highlight, index) => (
-                          <li key={index} className="text-sm text-blue-700 flex items-start gap-2">
-                            <span className="text-blue-400 mt-1">•</span>
-                            <span>{highlight}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                    
-                    <div>
-                      <h5 className="font-medium text-blue-800 mb-2">Watch Items</h5>
-                      <ul className="space-y-1">
-                        {multiYearData.ui_summaries.watch_items.map((item, index) => (
-                          <li key={index} className="text-sm text-blue-700 flex items-start gap-2">
-                            <span className="text-blue-400 mt-1">•</span>
-                            <span>{item}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Throughput & Utilization Trends */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  <Card>
-                    <CardHeader>
-                      <h4 className="font-semibold flex items-center gap-2">
-                        <Fuel className="h-5 w-5 text-blue-600" />
-                        Throughput Trends
-                      </h4>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm font-medium">Trend Direction</span>
-                        <Badge variant={multiYearData.semantic_themes.throughput_trend.label === 'Rising' ? 'default' : 'secondary'}>
-                          {multiYearData.semantic_themes.throughput_trend.label}
-                        </Badge>
-                      </div>
-                      
-                      <div>
-                        <span className="text-sm font-medium">Asset Mix</span>
-                        <div className="flex flex-wrap gap-1 mt-2">
-                          {multiYearData.semantic_themes.throughput_trend.assets.map((asset, index) => (
-                            <Badge key={index} variant="outline" className="text-xs">
-                              {asset}
-                            </Badge>
-                          ))}
-                        </div>
-                      </div>
-                      
-                      <div>
-                        <span className="text-sm font-medium">Rationale</span>
-                        <p className="text-sm text-muted-foreground mt-1">
-                          {multiYearData.semantic_themes.throughput_trend.rationale}
-                        </p>
-                      </div>
-                      
-                      <div>
-                        <span className="text-sm font-medium">Utilization Trend</span>
-                        <div className="flex items-center justify-between mt-1">
-                          <Badge variant={multiYearData.semantic_themes.utilization_trend.label === 'Improving' ? 'default' : 'secondary'}>
-                            {multiYearData.semantic_themes.utilization_trend.label}
-                          </Badge>
-                        </div>
-                        <p className="text-sm text-muted-foreground mt-1">
-                          {multiYearData.semantic_themes.utilization_trend.notes}
-                        </p>
-                      </div>
-                    </CardContent>
-                  </Card>
-
-                  <Card>
-                    <CardHeader>
-                      <h4 className="font-semibold flex items-center gap-2">
-                        <DollarSign className="h-5 w-5 text-green-600" />
-                        Fee Mix & Contracts
-                      </h4>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm font-medium">Fee-Based Exposure</span>
-                        <Badge variant={multiYearData.semantic_themes.fee_mix_contracts.fee_based_exposure_label === 'High' ? 'default' : 'secondary'}>
-                          {multiYearData.semantic_themes.fee_mix_contracts.fee_based_exposure_label}
-                        </Badge>
-                      </div>
-                      
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm font-medium">Take-or-Pay/MVC</span>
-                        <Badge variant={multiYearData.semantic_themes.fee_mix_contracts.take_or_pay_mvc_presence === 'Prevalent' ? 'default' : 'secondary'}>
-                          {multiYearData.semantic_themes.fee_mix_contracts.take_or_pay_mvc_presence}
-                        </Badge>
-                      </div>
-                      
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm font-medium">Contract Tenor</span>
-                        <Badge variant={multiYearData.semantic_themes.fee_mix_contracts.average_contract_tenor_label.includes('Long') ? 'default' : 'secondary'}>
-                          {multiYearData.semantic_themes.fee_mix_contracts.average_contract_tenor_label}
-                        </Badge>
-                      </div>
-                      
-                      <div>
-                        <span className="text-sm font-medium">Commodity Exposure</span>
-                        <p className="text-sm text-muted-foreground mt-1">
-                          {multiYearData.semantic_themes.fee_mix_contracts.commodity_exposure_comment}
-                        </p>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </div>
-
-                {/* Geographic Footprint */}
-                <Card>
-                  <CardHeader>
-                    <h4 className="font-semibold flex items-center gap-2">
-                      <MapPin className="h-5 w-5 text-purple-600" />
-                      Asset Footprint & Basin Exposure
-                    </h4>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                      {multiYearData.semantic_themes.asset_footprint_basin.map((basin, index) => (
-                        <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded">
-                          <span className="font-medium">{basin.basin_or_region}</span>
-                          <Badge variant={basin.importance_label === 'High' ? 'default' : 'secondary'}>
-                            {basin.importance_label}
-                          </Badge>
-                        </div>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-
-                {/* Distribution Analysis */}
-                {multiYearData.distribution_analysis.applies && (
-                  <Card>
-                    <CardHeader>
-                      <h4 className="font-semibold flex items-center gap-2">
-                        <PieChart className="h-5 w-5 text-indigo-600" />
-                        Distribution Analysis
-                      </h4>
-                    </CardHeader>
-                    <CardContent className="space-y-6">
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                          <h5 className="font-medium mb-3">Policy Overview</h5>
-                          <div className="space-y-2">
-                            <div className="flex items-center justify-between">
-                              <span className="text-sm">Cadence</span>
-                              <Badge variant="outline">{multiYearData.distribution_analysis.cadence || 'Not Specified'}</Badge>
-                            </div>
-                            <div className="flex items-center justify-between">
-                              <span className="text-sm">Policy Character</span>
-                              <Badge variant="outline">{multiYearData.distribution_analysis.policy_characterization}</Badge>
-                            </div>
-                            <div className="flex items-center justify-between">
-                              <span className="text-sm">Philosophy</span>
-                              <Badge variant="outline">{multiYearData.distribution_analysis.policy_philosophy}</Badge>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div>
-                          <h5 className="font-medium mb-3">Sustainability Signals</h5>
-                          <div className="space-y-2">
-                            <div className="flex items-center justify-between">
-                              <span className="text-sm">DCF Coverage</span>
-                              <Badge variant={multiYearData.distribution_analysis.sustainability_signals.dcf_coverage === 'Strong' ? 'default' : 'secondary'}>
-                                {multiYearData.distribution_analysis.sustainability_signals.dcf_coverage}
-                              </Badge>
-                            </div>
-                            <div className="flex items-center justify-between">
-                              <span className="text-sm">Policy Consistency</span>
-                              <Badge variant={multiYearData.distribution_analysis.sustainability_signals.policy_consistency === 'Consistent' ? 'default' : 'secondary'}>
-                                {multiYearData.distribution_analysis.sustainability_signals.policy_consistency}
-                              </Badge>
-                            </div>
-                            <div className="flex items-center justify-between">
-                              <span className="text-sm">Management Commitment</span>
-                              <Badge variant={multiYearData.distribution_analysis.sustainability_signals.management_commitment === 'High' ? 'default' : 'secondary'}>
-                                {multiYearData.distribution_analysis.sustainability_signals.management_commitment}
-                              </Badge>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Distribution Actions Timeline */}
-                      {multiYearData.distribution_analysis.distribution_actions.length > 0 && (
-                        <div>
-                          <h5 className="font-medium mb-3">Distribution Actions Timeline</h5>
-                          <div className="space-y-3">
-                            {multiYearData.distribution_analysis.distribution_actions.map((action, index) => (
-                              <div key={index} className="flex items-start gap-3 p-3 bg-gray-50 rounded">
-                                <Calendar className="h-4 w-4 text-gray-500 mt-0.5" />
-                                <div className="flex-1">
-                                  <div className="flex items-center gap-2 mb-1">
-                                    <span className="font-medium">FY{action.year}</span>
-                                    <Badge variant="outline" className="text-xs">
-                                      {action.action}
-                                    </Badge>
-                                  </div>
-                                  <p className="text-sm text-gray-600">{action.context}</p>
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                    </CardContent>
-                  </Card>
-                )}
-
-                {/* Risk Register */}
-                {multiYearData.semantic_themes.risk_register.length > 0 && (
-                  <Card>
-                    <CardHeader>
-                      <h4 className="font-semibold flex items-center gap-2">
-                        <AlertTriangle className="h-5 w-5 text-red-600" />
-                        Risk Register
-                      </h4>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="grid gap-4">
-                        {multiYearData.semantic_themes.risk_register.map((risk, index) => (
-                          <div key={index} className="flex items-start gap-3 p-4 border border-red-200 bg-red-50 rounded">
-                            <AlertTriangle className="h-4 w-4 text-red-500 mt-0.5" />
-                            <div className="flex-1">
-                              <div className="flex items-center gap-2 mb-2">
-                                <span className="font-medium text-red-800">{risk.name}</span>
-                                <Badge variant={risk.severity === 'High' ? 'destructive' : risk.severity === 'Med' ? 'secondary' : 'outline'}>
-                                  {risk.severity}
-                                </Badge>
-                              </div>
-                              <p className="text-sm text-red-700 mb-2">{risk.note}</p>
-                              <div className="text-xs text-red-600">
-                                Mentioned in: {risk.recurrence_years.join(', ')}
-                              </div>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </CardContent>
-                  </Card>
-                )}
-
-                {/* Performance Scoring */}
-                <Card>
-                  <CardHeader>
-                    <h4 className="font-semibold flex items-center gap-2">
-                      <BarChart3 className="h-5 w-5 text-blue-600" />
-                      Performance Scoring
-                    </h4>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="space-y-4">
-                        <div>
-                          <div className="flex justify-between mb-2">
-                            <span className="text-sm font-medium">Throughput Stability</span>
-                            <span className="text-sm text-gray-600">{multiYearData.scores.throughput_stability_utilization}/10</span>
-                          </div>
-                          <Progress value={multiYearData.scores.throughput_stability_utilization * 10} className="h-2" />
-                        </div>
-                        
-                        <div>
-                          <div className="flex justify-between mb-2">
-                            <span className="text-sm font-medium">Fee Mix Quality</span>
-                            <span className="text-sm text-gray-600">{multiYearData.scores.fee_mix_contract_quality}/10</span>
-                          </div>
-                          <Progress value={multiYearData.scores.fee_mix_contract_quality * 10} className="h-2" />
-                        </div>
-                        
-                        <div>
-                          <div className="flex justify-between mb-2">
-                            <span className="text-sm font-medium">DCF Coverage</span>
-                            <span className="text-sm text-gray-600">{multiYearData.scores.dcf_stability_coverage}/10</span>
-                          </div>
-                          <Progress value={multiYearData.scores.dcf_stability_coverage * 10} className="h-2" />
-                        </div>
-                        
-                        <div>
-                          <div className="flex justify-between mb-2">
-                            <span className="text-sm font-medium">Leverage & Liquidity</span>
-                            <span className="text-sm text-gray-600">{multiYearData.scores.leverage_liquidity}/10</span>
-                          </div>
-                          <Progress value={multiYearData.scores.leverage_liquidity * 10} className="h-2" />
-                        </div>
-                      </div>
-                      
-                      <div className="space-y-4">
-                        <div>
-                          <div className="flex justify-between mb-2">
-                            <span className="text-sm font-medium">Counterparty Quality</span>
-                            <span className="text-sm text-gray-600">{multiYearData.scores.counterparty_quality_concentration}/10</span>
-                          </div>
-                          <Progress value={multiYearData.scores.counterparty_quality_concentration * 10} className="h-2" />
-                        </div>
-                        
-                        <div>
-                          <div className="flex justify-between mb-2">
-                            <span className="text-sm font-medium">Asset Footprint</span>
-                            <span className="text-sm text-gray-600">{multiYearData.scores.asset_footprint_basin_quality}/10</span>
-                          </div>
-                          <Progress value={multiYearData.scores.asset_footprint_basin_quality * 10} className="h-2" />
-                        </div>
-                        
-                        <div>
-                          <div className="flex justify-between mb-2">
-                            <span className="text-sm font-medium">Growth Discipline</span>
-                            <span className="text-sm text-gray-600">{multiYearData.scores.external_growth_discipline}/10</span>
-                          </div>
-                          <Progress value={multiYearData.scores.external_growth_discipline * 10} className="h-2" />
-                        </div>
-                        
-                        <div>
-                          <div className="flex justify-between mb-2">
-                            <span className="text-sm font-medium">Risk Management</span>
-                            <span className="text-sm text-gray-600">{multiYearData.scores.risk_overhangs}/10</span>
-                          </div>
-                          <Progress value={multiYearData.scores.risk_overhangs * 10} className="h-2" />
-                        </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </>
+              <MLPEquityAnalysisComponent data={multiYearData} />
             ) : (
-              <div className="text-center py-8">
-                <Activity className="h-12 w-12 text-gray-400 mx-auto mb-3" />
-                <p className="text-gray-500">Data Processing...</p>
+              <div className="text-center py-8 text-muted-foreground">
+                No multi-year data available
               </div>
             )}
           </CardContent>
@@ -1063,198 +389,524 @@ function MLPEquityReportContent({
       {/* Management Assessment Section */}
       {expandedSections.has('management') && (
         <Card>
-          <CardHeader className="sticky top-0 z-10 bg-white border-b">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <Shield className="h-6 w-6 text-emerald-600" />
-                <div>
-                  <h3 className="text-xl font-semibold">Management & Capital Allocation Assessment</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Leadership credibility and communication quality analysis
-                  </p>
-                </div>
-              </div>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => toggleSection('management')}
-              >
-                <ChevronUp className="h-4 w-4" />
-              </Button>
-            </div>
+          <CardHeader className="pb-3">
+            <h3 className="text-base font-semibold text-slate-800 flex items-center gap-2">
+              <Shield className="h-4 w-4 text-emerald-600" />
+              Management Credibility Assessment
+            </h3>
           </CardHeader>
           <CardContent className="space-y-8">
             {managementData ? (
               <>
-                {/* Executive Summary */}
-                <div className="bg-emerald-50 p-6 rounded-lg">
-                  <h4 className="font-semibold text-emerald-800 mb-3">Management Assessment Synopsis</h4>
-                  <p className="text-emerald-700 mb-4">{managementData.ui_summaries.synopsis}</p>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                      <h5 className="font-medium text-emerald-800 mb-2">Key Highlights</h5>
-                      <ul className="space-y-1">
-                        {managementData.ui_summaries.bullet_highlights.map((highlight, index) => (
-                          <li key={index} className="text-sm text-emerald-700 flex items-start gap-2">
-                            <span className="text-emerald-400 mt-1">•</span>
-                            <span>{highlight}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                    
-                    <div>
-                      <h5 className="font-medium text-emerald-800 mb-2">Watch Items</h5>
-                      <ul className="space-y-1">
-                        {managementData.ui_summaries.watch_items.map((item, index) => (
-                          <li key={index} className="text-sm text-emerald-700 flex items-start gap-2">
-                            <span className="text-emerald-400 mt-1">•</span>
-                            <span>{item}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
+                {/* Management Synopsis */}
+                <div className="bg-slate-50 p-4 rounded-lg border-l-4 border-slate-400">
+                  <h4 className="font-semibold mb-2 text-slate-800">Management Synopsis</h4>
+                  <p className="text-sm text-slate-700">{managementData.ui_summaries.synopsis}</p>
+                </div>
+
+                {/* Credibility Component Analysis */}
+                <div>
+                  <h4 className="font-semibold mb-3">Credibility Component Analysis</h4>
+                  <div className="grid md:grid-cols-2 gap-4">
+                    {[
+                      { name: 'Promise Follow-Through', score: managementData.scores.promise_follow_through },
+                      { name: 'Tone Discipline', score: managementData.scores.tone_discipline },
+                      { name: 'Disclosure Hygiene', score: managementData.scores.disclosure_hygiene },
+                      { name: 'Risk Candor', score: managementData.scores.risk_candor },
+                      { name: 'Strategic Coherence', score: managementData.scores.strategic_coherence },
+                      { name: 'Capital Allocation Consistency', score: managementData.scores.capital_allocation_consistency },
+                      { name: 'Metric Definition Stability', score: managementData.scores.metric_definition_stability },
+                      { name: 'Red Flags (inverse)', score: managementData.scores.red_flags }
+                    ].map((component, index) => (
+                      <div key={index} className="p-3 border rounded-lg bg-white">
+                        <div className="flex justify-between items-center mb-1">
+                          <span className="text-sm font-medium">{component.name}</span>
+                          <span className="text-sm text-muted-foreground">{component.score.toFixed(1)}/10</span>
+                        </div>
+                        <Progress value={component.score * 10} className="h-2" />
+                      </div>
+                    ))}
                   </div>
                 </div>
 
-                {/* Credibility Tier */}
-                <div className="flex items-center justify-center">
-                  <div className={`px-6 py-3 rounded-full text-lg font-semibold ${getGradeColor(managementData.scores.credibility_tier)}`}>
-                    Credibility Tier: {managementData.scores.credibility_tier}
+                {/* Overall Score & Tier */}
+                <div className="mt-4 p-4 bg-slate-100 rounded-lg border-2 border-slate-300">
+                  <div className="flex justify-between items-center">
+                    <span className="font-semibold">Overall Credibility Score</span>
+                    <div className="flex items-center gap-3">
+                      <span className="font-bold text-xl">{managementData.scores.composite_score.toFixed(2)}/10</span>
+                      <Badge className={`text-lg px-3 py-1 ${getCredibilityTierColor(managementData.scores.credibility_tier)}`}>
+                        {managementData.scores.credibility_tier} Tier
+                      </Badge>
+                    </div>
                   </div>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Weighted composite assessment
+                  </p>
                 </div>
 
-                {/* Red Flags & Green Flags */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {managementData.credibility_assessment.red_flags.length > 0 && (
-                    <Card className="border-red-200">
-                      <CardHeader>
-                        <h4 className="font-semibold text-red-700 flex items-center gap-2">
-                          <AlertTriangle className="h-5 w-5" />
-                          Red Flags
-                        </h4>
-                      </CardHeader>
-                      <CardContent>
-                        <ul className="space-y-2">
-                          {managementData.credibility_assessment.red_flags.map((flag, index) => (
-                            <li key={index} className="text-sm text-red-700 flex items-start gap-2">
-                              <span className="text-red-400 mt-1">•</span>
-                              <span>{flag}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </CardContent>
-                    </Card>
-                  )}
-
-                  {managementData.credibility_assessment.green_flags.length > 0 && (
-                    <Card className="border-green-200">
-                      <CardHeader>
-                        <h4 className="font-semibold text-green-700 flex items-center gap-2">
-                          <Target className="h-5 w-5" />
-                          Green Flags
-                        </h4>
-                      </CardHeader>
-                      <CardContent>
-                        <ul className="space-y-2">
-                          {managementData.credibility_assessment.green_flags.map((flag, index) => (
-                            <li key={index} className="text-sm text-green-700 flex items-start gap-2">
-                              <span className="text-green-400 mt-1">•</span>
-                              <span>{flag}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </CardContent>
-                    </Card>
-                  )}
-                </div>
-
-                {/* Management Scoring */}
-                <Card>
-                  <CardHeader>
-                    <h4 className="font-semibold flex items-center gap-2">
-                      <BarChart3 className="h-5 w-5 text-emerald-600" />
-                      Credibility Scoring
+                {/* Promise Follow-through Analysis */}
+                {managementData.credibility_assessment.commitment_followthrough && managementData.credibility_assessment.commitment_followthrough.length > 0 && (
+                  <div>
+                    <h4 className="font-semibold mb-4 flex items-center gap-2">
+                      <Target className="h-5 w-5 text-blue-600" />
+                      Promise Follow-through Analysis
                     </h4>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="space-y-4">
-                        <div>
-                          <div className="flex justify-between mb-2">
-                            <span className="text-sm font-medium">Promise Follow-Through</span>
-                            <span className="text-sm text-gray-600">{managementData.scores.promise_follow_through}/10</span>
+                    <div className="space-y-4">
+                      {managementData.credibility_assessment.commitment_followthrough.map((commitment, index) => (
+                        <div key={index} className="border rounded-lg p-4 bg-blue-50">
+                          <div className="flex items-start justify-between mb-2">
+                            <div className="text-sm font-medium text-blue-800">
+                              Filing Year {commitment.commitment_year} Commitment
+                            </div>
+                            <Badge className={`${
+                              commitment.outcome_label === 'Achieved' ? 'bg-green-100 text-green-800' :
+                              commitment.outcome_label === 'Progressing' ? 'bg-blue-100 text-blue-800' :
+                              commitment.outcome_label === 'Stalled' ? 'bg-yellow-100 text-yellow-800' :
+                              commitment.outcome_label === 'Reversed' ? 'bg-red-100 text-red-800' :
+                              'bg-gray-100 text-gray-800'
+                            }`}>
+                              {commitment.outcome_label}
+                            </Badge>
                           </div>
-                          <Progress value={managementData.scores.promise_follow_through * 10} className="h-2" />
+                          <p className="text-sm text-blue-700 mb-2">&ldquo;{commitment.commitment}&rdquo;</p>
+                          <div className="text-xs text-blue-600 mb-2">
+                            Tracked in: Filing Year {commitment.subsequent_followup_years.join(', Filing Year ')}
+                          </div>
+                          <p className="text-xs text-blue-600">
+                            {commitment.rationale}
+                          </p>
                         </div>
-                        
-                        <div>
-                          <div className="flex justify-between mb-2">
-                            <span className="text-sm font-medium">Tone Discipline</span>
-                            <span className="text-sm text-gray-600">{managementData.scores.tone_discipline}/10</span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Communication Style & Tone Profile */}
+                <div className="space-y-6">
+                  <div className="flex items-center gap-2">
+                    <FileText className="h-5 w-5 text-purple-600" />
+                    <h3 className="text-base font-semibold">Communication Style & Tone Profile</h3>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-x-16 gap-y-6">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm">Tone Balance</span>
+                      <Badge className="bg-purple-100 text-purple-800 text-sm">
+                        {managementData.credibility_assessment.tone_profile.tone_balance_label}
+                      </Badge>
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm">Guidance Style</span>
+                      <Badge className="bg-purple-100 text-purple-800 text-sm">
+                        {managementData.credibility_assessment.tone_profile.guidance_style_label}
+                      </Badge>
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm">Superlative Frequency</span>
+                      <Badge className="bg-purple-100 text-purple-800 text-sm">
+                        {managementData.credibility_assessment.tone_profile.superlative_frequency_label}
+                      </Badge>
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm">Tone Trend</span>
+                      <Badge className="bg-purple-100 text-purple-800 text-sm">
+                        {managementData.credibility_assessment.tone_profile.change_in_tone_label}
+                      </Badge>
+                    </div>
+                  </div>
+
+                  {managementData.credibility_assessment.tone_profile.notes && (
+                    <div className="bg-purple-50/50 p-4 rounded-lg">
+                      <p className="text-purple-700 text-sm">
+                        {managementData.credibility_assessment.tone_profile.notes}
+                      </p>
+                    </div>
+                  )}
+                </div>
+
+                {/* Disclosure Hygiene */}
+                <div>
+                  <h4 className="font-semibold mb-4 flex items-center gap-2">
+                    <Shield className="h-5 w-5 text-teal-600" />
+                    Disclosure Hygiene Assessment
+                  </h4>
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div className="space-y-3">
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm">DCF Definition</span>
+                        <Badge className="bg-teal-100 text-teal-800">
+                          {managementData.credibility_assessment.disclosure_hygiene.dcf_definition_clarity}
+                        </Badge>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm">EBITDA Reconciliation</span>
+                        <Badge className="bg-teal-100 text-teal-800">
+                          {managementData.credibility_assessment.disclosure_hygiene.adjusted_ebitda_reconciliation_quality}
+                        </Badge>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm">Maintenance Capex</span>
+                        <Badge className="bg-teal-100 text-teal-800">
+                          {managementData.credibility_assessment.disclosure_hygiene.maintenance_capex_definition_stability}
+                        </Badge>
+                      </div>
+                    </div>
+                    <div className="space-y-3">
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm">FERC Rate Case</span>
+                        <Badge className="bg-teal-100 text-teal-800">
+                          {managementData.credibility_assessment.disclosure_hygiene.ferc_rate_case_clarity}
+                        </Badge>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm">Incident/Outage</span>
+                        <Badge className="bg-teal-100 text-teal-800">
+                          {managementData.credibility_assessment.disclosure_hygiene.incident_outage_disclosure_quality}
+                        </Badge>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Risk Candor Analysis */}
+                <div>
+                  <h4 className="font-semibold mb-4 flex items-center gap-2">
+                    <AlertTriangle className="h-5 w-5 text-red-600" />
+                    Risk Candor Analysis
+                  </h4>
+                  
+                  {/* Realized Issues Acknowledgment */}
+                  <div className="mb-6">
+                    <div className="flex items-center justify-between p-4 border rounded-lg bg-red-50">
+                      <span className="text-sm font-medium text-black">Realized Issues Acknowledged</span>
+                      <Badge className="bg-red-100 text-red-800">
+                        {managementData.credibility_assessment.risk_candor.realized_issues_acknowledged_label}
+                      </Badge>
+                    </div>
+                  </div>
+
+                  {/* Recurring Risk Disclosures */}
+                  <div>
+                    <h5 className="text-sm font-medium text-red-800 mb-3">Recurring Risk Disclosures</h5>
+                    <div className="space-y-4">
+                      {managementData.credibility_assessment.risk_candor.recurring_risks.map((risk, index) => (
+                        <div key={index} className="border rounded-lg p-4 bg-red-50">
+                          <div className="flex items-start justify-between mb-2">
+                            <div className="text-sm font-medium text-red-800">
+                              {risk.name}
+                            </div>
+                            <Badge className="bg-red-100 text-red-800">
+                              {risk.candor_label}
+                            </Badge>
                           </div>
-                          <Progress value={managementData.scores.tone_discipline * 10} className="h-2" />
+                          <div className="text-xs text-red-600 mb-2">
+                            Recurrence: Filing Year {risk.recurrence_years.join(', Filing Year ')}
+                          </div>
+                          {risk.note && (
+                            <p className="text-xs text-red-700">{risk.note}</p>
+                          )}
                         </div>
-                        
-                        <div>
-                          <div className="flex justify-between mb-2">
-                            <span className="text-sm font-medium">Disclosure Hygiene</span>
-                            <span className="text-sm text-gray-600">{managementData.scores.disclosure_hygiene}/10</span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Strategic Coherence */}
+                <div>
+                  <h4 className="font-semibold mb-4 flex items-center gap-2">
+                    <Target className="h-5 w-5 text-indigo-600" />
+                    Strategic Coherence Assessment
+                  </h4>
+                  <div className="grid md:grid-cols-2 gap-4 mb-4">
+                    <div className="text-center p-3 bg-indigo-50 rounded-lg">
+                      <div className="text-sm font-medium text-indigo-800">Pivot Frequency</div>
+                      <Badge className="mt-2 bg-indigo-100 text-indigo-800">
+                        {managementData.credibility_assessment.strategic_coherence.pivot_frequency_label}
+                      </Badge>
+                    </div>
+                    <div className="text-center p-3 bg-indigo-50 rounded-lg">
+                      <div className="text-sm font-medium text-indigo-800">Rationalization Quality</div>
+                      <Badge className="mt-2 bg-indigo-100 text-indigo-800">
+                        {managementData.credibility_assessment.strategic_coherence.rationalization_quality_label}
+                      </Badge>
+                    </div>
+                    <div className="text-center p-3 bg-indigo-50 rounded-lg">
+                      <div className="text-sm font-medium text-indigo-800">Fee Mix Stance</div>
+                      <Badge className="mt-2 bg-indigo-100 text-indigo-800">
+                        {managementData.credibility_assessment.strategic_coherence.fee_mix_stance_label}
+                      </Badge>
+                    </div>
+                    <div className="text-center p-3 bg-indigo-50 rounded-lg">
+                      <div className="text-sm font-medium text-indigo-800">Contract Quality Stance</div>
+                      <Badge className="mt-2 bg-indigo-100 text-indigo-800">
+                        {managementData.credibility_assessment.strategic_coherence.contract_quality_stance_label}
+                      </Badge>
+                    </div>
+                  </div>
+                  {managementData.credibility_assessment.strategic_coherence.examples.length > 0 && (
+                    <div className="mt-4">
+                      <h5 className="text-sm font-medium text-indigo-800 mb-3">Strategic Examples</h5>
+                      <div className="space-y-2">
+                        {managementData.credibility_assessment.strategic_coherence.examples.map((example, index) => (
+                          <div key={index} className="flex items-start gap-2">
+                            <span className="text-indigo-600 mt-1">•</span>
+                            <p className="text-sm text-indigo-700">{example}</p>
                           </div>
-                          <Progress value={managementData.scores.disclosure_hygiene * 10} className="h-2" />
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Capital Allocation Consistency */}
+                <div className="p-6 border-2 border-slate-200 rounded-lg bg-gradient-to-r from-slate-50 to-gray-50">
+                  <h4 className="font-semibold mb-4 flex items-center gap-2">
+                    <TrendingUp className="h-5 w-5 text-green-600" />
+                    Capital Allocation Consistency Analysis
+                  </h4>
+                  <div className="space-y-6">
+                    {/* Stated Priorities */}
+                    {managementData.credibility_assessment.capital_allocation_consistency.stated_priorities && managementData.credibility_assessment.capital_allocation_consistency.stated_priorities.length > 0 && (
+                      <div className="p-4 border rounded-lg bg-green-50">
+                        <h5 className="font-medium mb-3 text-green-800">
+                          Management&apos;s Stated Capital Priorities
+                        </h5>
+                        <div className="flex flex-wrap gap-2">
+                          {managementData.credibility_assessment.capital_allocation_consistency.stated_priorities.map((priority, index) => (
+                            <Badge key={index} className="bg-green-100 text-green-800 border border-green-300">
+                              {priority.replace(/_/g, ' ')}
+                            </Badge>
+                          ))}
                         </div>
-                        
-                        <div>
-                          <div className="flex justify-between mb-2">
-                            <span className="text-sm font-medium">Risk Candor</span>
-                            <span className="text-sm text-gray-600">{managementData.scores.risk_candor}/10</span>
+                      </div>
+                    )}
+                    
+                    {/* Execution Examples */}
+                    {managementData.credibility_assessment.capital_allocation_consistency.examples && managementData.credibility_assessment.capital_allocation_consistency.examples.length > 0 && (
+                      <div className="p-4 border rounded-lg bg-blue-50">
+                        <h5 className="font-medium mb-3 text-blue-800">
+                          Actual Execution Track Record
+                        </h5>
+                        <ul className="space-y-2">
+                          {managementData.credibility_assessment.capital_allocation_consistency.examples.map((example, index) => (
+                            <li key={index} className="text-sm flex items-start gap-2">
+                              <div className="w-2 h-2 bg-blue-400 rounded-full mt-2 flex-shrink-0"></div>
+                              <span className="text-blue-700">{example}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                    
+                    {/* Assessment Result */}
+                    <div className="p-4 border-2 rounded-lg bg-white">
+                      <h5 className="font-medium mb-3 text-slate-800">
+                        Behavior Alignment Assessment
+                      </h5>
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm">Stated priorities vs. actual execution:</span>
+                        <Badge className={`text-lg px-3 py-1 ${
+                          managementData.credibility_assessment.capital_allocation_consistency.behavior_alignment_label === 'Aligned' ? 'bg-green-100 text-green-800 border-green-300' :
+                          managementData.credibility_assessment.capital_allocation_consistency.behavior_alignment_label === 'Mixed' ? 'bg-yellow-100 text-yellow-800 border-yellow-300' :
+                          managementData.credibility_assessment.capital_allocation_consistency.behavior_alignment_label === 'NotAligned' ? 'bg-red-100 text-red-800 border-red-300' :
+                          'bg-slate-100 text-slate-800 border-slate-300'
+                        }`}>
+                          {managementData.credibility_assessment.capital_allocation_consistency.behavior_alignment_label}
+                        </Badge>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Structure Events */}
+                <div>
+                  <h4 className="font-semibold mb-4 flex items-center gap-2">
+                    <Building2 className="h-5 w-5 text-orange-600" />
+                    Structure Events
+                  </h4>
+                  <div className="space-y-4">
+                    {managementData.credibility_assessment.structure_events.map((event, index) => (
+                      <div key={index} className="border rounded-lg p-4 bg-orange-50">
+                        <div className="flex items-start justify-between mb-2">
+                          <div className="text-sm font-medium text-orange-800">
+                            {event.event}
                           </div>
-                          <Progress value={managementData.scores.risk_candor * 10} className="h-2" />
+                          <div className="flex gap-2">
+                            <Badge className="bg-orange-100 text-orange-800">
+                              {event.communication_label}
+                            </Badge>
+                            <Badge className={`${
+                              event.outcome_label === 'Achieved' ? 'bg-green-100 text-green-800' :
+                              event.outcome_label === 'Progressing' ? 'bg-blue-100 text-blue-800' :
+                              event.outcome_label === 'Stalled' ? 'bg-yellow-100 text-yellow-800' :
+                              'bg-red-100 text-red-800'
+                            }`}>
+                              {event.outcome_label}
+                            </Badge>
+                          </div>
+                        </div>
+                        {event.notes && (
+                          <p className="text-xs text-orange-700">{event.notes}</p>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Metric Definition Stability */}
+                {managementData.credibility_assessment.metric_definition_stability && managementData.credibility_assessment.metric_definition_stability.length > 0 && (
+                  <div>
+                    <h4 className="font-semibold mb-4 flex items-center gap-2">
+                      <Brain className="h-5 w-5 text-cyan-600" />
+                      Metric Definition Stability
+                    </h4>
+                    <div className="space-y-3">
+                      {managementData.credibility_assessment.metric_definition_stability.map((metric, index) => (
+                        <div key={index} className="border rounded-lg p-3 bg-cyan-50">
+                          <div className="flex items-start justify-between mb-2">
+                            <div className="font-medium text-cyan-800">{metric.metric}</div>
+                            <Badge className="bg-cyan-100 text-cyan-800">{metric.stability_label}</Badge>
+                          </div>
+                          <p className="text-sm text-cyan-700">{metric.notes}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Management Classification Summary */}
+                {managementData.classification && (
+                  <div>
+                    <h4 className="font-semibold mb-4 flex items-center gap-2">
+                      <Building2 className="h-5 w-5 text-slate-600" />
+                      Management Classification Summary
+                    </h4>
+                    <div className="p-4 border rounded-lg bg-slate-50">
+                      <div className="grid md:grid-cols-3 gap-4 mb-4">
+                        <div className="text-center">
+                          <div className="text-sm font-medium text-slate-700 mb-2">Communication Style</div>
+                          <Badge className="bg-slate-100 text-slate-800">
+                            {managementData.classification.communication_style}
+                          </Badge>
+                        </div>
+                        <div className="text-center">
+                          <div className="text-sm font-medium text-slate-700 mb-2">Credibility Trend</div>
+                          <Badge className={`${
+                            managementData.classification.credibility_trend === 'Improving' ? 'bg-green-100 text-green-800' :
+                            managementData.classification.credibility_trend === 'Deteriorating' ? 'bg-red-100 text-red-800' :
+                            managementData.classification.credibility_trend === 'Mixed' ? 'bg-yellow-100 text-yellow-800' :
+                            'bg-slate-100 text-slate-800'
+                          }`}>
+                            {managementData.classification.credibility_trend}
+                          </Badge>
+                        </div>
+                        <div className="text-center">
+                          <div className="text-sm font-medium text-slate-700 mb-2">Disclosure Quality</div>
+                          <Badge className={`${
+                            managementData.classification.disclosure_quality_tier === 'High' ? 'bg-green-100 text-green-800' :
+                            managementData.classification.disclosure_quality_tier === 'Moderate' ? 'bg-yellow-100 text-yellow-800' :
+                            managementData.classification.disclosure_quality_tier === 'Low' ? 'bg-red-100 text-red-800' :
+                            'bg-slate-100 text-slate-800'
+                          }`}>
+                            {managementData.classification.disclosure_quality_tier}
+                          </Badge>
                         </div>
                       </div>
                       
-                      <div className="space-y-4">
-                        <div>
-                          <div className="flex justify-between mb-2">
-                            <span className="text-sm font-medium">Strategic Coherence</span>
-                            <span className="text-sm text-gray-600">{managementData.scores.strategic_coherence}/10</span>
-                          </div>
-                          <Progress value={managementData.scores.strategic_coherence * 10} className="h-2" />
+                      {managementData.classification.rationale && (
+                        <div className="border-t pt-4">
+                          <h5 className="font-medium mb-2 text-slate-700">Assessment Rationale</h5>
+                          <p className="text-sm text-slate-600">{managementData.classification.rationale}</p>
                         </div>
-                        
-                        <div>
-                          <div className="flex justify-between mb-2">
-                            <span className="text-sm font-medium">Capital Allocation</span>
-                            <span className="text-sm text-gray-600">{managementData.scores.capital_allocation_consistency}/10</span>
-                          </div>
-                          <Progress value={managementData.scores.capital_allocation_consistency * 10} className="h-2" />
-                        </div>
-                        
-                        <div>
-                          <div className="flex justify-between mb-2">
-                            <span className="text-sm font-medium">Metric Stability</span>
-                            <span className="text-sm text-gray-600">{managementData.scores.metric_definition_stability}/10</span>
-                          </div>
-                          <Progress value={managementData.scores.metric_definition_stability * 10} className="h-2" />
-                        </div>
-                        
-                        <div>
-                          <div className="flex justify-between mb-2">
-                            <span className="text-sm font-medium">Red Flag Management</span>
-                            <span className="text-sm text-gray-600">{managementData.scores.red_flags}/10</span>
-                          </div>
-                          <Progress value={managementData.scores.red_flags * 10} className="h-2" />
-                        </div>
-                      </div>
+                      )}
                     </div>
-                  </CardContent>
-                </Card>
+                  </div>
+                )}
+
+                {/* Bullet Highlights and Watch Items */}
+                {(managementData.ui_summaries?.bullet_highlights || managementData.ui_summaries?.watch_items) && (
+                  <div className="grid md:grid-cols-2 gap-6">
+                    {managementData.ui_summaries?.bullet_highlights && managementData.ui_summaries.bullet_highlights.length > 0 && (
+                      <div>
+                        <h4 className="font-semibold mb-3 text-blue-700 flex items-center gap-2">
+                          <Award className="h-5 w-5" />
+                          Key Highlights
+                        </h4>
+                        <ul className="space-y-2">
+                          {managementData.ui_summaries.bullet_highlights.map((highlight, index) => (
+                            <li key={index} className="text-sm flex items-start gap-2">
+                              <div className="w-2 h-2 bg-blue-400 rounded-full mt-2 flex-shrink-0"></div>
+                              <span className="text-blue-700">{highlight}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                    
+                    {managementData.ui_summaries?.watch_items && managementData.ui_summaries.watch_items.length > 0 && (
+                      <div>
+                        <h4 className="font-semibold mb-3 text-orange-700 flex items-center gap-2">
+                          <AlertTriangle className="h-5 w-5" />
+                          Watch Items
+                        </h4>
+                        <ul className="space-y-2">
+                          {managementData.ui_summaries.watch_items.map((item, index) => (
+                            <li key={index} className="text-sm flex items-start gap-2">
+                              <AlertTriangle className="h-4 w-4 text-orange-500 mt-0.5 flex-shrink-0" />
+                              <span className="text-orange-700">{item}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Red and Green Flags */}
+                <div className="grid md:grid-cols-2 gap-6">
+                  {managementData.credibility_assessment.red_flags.length > 0 && (
+                    <div>
+                      <h4 className="font-semibold mb-3 text-red-700">Red Flags</h4>
+                      <ul className="space-y-2">
+                        {managementData.credibility_assessment.red_flags.map((flag, index) => (
+                          <li key={index} className="text-sm flex items-start gap-2">
+                            <AlertTriangle className="h-4 w-4 text-red-500 mt-0.5 flex-shrink-0" />
+                            {flag}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                  
+                  {managementData.credibility_assessment.green_flags.length > 0 && (
+                    <div>
+                      <h4 className="font-semibold mb-3 text-green-700">Green Flags</h4>
+                      <ul className="space-y-2">
+                        {managementData.credibility_assessment.green_flags.map((flag, index) => (
+                          <li key={index} className="text-sm flex items-start gap-2">
+                            <Award className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
+                            {flag}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+
+                {/* Disclaimer */}
+                <div className="mt-6 p-4 bg-gray-50 rounded-lg border-l-4 border-gray-400">
+                  <p className="text-xs text-gray-600">
+                    {managementData.ui_summaries?.disclaimer || 'For informational purposes only. Operational analysis of historical disclosures. Not investment advice or a recommendation.'}
+                  </p>
+                </div>
               </>
             ) : (
-              <div className="text-center py-8">
-                <Activity className="h-12 w-12 text-gray-400 mx-auto mb-3" />
-                <p className="text-gray-500">Data Processing...</p>
+              <div className="text-center py-8 text-muted-foreground">
+                No management data available
               </div>
             )}
           </CardContent>
@@ -1264,186 +916,40 @@ function MLPEquityReportContent({
       {/* Predictive Inference Section */}
       {expandedSections.has('predictive') && (
         <Card>
-          <CardHeader className="sticky top-0 z-10 bg-white border-b">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <Brain className="h-6 w-6 text-amber-600" />
-                <div>
-                  <h3 className="text-xl font-semibold">MLP Market Outlook & Positioning</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Scenario-based forward-looking analysis
-                  </p>
-                </div>
-              </div>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => toggleSection('predictive')}
-              >
-                <ChevronUp className="h-4 w-4" />
-              </Button>
-            </div>
+          <CardHeader className="pb-3">
+            <h3 className="text-lg font-semibold text-slate-800 flex items-center gap-2">
+              <Brain className="h-5 w-5 text-amber-600" />
+              MLP Market Outlook & Positioning
+            </h3>
           </CardHeader>
           <CardContent className="space-y-8">
             {predictiveData ? (
               <>
                 {/* Executive Summary */}
                 <div className="bg-amber-50 p-6 rounded-lg">
-                  <h4 className="font-semibold text-amber-800 mb-3">Predictive Analysis Synopsis</h4>
-                  <p className="text-amber-700 mb-4">{predictiveData.ui_summaries.synopsis}</p>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                      <h5 className="font-medium text-amber-800 mb-2">Key Highlights</h5>
-                      <ul className="space-y-1">
-                        {predictiveData.ui_summaries.bullet_highlights.map((highlight, index) => (
-                          <li key={index} className="text-sm text-amber-700 flex items-start gap-2">
-                            <span className="text-amber-400 mt-1">•</span>
-                            <span>{highlight}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                    
-                    <div>
-                      <h5 className="font-medium text-amber-800 mb-2">Watch Items</h5>
-                      <ul className="space-y-1">
-                        {predictiveData.ui_summaries.watch_items.map((item, index) => (
-                          <li key={index} className="text-sm text-amber-700 flex items-start gap-2">
-                            <span className="text-amber-400 mt-1">•</span>
-                            <span>{item}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
+                  <h4 className="font-semibold mb-2 text-amber-800">Predictive Analysis Summary</h4>
+                  <p className="text-sm text-amber-700">{predictiveData.ui_summaries.synopsis}</p>
                 </div>
 
                 {/* Scenarios */}
-                <div className="grid gap-6">
-                  {predictiveData.scenarios.map((scenario, index) => (
-                    <Card key={index} className={`${
-                      scenario.name === 'Base' ? 'border-blue-200 bg-blue-50' :
-                      scenario.name === 'Upside' ? 'border-green-200 bg-green-50' :
-                      'border-red-200 bg-red-50'
-                    }`}>
-                      <CardHeader>
-                        <div className="flex items-center justify-between">
-                          <h4 className={`font-semibold ${
-                            scenario.name === 'Base' ? 'text-blue-800' :
-                            scenario.name === 'Upside' ? 'text-green-800' :
-                            'text-red-800'
-                          }`}>
-                            {scenario.name} Scenario
-                          </h4>
-                          <Badge variant="outline" className="text-xs">
-                            Confidence: {Math.round(scenario.confidence * 100)}%
-                          </Badge>
+                {predictiveData.scenarios && predictiveData.scenarios.length > 0 && (
+                  <div className="space-y-4">
+                    <h4 className="font-semibold text-slate-800">Forward-Looking Scenarios</h4>
+                    {predictiveData.scenarios.map((scenario, index) => (
+                      <div key={index} className="p-4 border rounded-lg bg-slate-50">
+                        <div className="flex items-center justify-between mb-2">
+                          <h5 className="font-medium">{scenario.name}</h5>
+                          <Badge variant="outline">{scenario.probability}% probability</Badge>
                         </div>
-                      </CardHeader>
-                      <CardContent className="space-y-4">
-                        {/* Key Drivers */}
-                        <div>
-                          <h5 className="font-medium mb-2">Key Drivers</h5>
-                          <div className="flex flex-wrap gap-2">
-                            {scenario.key_drivers.map((driver, idx) => (
-                              <Badge key={idx} variant="outline" className="text-xs">
-                                {driver}
-                              </Badge>
-                            ))}
-                          </div>
-                        </div>
-
-                        {/* Leading Indicators */}
-                        <div>
-                          <h5 className="font-medium mb-2">Leading Indicators</h5>
-                          <ul className="space-y-1">
-                            {scenario.leading_indicators.map((indicator, idx) => (
-                              <li key={idx} className="text-sm flex items-start gap-2">
-                                <span className="text-gray-400 mt-1">•</span>
-                                <span>{indicator}</span>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-
-                        {/* Falsifiers */}
-                        <div>
-                          <h5 className="font-medium mb-2">Scenario Falsifiers</h5>
-                          <ul className="space-y-1">
-                            {scenario.falsifiers.map((falsifier, idx) => (
-                              <li key={idx} className="text-sm flex items-start gap-2">
-                                <span className="text-gray-400 mt-1">•</span>
-                                <span>{falsifier}</span>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-
-                        {scenario.numeric_context && (
-                          <div className="bg-gray-100 p-3 rounded">
-                            <h5 className="font-medium mb-1">Numeric Context</h5>
-                            <p className="text-sm text-gray-700">{scenario.numeric_context}</p>
-                          </div>
-                        )}
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-
-                {/* Distribution Outlook */}
-                {predictiveData.distribution_outlook.applies && (
-                  <Card>
-                    <CardHeader>
-                      <h4 className="font-semibold flex items-center gap-2">
-                        <DollarSign className="h-5 w-5 text-green-600" />
-                        Distribution Outlook
-                      </h4>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                      <div className="flex items-center justify-between">
-                        <span className="font-medium">Expected Trajectory</span>
-                        <Badge variant="outline">{predictiveData.distribution_outlook.trajectory}</Badge>
+                        <p className="text-sm text-muted-foreground">{scenario.description}</p>
                       </div>
-
-                      <div>
-                        <h5 className="font-medium mb-2">Key Factors</h5>
-                        <ul className="space-y-1">
-                          {predictiveData.distribution_outlook.key_factors.map((factor, index) => (
-                            <li key={index} className="text-sm flex items-start gap-2">
-                              <span className="text-gray-400 mt-1">•</span>
-                              <span>{factor}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-
-                      <div>
-                        <h5 className="font-medium mb-2">Policy Signals</h5>
-                        <ul className="space-y-1">
-                          {predictiveData.distribution_outlook.policy_signals.map((signal, index) => (
-                            <li key={index} className="text-sm flex items-start gap-2">
-                              <span className="text-gray-400 mt-1">•</span>
-                              <span>{signal}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-
-                      {predictiveData.distribution_outlook.structure_notes && (
-                        <div className="bg-blue-50 p-3 rounded">
-                          <h5 className="font-medium text-blue-800 mb-1">Structure Notes</h5>
-                          <p className="text-sm text-blue-700">{predictiveData.distribution_outlook.structure_notes}</p>
-                        </div>
-                      )}
-                    </CardContent>
-                  </Card>
+                    ))}
+                  </div>
                 )}
               </>
             ) : (
-              <div className="text-center py-8">
-                <Activity className="h-12 w-12 text-gray-400 mx-auto mb-3" />
-                <p className="text-gray-500">Data Processing...</p>
+              <div className="text-center py-8 text-muted-foreground">
+                No predictive data available
               </div>
             )}
           </CardContent>
@@ -1453,40 +959,26 @@ function MLPEquityReportContent({
       {/* Business Thesis Section */}
       {expandedSections.has('thesis') && (
         <Card>
-          <CardHeader className="sticky top-0 z-10 bg-white border-b">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <Building2 className="h-6 w-6 text-orange-600" />
-                <div>
-                  <h3 className="text-xl font-semibold">MLP Business Thesis</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Comprehensive synthesis of multi-agent analysis
-                  </p>
-                </div>
-              </div>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => toggleSection('thesis')}
-              >
-                <ChevronUp className="h-4 w-4" />
-              </Button>
-            </div>
+          <CardHeader className="pb-3">
+            <h3 className="text-lg font-semibold text-slate-800 flex items-center gap-2">
+              <Building2 className="h-5 w-5 text-orange-600" />
+              MLP Business Thesis
+            </h3>
           </CardHeader>
           <CardContent className="space-y-8">
             {thesisData ? (
               <>
                 {/* Thesis Statement */}
                 <div className="bg-orange-50 p-6 rounded-lg text-center">
-                  <h4 className="font-semibold text-orange-800 mb-3">Business Thesis Statement</h4>
-                  <p className="text-lg text-orange-700 font-medium">{thesisData.mlp_thesis.thesis_statement}</p>
+                  <h4 className="font-semibold mb-4 text-orange-800">Investment Thesis</h4>
+                  <p className="text-lg text-orange-700 italic">{thesisData.thesis_statement}</p>
                 </div>
 
                 {/* Viability Assessment */}
-                <Card>
+                <Card className="border-orange-200">
                   <CardHeader>
-                    <h4 className="font-semibold flex items-center gap-2">
-                      <Gauge className="h-5 w-5 text-blue-600" />
+                    <h4 className="font-semibold text-orange-700 flex items-center gap-2">
+                      <Gauge className="h-5 w-5" />
                       Viability Assessment
                     </h4>
                   </CardHeader>
@@ -1506,7 +998,6 @@ function MLPEquityReportContent({
                           </div>
                           <Progress value={thesisData.viability_assessment.subscores.system_durability * 10} className="h-2" />
                         </div>
-                        
                         <div>
                           <div className="flex justify-between mb-2">
                             <span className="text-sm font-medium">Execution Quality</span>
@@ -1514,7 +1005,6 @@ function MLPEquityReportContent({
                           </div>
                           <Progress value={thesisData.viability_assessment.subscores.execution_quality * 10} className="h-2" />
                         </div>
-                        
                         <div>
                           <div className="flex justify-between mb-2">
                             <span className="text-sm font-medium">Financial Resilience</span>
@@ -1523,7 +1013,6 @@ function MLPEquityReportContent({
                           <Progress value={thesisData.viability_assessment.subscores.financial_resilience * 10} className="h-2" />
                         </div>
                       </div>
-                      
                       <div className="space-y-4">
                         <div>
                           <div className="flex justify-between mb-2">
@@ -1532,7 +1021,6 @@ function MLPEquityReportContent({
                           </div>
                           <Progress value={thesisData.viability_assessment.subscores.risk_balance * 10} className="h-2" />
                         </div>
-                        
                         <div>
                           <div className="flex justify-between mb-2">
                             <span className="text-sm font-medium">Governance Quality</span>
@@ -1540,172 +1028,32 @@ function MLPEquityReportContent({
                           </div>
                           <Progress value={thesisData.viability_assessment.subscores.governance_quality * 10} className="h-2" />
                         </div>
-                        
-                        <div className="mt-6">
-                          <div className="flex justify-between mb-2">
-                            <span className="text-base font-semibold">Composite Score</span>
-                            <span className="text-base font-semibold text-blue-600">{thesisData.viability_assessment.composite.toFixed(1)}/10</span>
-                          </div>
-                          <Progress value={thesisData.viability_assessment.composite * 10} className="h-3" />
-                        </div>
                       </div>
-                    </div>
-
-                    <div className="bg-gray-50 p-4 rounded">
-                      <h5 className="font-medium mb-2">Assessment Rationale</h5>
-                      <p className="text-sm text-gray-700">{thesisData.viability_assessment.rationale}</p>
                     </div>
                   </CardContent>
                 </Card>
-
-                {/* Throughput Engine */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <Card>
-                    <CardHeader>
-                      <h4 className="font-semibold text-green-700 flex items-center gap-2">
-                        <Target className="h-5 w-5" />
-                        Value Creation Drivers
-                      </h4>
-                    </CardHeader>
-                    <CardContent>
-                      <ul className="space-y-2">
-                        {thesisData.mlp_thesis.value_creation_drivers.map((driver, index) => (
-                          <li key={index} className="text-sm flex items-start gap-2">
-                            <span className="text-green-400 mt-1">•</span>
-                            <span>{driver}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </CardContent>
-                  </Card>
-
-                  <Card>
-                    <CardHeader>
-                      <h4 className="font-semibold text-red-700 flex items-center gap-2">
-                        <AlertTriangle className="h-5 w-5" />
-                        Key Fragilities
-                      </h4>
-                    </CardHeader>
-                    <CardContent>
-                      <ul className="space-y-2">
-                        {thesisData.mlp_thesis.fragilities.map((fragility, index) => (
-                          <li key={index} className="text-sm flex items-start gap-2">
-                            <span className="text-red-400 mt-1">•</span>
-                            <span>{fragility}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </CardContent>
-                  </Card>
-                </div>
-
-                {/* Watchlist */}
-                <Card>
-                  <CardHeader>
-                    <h4 className="font-semibold flex items-center gap-2">
-                      <Eye className="h-5 w-5 text-purple-600" />
-                      Monitoring Watchlist
-                    </h4>
-                  </CardHeader>
-                  <CardContent className="space-y-6">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div>
-                        <h5 className="font-medium text-green-700 mb-3">Leading Indicators</h5>
-                        <ul className="space-y-2">
-                          {thesisData.watchlist.leading_indicators.map((indicator, index) => (
-                            <li key={index} className="text-sm flex items-start gap-2">
-                              <span className="text-green-400 mt-1">•</span>
-                              <span>{indicator}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-
-                      <div>
-                        <h5 className="font-medium text-amber-700 mb-3">Early Warnings</h5>
-                        <ul className="space-y-2">
-                          {thesisData.watchlist.early_warnings.map((warning, index) => (
-                            <li key={index} className="text-sm flex items-start gap-2">
-                              <span className="text-amber-400 mt-1">•</span>
-                              <span>{warning}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    </div>
-
-                    {thesisData.watchlist.data_gaps.length > 0 && (
-                      <div>
-                        <h5 className="font-medium text-gray-700 mb-3">Data Gaps</h5>
-                        <ul className="space-y-2">
-                          {thesisData.watchlist.data_gaps.map((gap, index) => (
-                            <li key={index} className="text-sm text-gray-600 flex items-start gap-2">
-                              <span className="text-gray-400 mt-1">•</span>
-                              <span>{gap}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-                  </CardContent>
-                </Card>
-
-                {/* Transition Triggers */}
-                {thesisData.transition_triggers.length > 0 && (
-                  <Card>
-                    <CardHeader>
-                      <h4 className="font-semibold flex items-center gap-2">
-                        <Activity className="h-5 w-5 text-indigo-600" />
-                        Transition Triggers
-                      </h4>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="space-y-4">
-                        {thesisData.transition_triggers.map((trigger, index) => (
-                          <div key={index} className="border border-gray-200 p-4 rounded">
-                            <div className="flex items-start justify-between mb-2">
-                              <h5 className="font-medium">{trigger.event}</h5>
-                              <Badge variant={trigger.interpretation === 'Positive' ? 'default' : trigger.interpretation === 'Negative' ? 'destructive' : 'secondary'}>
-                                {trigger.interpretation}
-                              </Badge>
-                            </div>
-                            <p className="text-sm text-gray-600 mb-2">
-                              <strong>Expected Effect:</strong> {trigger.expected_effect}
-                            </p>
-                            <p className="text-sm text-gray-600">
-                              <strong>Thesis Update Rule:</strong> {trigger.thesis_update_rule}
-                            </p>
-                          </div>
-                        ))}
-                      </div>
-                    </CardContent>
-                  </Card>
-                )}
               </>
             ) : (
-              <div className="text-center py-8">
-                <Activity className="h-12 w-12 text-gray-400 mx-auto mb-3" />
-                <p className="text-gray-500">Data Processing...</p>
+              <div className="text-center py-8 text-muted-foreground">
+                No thesis data available
               </div>
             )}
           </CardContent>
         </Card>
       )}
-
-      {/* Disclaimer */}
-      <Card className="border-amber-200 bg-amber-50">
-        <CardContent className="pt-6">
-          <p className="text-sm text-amber-800">
-            <strong>Disclaimer:</strong> For informational purposes only. Analysis of historical disclosures. 
-            Not investment advice or a recommendation.
-          </p>
-        </CardContent>
-      </Card>
     </div>
   );
 }
 
-// Helper function to safely parse JSON content
+// Type guard functions
+function isValidMLPData(data: unknown, requiredKeys: string[]): boolean {
+  return Boolean(data) &&
+         typeof data === 'object' &&
+         data !== null &&
+         Object.keys(data).length > 0 &&
+         requiredKeys.every(key => key in (data as Record<string, unknown>));
+}
+
 function parseJSONContent(content: string): unknown {
   try {
     return JSON.parse(content);
@@ -1717,27 +1065,17 @@ function parseJSONContent(content: string): unknown {
 // Main wrapper component that handles ParsedReport structure
 export default function MLPEquityReport({ report }: MLPReportProps) {
   // Try to get structured data from each section first, fallback to parsing content
-  const rawMultiYearData = report.sections.multi_year_analysis.structured_data || parseJSONContent(report.sections.multi_year_analysis.content);
-  const rawManagementData = report.sections.management_credibility.structured_data || parseJSONContent(report.sections.management_credibility.content);
-  const rawPredictiveData = report.sections.predictive_inference.structured_data || parseJSONContent(report.sections.predictive_inference.content);
+  const rawMultiYearData = report.sections.multi_year_analysis?.structured_data || parseJSONContent(report.sections.multi_year_analysis?.content || '');
+  const rawManagementData = report.sections.management_credibility?.structured_data || parseJSONContent(report.sections.management_credibility?.content || '');
+  const rawPredictiveData = report.sections.predictive_inference?.structured_data || parseJSONContent(report.sections.predictive_inference?.content || '');
   const rawThesisData = report.sections.final_thesis?.structured_data || parseJSONContent(report.sections.final_thesis?.content || '');
 
-  // Type guard function to check if data has the expected MLP structure
-  const isValidMLPData = (data: unknown, requiredKeys: string[]): boolean => {
-    return Boolean(data) && 
-           typeof data === 'object' && 
-           data !== null &&
-           Object.keys(data).length > 0 &&
-           requiredKeys.some(key => key in data);
-  };
-
-  // Check if we have valid MLP structured data and cast to proper types
+  // Type guard and cast data
   const hasMultiYear = isValidMLPData(rawMultiYearData, ['company', 'window', 'semantic_themes']);
-  const hasManagement = isValidMLPData(rawManagementData, ['company', 'window', 'credibility_assessment']);
-  const hasPredictive = isValidMLPData(rawPredictiveData, ['company', 'window', 'scenarios']);
-  const hasThesis = isValidMLPData(rawThesisData, ['company', 'window', 'mlp_thesis']);
+  const hasManagement = isValidMLPData(rawManagementData, ['company', 'credibility_assessment']);
+  const hasPredictive = isValidMLPData(rawPredictiveData, ['company', 'scenarios']);
+  const hasThesis = isValidMLPData(rawThesisData, ['company', 'viability_assessment']);
 
-  // Cast to proper types only if validation passes
   const multiYearData = hasMultiYear ? rawMultiYearData as MLPMultiYearData : null;
   const managementData = hasManagement ? rawManagementData as MLPManagementData : null;
   const predictiveData = hasPredictive ? rawPredictiveData as MLPPredictiveData : null;
@@ -1746,12 +1084,24 @@ export default function MLPEquityReport({ report }: MLPReportProps) {
   // If we have any structured JSON data, use the full MLP component
   if (hasMultiYear || hasManagement || hasPredictive || hasThesis) {
     return (
-      <MLPEquityReportContent
-        multiYearData={multiYearData}
-        managementData={managementData}
-        predictiveData={predictiveData}
-        thesisData={thesisData}
-      />
+      <>
+        <MLPEquityReportContent
+          multiYearData={multiYearData}
+          managementData={managementData}
+          predictiveData={predictiveData}
+          thesisData={thesisData}
+        />
+        
+        {/* Disclaimer */}
+        <Card className="border-amber-200 bg-amber-50">
+          <CardContent className="pt-6">
+            <p className="text-sm text-amber-800">
+              {multiYearData?.ui_summaries?.disclaimer || 
+               "For informational purposes only. Analysis of historical disclosures. Not investment advice or a recommendation."}
+            </p>
+          </CardContent>
+        </Card>
+      </>
     );
   }
 
@@ -1769,95 +1119,35 @@ export default function MLPEquityReport({ report }: MLPReportProps) {
 
       {/* MLP Analysis Sections */}
       <div className="grid gap-6">
-        {Object.entries(report.sections).map(([key, section]) => {
-          // Get appropriate icon and color for each section
-          let icon = <Building2 className="h-5 w-5" />;
-          let colorClass = "text-slate-600";
-          
-          if (key === 'multi_year_analysis') {
-            icon = <TrendingUp className="h-5 w-5 text-blue-600" />;
-            colorClass = "text-blue-600";
-          } else if (key === 'management_credibility') {
-            icon = <Shield className="h-5 w-5 text-emerald-600" />;
-            colorClass = "text-emerald-600";
-          } else if (key === 'predictive_inference') {
-            icon = <Brain className="h-5 w-5 text-amber-600" />;
-            colorClass = "text-amber-600";
-          } else if (key === 'final_thesis') {
-            icon = <Building2 className="h-5 w-5 text-orange-600" />;
-            colorClass = "text-orange-600";
-          }
-
-          return (
-            <Card key={key}>
-              <CardHeader>
-                <h3 className={`text-lg font-semibold flex items-center gap-2 ${colorClass}`}>
-                  {icon}
-                  {section.title}
-                </h3>
-              </CardHeader>
-              <CardContent>
-                <div className="prose prose-sm max-w-none">
-                  {/* Check if content indicates structured data is available */}
-                  {section.content === "Structured analysis data available" ? (
-                    <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
-                      <div className="flex items-center gap-2 mb-2">
-                        <AlertTriangle className="h-4 w-4 text-blue-600" />
-                        <span className="font-medium text-blue-800">Structured Data Available</span>
+        {Object.entries(report.sections).map(([key, section]) => (
+          <Card key={key}>
+            <CardHeader>
+              <h3 className="text-lg font-semibold">{section.title}</h3>
+            </CardHeader>
+            <CardContent>
+              <div className="prose prose-sm max-w-none">
+                <div className="whitespace-pre-wrap">{section.content}</div>
+                {section.subsections && section.subsections.length > 0 && (
+                  <div className="mt-4 space-y-3">
+                    {section.subsections.map((subsection, index) => (
+                      <div key={index} className="border-l-2 border-gray-200 pl-4">
+                        <h4 className="font-semibold">{subsection.title}</h4>
+                        <div className="whitespace-pre-wrap text-sm">{subsection.content}</div>
                       </div>
-                      <p className="text-sm text-blue-700">
-                        This section contains structured analysis data that will be displayed in the enhanced MLP interface once the data parsing is fully implemented.
-                      </p>
-                    </div>
-                  ) : (
-                    <div className="whitespace-pre-wrap text-slate-700 leading-relaxed">
-                      {section.content}
-                    </div>
-                  )}
-                  
-                  {/* Render subsections if they exist */}
-                  {section.subsections && section.subsections.length > 0 && (
-                    <div className="mt-6 space-y-4">
-                      {section.subsections.map((subsection, index) => (
-                        <div key={index} className="border-l-2 border-gray-200 pl-4">
-                          <h4 className="font-semibold text-slate-800 mb-2">{subsection.title}</h4>
-                          <div className="whitespace-pre-wrap text-sm text-slate-600 leading-relaxed">
-                            {subsection.content}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
-          );
-        })}
+                    ))}
+                  </div>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+        ))}
       </div>
-
-      {/* Enhanced Notice */}
-      <Card className="border-purple-200 bg-purple-50">
-        <CardContent className="pt-6">
-          <div className="flex items-start gap-3">
-            <Eye className="h-5 w-5 text-purple-600 mt-0.5" />
-            <div>
-              <h4 className="font-semibold text-purple-800 mb-1">Enhanced MLP Analysis</h4>
-              <p className="text-sm text-purple-700">
-                This MLP analysis includes multi-year operational trends, management credibility assessment, 
-                and predictive inference specific to master limited partnerships. The structured interface 
-                with interactive components will be available once the data parsing is fully implemented.
-              </p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
 
       {/* Disclaimer */}
       <Card className="border-amber-200 bg-amber-50">
         <CardContent className="pt-6">
           <p className="text-sm text-amber-800">
-            <strong>Disclaimer:</strong> For informational purposes only. Analysis of historical disclosures. 
-            Not investment advice or a recommendation.
+            For informational purposes only. Analysis of historical disclosures. Not investment advice or a recommendation.
           </p>
         </CardContent>
       </Card>
