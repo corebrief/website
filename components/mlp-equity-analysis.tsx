@@ -7,9 +7,7 @@ import { Progress } from '@/components/ui/progress';
 import {
   TrendingUp,
   TrendingDown,
-  Shield,
   Building2,
-  Gauge,
   DollarSign,
   MapPin,
   AlertTriangle,
