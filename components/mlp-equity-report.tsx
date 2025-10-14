@@ -12,7 +12,12 @@ import {
   Gauge,
   Target,
   FileText,
-  Award
+  Award,
+  Star,
+  Eye,
+  AlertCircle,
+  HelpCircle,
+  Zap
 } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
 import { type ParsedReport, type MLPMultiYearAnalysis } from '@/utils/report-parsers';
@@ -147,18 +152,81 @@ interface MLPPredictiveData {
     end_fy: number;
     num_years: number;
   };
+  coverage: {
+    years_received: number[];
+    notes: string[];
+  };
+  horizon_selection: {
+    type: 'quarters' | 'years';
+    length: number;
+    reason: string;
+  };
+  assumption_journal: string[];
+  base_state: {
+    starting_point: {
+      throughput: 'Up' | 'Stable' | 'Down' | 'Mixed' | 'insufficient_detail';
+      utilization: 'Improving' | 'Stable' | 'Declining' | 'insufficient_detail';
+      fee_based_exposure: 'Higher' | 'Similar' | 'Lower' | 'insufficient_detail';
+      contract_quality: 'Strengthening' | 'Stable' | 'Weakening' | 'insufficient_detail';
+      dcf: 'Stronger' | 'Similar' | 'Weaker' | 'insufficient_detail';
+      risk_level: 'Rising' | 'Stable' | 'Abating' | 'insufficient_detail';
+    };
+    recent_inflections: string[];
+  };
   scenarios: Array<{
-    name: string;
-    probability: number;
-    description: string;
+    name: 'Base' | 'Upside' | 'Downside';
+    outcomes: {
+      throughput: 'Up' | 'Stable' | 'Down' | 'insufficient_detail';
+      utilization: 'Improving' | 'Stable' | 'Declining' | 'insufficient_detail';
+      fee_based_exposure: 'Higher' | 'Similar' | 'Lower' | 'insufficient_detail';
+      contract_quality: 'Strengthening' | 'Stable' | 'Weakening' | 'insufficient_detail';
+      dcf: 'Stronger' | 'Similar' | 'Weaker' | 'insufficient_detail';
+      distribution_trajectory: 'Increase' | 'Stable' | 'Cut' | 'Suspend' | 'NotApplicable' | 'insufficient_detail';
+      coverage_direction: 'Improving' | 'Stable' | 'Weakening' | 'insufficient_detail';
+      capex_mix: 'Growth Heavier' | 'Similar' | 'Maintenance Heavier' | 'insufficient_detail';
+      leverage: 'Down' | 'Stable' | 'Up' | 'insufficient_detail';
+      liquidity_refi: 'Easier' | 'Similar' | 'Tighter' | 'insufficient_detail';
+      rate_exposure: 'Lower' | 'Medium' | 'Higher' | 'insufficient_detail';
+      risk_level: 'Rising' | 'Stable' | 'Abating' | 'insufficient_detail';
+      external_growth: 'Active' | 'Selective' | 'Limited' | 'Paused' | 'insufficient_detail';
+    };
+    numeric_context: string | null;
+    key_drivers: string[];
+    leading_indicators: string[];
+    falsifiers: string[];
+    confidence: number;
   }>;
-  key_drivers: string[];
-  leading_indicators: string[];
-  thesis_falsifiers: string[];
+  uncertainty: {
+    dominant_unknowns: string[];
+    black_swan_notes: string | null;
+    confidence_check: 'High' | 'Medium' | 'Low';
+  };
+  transition_map: Array<{
+    from: 'Base' | 'Upside' | 'Downside';
+    to: 'Base' | 'Upside' | 'Downside';
+    trigger: string;
+    early_signals: string[];
+  }>;
+  distribution_outlook: {
+    applies: boolean;
+    trajectory: 'Increase' | 'Stable' | 'Cut' | 'Suspend' | 'NotApplicable' | 'insufficient_detail';
+    key_factors: string[];
+    structure_notes: string | null;
+    policy_signals: string[];
+  };
+  features_for_downstream: {
+    directional_tilt: 'Positive' | 'Neutral' | 'Negative' | 'Mixed' | 'insufficient_detail';
+    confidence_bucket: 'High(>=0.6)' | 'Medium(0.4 to 0.59)' | 'Low(<0.4)' | 'insufficient_detail';
+    key_drivers_top3: string[];
+    key_falsifiers_top3: string[];
+    watchlist_metrics: string[];
+  };
   ui_summaries: {
+    one_liner: string;
+    synopsis: string;
     bullet_highlights: string[];
     watch_items: string[];
-    synopsis: string;
+    disclaimer: string;
   };
   version: string;
 }
@@ -919,33 +987,428 @@ function MLPEquityReportContent({
           <CardHeader className="pb-3">
             <h3 className="text-lg font-semibold text-slate-800 flex items-center gap-2">
               <Brain className="h-5 w-5 text-amber-600" />
-              MLP Market Outlook & Positioning
+              Predictive Inference Analysis
             </h3>
           </CardHeader>
           <CardContent className="space-y-8">
             {predictiveData ? (
               <>
-                {/* Executive Summary */}
-                <div className="bg-amber-50 p-6 rounded-lg">
-                  <h4 className="font-semibold mb-2 text-amber-800">Predictive Analysis Summary</h4>
-                  <p className="text-sm text-amber-700">{predictiveData.ui_summaries.synopsis}</p>
+                {/* Predictive Synopsis */}
+                <div className="bg-slate-50 p-4 rounded-lg border-l-4 border-slate-400">
+                  <h4 className="font-semibold mb-2 text-slate-800">Forward-Looking Synopsis</h4>
+                  <p className="text-sm text-slate-700">{predictiveData.ui_summaries.synopsis}</p>
                 </div>
 
-                {/* Scenarios */}
-                {predictiveData.scenarios && predictiveData.scenarios.length > 0 && (
-                  <div className="space-y-4">
-                    <h4 className="font-semibold text-slate-800">Forward-Looking Scenarios</h4>
-                    {predictiveData.scenarios.map((scenario, index) => (
-                      <div key={index} className="p-4 border rounded-lg bg-slate-50">
-                        <div className="flex items-center justify-between mb-2">
-                          <h5 className="font-medium">{scenario.name}</h5>
-                          <Badge variant="outline">{scenario.probability}% probability</Badge>
+                {/* Key Highlights & Watch Items */}
+                <div className="grid md:grid-cols-2 gap-6">
+                  {/* Bullet Highlights */}
+                  <div className="p-4 border rounded-lg bg-blue-50">
+                    <h5 className="font-semibold mb-3 text-blue-800 flex items-center gap-2">
+                      <Star className="h-5 w-5" />
+                      Key Highlights
+                    </h5>
+                    <ul className="space-y-2">
+                      {predictiveData.ui_summaries.bullet_highlights.map((highlight, index) => (
+                        <li key={index} className="text-sm flex items-start gap-2">
+                          <div className="w-1.5 h-1.5 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
+                          <span className="text-blue-700">{highlight}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  {/* Watch Items */}
+                  <div className="p-4 border rounded-lg bg-purple-50">
+                    <h5 className="font-semibold mb-3 text-purple-800 flex items-center gap-2">
+                      <Eye className="h-5 w-5" />
+                      Priority Watch Items
+                    </h5>
+                    <ul className="space-y-2">
+                      {predictiveData.ui_summaries.watch_items.map((item, index) => (
+                        <li key={index} className="text-sm flex items-start gap-2">
+                          <div className="w-1.5 h-1.5 bg-purple-500 rounded-full mt-2 flex-shrink-0"></div>
+                          <span className="text-purple-700">{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+
+                {/* Horizon Selection & Assumptions */}
+                <div className="grid md:grid-cols-2 gap-6">
+                  {/* Horizon Selection */}
+                  <div className="p-4 border rounded-lg bg-blue-50">
+                    <h4 className="font-semibold mb-3 text-blue-800 flex items-center gap-2">
+                      <Brain className="h-5 w-5" />
+                      Forward Analysis Horizon
+                    </h4>
+                    <div className="space-y-2">
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm">Time Frame:</span>
+                        <Badge className="bg-blue-100 text-blue-800">
+                          {predictiveData.horizon_selection.length} {predictiveData.horizon_selection.type}
+                        </Badge>
+                      </div>
+                      <div className="text-xs text-blue-600">
+                        <span className="font-medium">Rationale:</span> {predictiveData.horizon_selection.reason}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Base State Assessment */}
+                  <div className="p-4 border rounded-lg bg-green-50">
+                    <h4 className="font-semibold mb-3 text-green-800">Current State Assessment</h4>
+                    <div className="grid grid-cols-2 gap-2">
+                      {Object.entries(predictiveData.base_state.starting_point).map(([key, value]) => (
+                        <div key={key} className="flex justify-between items-center">
+                          <span className="text-xs">{key.replace(/_/g, ' ').charAt(0).toUpperCase() + key.slice(1).replace(/_/g, ' ')}:</span>
+                          <Badge className={`text-xs ${
+                            value.toLowerCase().includes('up') || value.toLowerCase().includes('improving') || value.toLowerCase().includes('higher') || value.toLowerCase().includes('stronger') ? 'bg-green-100 text-green-800' :
+                            value.toLowerCase().includes('down') || value.toLowerCase().includes('declining') || value.toLowerCase().includes('lower') || value.toLowerCase().includes('weaker') ? 'bg-red-100 text-red-800' :
+                            'bg-blue-100 text-blue-800'
+                          }`}>
+                            {value}
+                          </Badge>
                         </div>
-                        <p className="text-sm text-muted-foreground">{scenario.description}</p>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Assumption Journal */}
+                {predictiveData.assumption_journal && predictiveData.assumption_journal.length > 0 && (
+                  <div>
+                    <h4 className="font-semibold mb-3 flex items-center gap-2">
+                      <Target className="h-5 w-5 text-indigo-600" />
+                      Key Assumptions from Historical Analysis
+                    </h4>
+                    <div className="space-y-2">
+                      {predictiveData.assumption_journal.map((assumption, index) => (
+                        <div key={index} className="p-3 border rounded-lg bg-indigo-50">
+                          <p className="text-sm text-indigo-700">{assumption}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Recent Operational Inflections */}
+                {predictiveData.base_state.recent_inflections && predictiveData.base_state.recent_inflections.length > 0 && (
+                  <div>
+                    <h4 className="font-semibold mb-3 flex items-center gap-2">
+                      <TrendingUp className="h-5 w-5 text-orange-600" />
+                      Recent Operational Inflections
+                    </h4>
+                    <ul className="space-y-2">
+                      {predictiveData.base_state.recent_inflections.map((inflection, index) => (
+                        <li key={index} className="text-sm flex items-start gap-2">
+                          <div className="w-2 h-2 bg-orange-400 rounded-full mt-2 flex-shrink-0"></div>
+                          <span className="text-orange-700">{inflection}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {/* Forward Scenarios */}
+                <div>
+                  <h4 className="font-semibold mb-4">Forward-Looking Scenarios</h4>
+                  <div className="space-y-6">
+                    {predictiveData.scenarios.map((scenario, index) => (
+                      <div key={index} className={`p-6 border-2 rounded-lg ${
+                        scenario.name === 'Base' ? 'bg-slate-50 border-slate-300' :
+                        scenario.name === 'Upside' ? 'bg-green-50 border-green-300' :
+                        'bg-red-50 border-red-300'
+                      }`}>
+                        <div className="flex items-center justify-between mb-4">
+                          <h5 className="font-semibold text-lg">{scenario.name} Case</h5>
+                          <Badge className={`text-lg px-3 py-1 ${
+                            scenario.name === 'Base' ? 'bg-slate-100 text-slate-800' :
+                            scenario.name === 'Upside' ? 'bg-green-100 text-green-800' :
+                            'bg-red-100 text-red-800'
+                          }`}>
+                            {(scenario.confidence * 100).toFixed(0)}% Confidence
+                          </Badge>
+                        </div>
+
+                        {/* Complete Outcomes Grid */}
+                        <div className="grid md:grid-cols-3 gap-4 mb-4">
+                          {/* Operational Metrics */}
+                          <div className="space-y-2">
+                            {Object.entries(scenario.outcomes).slice(0, 4).map(([key, value]) => (
+                              <div key={key} className="flex justify-between items-center">
+                                <span className="text-sm font-medium">{key.replace(/_/g, ' ').charAt(0).toUpperCase() + key.slice(1).replace(/_/g, ' ')}:</span>
+                                <Badge variant="outline">{value}</Badge>
+                              </div>
+                            ))}
+                          </div>
+
+                          {/* Financial Metrics */}
+                          <div className="space-y-2">
+                            {Object.entries(scenario.outcomes).slice(4, 8).map(([key, value]) => (
+                              <div key={key} className="flex justify-between items-center">
+                                <span className="text-sm font-medium">{key.replace(/_/g, ' ').charAt(0).toUpperCase() + key.slice(1).replace(/_/g, ' ')}:</span>
+                                <Badge variant="outline">{value}</Badge>
+                              </div>
+                            ))}
+                          </div>
+
+                          {/* Risk & Growth Metrics */}
+                          <div className="space-y-2">
+                            {Object.entries(scenario.outcomes).slice(8).map(([key, value]) => (
+                              <div key={key} className="flex justify-between items-center">
+                                <span className="text-sm font-medium">{key.replace(/_/g, ' ').charAt(0).toUpperCase() + key.slice(1).replace(/_/g, ' ')}:</span>
+                                <Badge variant="outline">{value}</Badge>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+
+                        {/* Numeric Context */}
+                        {scenario.numeric_context && (
+                          <div className="mb-4 p-3 bg-white rounded-lg border">
+                            <h6 className="font-medium mb-2 text-sm">Quantitative Indicators</h6>
+                            <p className="text-sm text-slate-600">{scenario.numeric_context}</p>
+                          </div>
+                        )}
+
+                        <div className="grid md:grid-cols-3 gap-6">
+                          {/* Key Drivers */}
+                          <div>
+                            <h6 className="font-medium mb-2 text-sm">Key Drivers</h6>
+                            <ul className="space-y-1">
+                              {scenario.key_drivers.map((driver, idx) => (
+                                <li key={idx} className="text-sm flex items-start gap-2">
+                                  <div className="w-1.5 h-1.5 bg-blue-400 rounded-full mt-2 flex-shrink-0"></div>
+                                  <span className="text-blue-700">{driver}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+
+                          {/* Leading Indicators */}
+                          <div>
+                            <h6 className="font-medium mb-2 text-sm">Leading Indicators</h6>
+                            <ul className="space-y-1">
+                              {scenario.leading_indicators.map((indicator, idx) => (
+                                <li key={idx} className="text-sm flex items-start gap-2">
+                                  <div className="w-1.5 h-1.5 bg-green-400 rounded-full mt-2 flex-shrink-0"></div>
+                                  <span className="text-green-700">{indicator}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+
+                          {/* Falsifiers */}
+                          <div>
+                            <h6 className="font-medium mb-2 text-sm">Scenario Falsifiers</h6>
+                            <ul className="space-y-1">
+                              {scenario.falsifiers.map((falsifier, idx) => (
+                                <li key={idx} className="text-sm flex items-start gap-2">
+                                  <AlertTriangle className="h-3 w-3 text-red-500 mt-1 flex-shrink-0" />
+                                  <span className="text-red-700">{falsifier}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        </div>
                       </div>
                     ))}
                   </div>
+                </div>
+
+
+                {/* Scenario Transitions */}
+                <div>
+                  <h4 className="font-semibold mb-4 flex items-center gap-2">
+                    <Target className="h-5 w-5 text-indigo-600" />
+                    Scenario Transition Analysis
+                  </h4>
+                  <div className="space-y-4">
+                    {predictiveData.transition_map.map((transition, index) => (
+                      <div key={index} className="p-4 border rounded-lg bg-indigo-50">
+                        <div className="flex items-center gap-4 mb-3">
+                          <div className="text-sm font-medium text-indigo-700">Scenario Shift:</div>
+                          <div className="flex items-center gap-3">
+                            <Badge className={`${
+                              transition.from === 'Base' ? 'bg-slate-100 text-slate-800' :
+                              transition.from === 'Upside' ? 'bg-green-100 text-green-800' :
+                              'bg-red-100 text-red-800'
+                            }`}>
+                              {transition.from} Case
+                            </Badge>
+                            <div className="text-indigo-600 font-bold text-3xl px-2">→</div>
+                            <Badge className={`${
+                              transition.to === 'Base' ? 'bg-slate-100 text-slate-800' :
+                              transition.to === 'Upside' ? 'bg-green-100 text-green-800' :
+                              'bg-red-100 text-red-800'
+                            }`}>
+                              {transition.to} Case
+                            </Badge>
+                          </div>
+                        </div>
+                        
+                        <div className="space-y-3">
+                          <div>
+                            <h6 className="font-medium text-sm text-indigo-800 mb-1">Transition Trigger</h6>
+                            <p className="text-sm text-indigo-700">{transition.trigger}</p>
+                          </div>
+                          
+                          <div>
+                            <h6 className="font-medium text-sm text-indigo-800 mb-2">Early Warning Signals</h6>
+                            <ul className="space-y-1">
+                              {transition.early_signals.map((signal, idx) => (
+                                <li key={idx} className="text-sm flex items-start gap-2">
+                                  <div className="w-1.5 h-1.5 bg-indigo-500 rounded-full mt-2 flex-shrink-0"></div>
+                                  <span className="text-indigo-700">{signal}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                                {/* Uncertainty Analysis */}
+                                <div>
+                  <h4 className="font-semibold mb-4 flex items-center gap-2">
+                    <AlertCircle className="h-5 w-5 text-amber-600" />
+                    Uncertainty & Risk Assessment
+                  </h4>
+                  <div className="grid md:grid-cols-2 gap-6">
+                    {/* Dominant Unknowns */}
+                    <div className="p-4 border rounded-lg bg-amber-50">
+                      <h5 className="font-semibold mb-3 text-amber-800">Dominant Unknowns</h5>
+                      <ul className="space-y-2">
+                        {predictiveData.uncertainty.dominant_unknowns.map((unknown, index) => (
+                          <li key={index} className="text-sm flex items-start gap-2">
+                            <HelpCircle className="h-4 w-4 text-amber-600 mt-0.5 flex-shrink-0" />
+                            <span className="text-amber-700">{unknown}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    {/* Confidence Check & Black Swan */}
+                    <div className="space-y-4">
+                      <div className="p-4 border rounded-lg bg-slate-50">
+                        <h5 className="font-semibold mb-2 text-slate-800">Overall Confidence</h5>
+                        <Badge className={`${
+                          predictiveData.uncertainty.confidence_check === 'High' ? 'bg-green-100 text-green-800' :
+                          predictiveData.uncertainty.confidence_check === 'Medium' ? 'bg-yellow-100 text-yellow-800' :
+                          'bg-red-100 text-red-800'
+                        }`}>
+                          {predictiveData.uncertainty.confidence_check}
+                        </Badge>
+                      </div>
+
+                      {predictiveData.uncertainty.black_swan_notes && (
+                        <div className="p-4 border rounded-lg bg-red-50">
+                          <h5 className="font-semibold mb-2 text-red-800 flex items-center gap-2">
+                            <Zap className="h-4 w-4" />
+                            Tail Risk Considerations
+                          </h5>
+                          <p className="text-sm text-red-700">{predictiveData.uncertainty.black_swan_notes}</p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Distribution Forward Analysis */}
+                {predictiveData.distribution_outlook.applies && (
+                  <div className="p-6 border-2 rounded-lg bg-gradient-to-br from-slate-50 to-blue-50 border-slate-300">
+                    <h4 className="font-semibold mb-6 flex items-center gap-2 text-lg">
+                      <TrendingUp className="h-6 w-6 text-green-600" />
+                      Distribution Forward Analysis
+                    </h4>
+                    
+                    <div className="space-y-6">
+                      {/* Base Outlook & Sustainability */}
+                      <div className="grid md:grid-cols-2 gap-6">
+                        {/* Base Outlook */}
+                        <div className="p-4 border rounded-lg bg-white shadow-sm">
+                          <h5 className="font-semibold mb-3 text-green-800">Base Case Outlook</h5>
+                          <div className="space-y-3">
+                            {/* Distribution Trajectory */}
+                            <div className="flex justify-between items-center">
+                              <span className="text-sm font-medium">Expected Direction:</span>
+                              <Badge className={`${
+                                predictiveData.distribution_outlook.trajectory === 'Increase' ? 'bg-green-100 text-green-800' :
+                                predictiveData.distribution_outlook.trajectory === 'Stable' ? 'bg-blue-100 text-blue-800' :
+                                predictiveData.distribution_outlook.trajectory === 'Cut' ? 'bg-orange-100 text-orange-800' :
+                                predictiveData.distribution_outlook.trajectory === 'Suspend' ? 'bg-red-100 text-red-800' :
+                                'bg-slate-100 text-slate-800'
+                              }`}>
+                                {predictiveData.distribution_outlook.trajectory}
+                              </Badge>
+                            </div>
+
+                            {/* Coverage Direction */}
+                            {predictiveData.scenarios.find(s => s.name === 'Base')?.outcomes.coverage_direction && (
+                              <div className="flex justify-between items-center">
+                                <span className="text-sm font-medium">Coverage Trend:</span>
+                                <Badge className={`${
+                                  predictiveData.scenarios.find(s => s.name === 'Base')?.outcomes.coverage_direction === 'Improving' ? 'bg-green-100 text-green-800' :
+                                  predictiveData.scenarios.find(s => s.name === 'Base')?.outcomes.coverage_direction === 'Stable' ? 'bg-blue-100 text-blue-800' :
+                                  'bg-red-100 text-red-800'
+                                }`}>
+                                  {predictiveData.scenarios.find(s => s.name === 'Base')?.outcomes.coverage_direction}
+                                </Badge>
+                              </div>
+                            )}
+
+                            {/* Key Driving Factors */}
+                            <div>
+                              <h6 className="text-sm font-medium mb-2">Key Driving Factors</h6>
+                              <ul className="space-y-1">
+                                {predictiveData.distribution_outlook.key_factors.map((factor, idx) => (
+                                  <li key={idx} className="text-sm flex items-start gap-2">
+                                    <div className="w-1.5 h-1.5 bg-green-400 rounded-full mt-2 flex-shrink-0"></div>
+                                    <span className="text-slate-700">{factor}</span>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Structure & Policy */}
+                        <div className="space-y-4">
+                          {predictiveData.distribution_outlook.structure_notes && (
+                            <div className="p-4 border rounded-lg bg-white shadow-sm">
+                              <h5 className="font-semibold mb-2 text-indigo-800">Structure Considerations</h5>
+                              <p className="text-sm text-slate-700">{predictiveData.distribution_outlook.structure_notes}</p>
+                            </div>
+                          )}
+
+                          <div className="p-4 border rounded-lg bg-white shadow-sm">
+                            <h5 className="font-semibold mb-2 text-amber-800">Policy Monitoring Signals</h5>
+                            <ul className="space-y-1">
+                              {predictiveData.distribution_outlook.policy_signals.map((signal, idx) => (
+                                <li key={idx} className="text-sm flex items-start gap-2">
+                                  <div className="w-1.5 h-1.5 bg-amber-400 rounded-full mt-2 flex-shrink-0"></div>
+                                  <span className="text-slate-700">{signal}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 )}
+
+
+
+
+
+                {/* Disclaimer */}
+                <div className="mt-6 p-4 bg-gray-50 rounded-lg border-l-4 border-gray-400">
+                  <p className="text-xs text-gray-600">{predictiveData.ui_summaries.disclaimer}</p>
+                </div>
               </>
             ) : (
               <div className="text-center py-8 text-muted-foreground">
