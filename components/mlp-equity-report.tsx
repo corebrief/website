@@ -348,14 +348,6 @@ interface MLPReportProps {
   report: ParsedReport;
 }
 
-// Helper function to get grade color
-function getGradeColor(letter: string): string {
-  if (letter.startsWith('A')) return 'bg-green-100 text-green-800 border-green-300';
-  if (letter.startsWith('B')) return 'bg-blue-100 text-blue-800 border-blue-300';
-  if (letter.startsWith('C')) return 'bg-yellow-100 text-yellow-800 border-yellow-300';
-  return 'bg-red-100 text-red-800 border-red-300';
-}
-
 // Helper function to get credibility tier color
 function getCredibilityTierColor(tier: string): string {
   switch (tier.toLowerCase()) {
