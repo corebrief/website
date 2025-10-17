@@ -2179,7 +2179,7 @@ function REITEquityReportContent({
                           <div className="p-4 border rounded-lg bg-red-50">
                             <h5 className="font-semibold mb-2 text-red-800 flex items-center gap-2">
                               <AlertTriangle className="h-4 w-4" />
-                              Black Swan Considerations
+                              Tail Risk Considerations
                             </h5>
                             <p className="text-sm text-red-700">{predictiveData.uncertainty.black_swan_notes}</p>
                           </div>

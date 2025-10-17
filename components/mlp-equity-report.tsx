@@ -9,6 +9,7 @@ import {
   Brain,
   Building2,
   AlertTriangle,
+  BarChart3,
   Gauge,
   Target,
   FileText,
@@ -16,8 +17,13 @@ import {
   Star,
   Eye,
   AlertCircle,
+  CheckCircle,
+  GitBranch,
+  Activity,
   HelpCircle,
-  Zap
+  Zap,
+  ChevronDown,
+  Lightbulb
 } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
 import { type ParsedReport, type MLPMultiYearAnalysis } from '@/utils/report-parsers';
@@ -239,8 +245,53 @@ interface MLPThesisData {
     end_fy: number;
     num_years: number;
   };
+  coverage: {
+    years_received: number[];
+    source_versions: {
+      multi_year: string;
+      management: string;
+      predictive: string;
+    };
+    warnings: string[];
+  };
+  consensus_map: {
+    aligned_themes: string[];
+    tensions: Array<{
+      topic: string;
+      positions: {
+        multi_year: string;
+        management: string;
+        predictive: string;
+      };
+      diagnosis: string;
+    }>;
+    missing_info: string[];
+  };
+  mlp_thesis: {
+    thesis_statement: string;
+    throughput_engine: {
+      throughput_drivers: string[];
+      constraints: string[];
+    };
+    value_creation_drivers: string[];
+    fragilities: string[];
+    capital_allocation_model: {
+      growth_capex_discipline: 'High' | 'Medium' | 'Low' | 'insufficient_detail';
+      mna_selectivity: 'High' | 'Medium' | 'Low' | 'insufficient_detail';
+      dropdowns_usage: 'Active' | 'Selective' | 'Limited' | 'insufficient_detail';
+      leverage_policy: 'Conservative' | 'Balanced' | 'Aggressive' | 'insufficient_detail';
+      distribution_sustainability: 'Strong' | 'Adequate' | 'Stretched' | 'insufficient_detail';
+      notes: string;
+    };
+    structural_position: {
+      moat_label: 'Strengthening' | 'Stable' | 'Eroding' | 'Mixed' | 'insufficient_detail';
+      switching_costs: 'High' | 'Medium' | 'Low' | 'insufficient_detail';
+      regulatory_posture: 'Favorable' | 'Neutral' | 'Adverse' | 'Mixed' | 'insufficient_detail';
+      notes: string;
+    };
+  };
   viability_assessment: {
-    tier: string;
+    tier: 'VeryStrong' | 'Strong' | 'Adequate' | 'Fragile' | 'insufficient_detail';
     subscores: {
       system_durability: number;
       execution_quality: number;
@@ -248,24 +299,53 @@ interface MLPThesisData {
       risk_balance: number;
       governance_quality: number;
     };
+    weights: number[];
+    composite: number;
+    rationale: string;
   };
-  thesis_statement: string;
-  ui_summaries: {
-    synopsis: string;
+  agreement: {
+    alignment_score: number;
+    areas_of_agreement: string[];
+    areas_of_divergence: string[];
   };
+  scenarios_bridge: {
+    base_path: string;
+    upside_falsifiers: string[];
+    downside_falsifiers: string[];
+  };
+  watchlist: {
+    leading_indicators: string[];
+    early_warnings: string[];
+    data_gaps: string[];
+  };
+  transition_triggers: Array<{
+    event: string;
+    interpretation: 'Positive' | 'Negative' | 'Ambiguous';
+    expected_effect: 'Throughput' | 'Utilization' | 'DCF' | 'Distribution' | 'Multiple';
+    thesis_update_rule: string;
+  }>;
+  contribution_breakdown: {
+    weights: {
+      multi_year: number;
+      management: number;
+      predictive: number;
+    };
+    components: {
+      MY_comp: number;
+      MG_comp: number;
+      PR_comp: number;
+    };
+    viability_composite: number;
+    notes: string;
+  };
+  disclaimer: string;
   version: string;
+  one_liner: string;
+  synopsis: string;
 }
 
 interface MLPReportProps {
   report: ParsedReport;
-}
-
-// Helper function to get grade color
-function getGradeColor(letter: string): string {
-  if (letter.startsWith('A')) return 'bg-green-100 text-green-800 border-green-300';
-  if (letter.startsWith('B')) return 'bg-blue-100 text-blue-800 border-blue-300';
-  if (letter.startsWith('C')) return 'bg-yellow-100 text-yellow-800 border-yellow-300';
-  return 'bg-red-100 text-red-800 border-red-300';
 }
 
 // Helper function to get credibility tier color
@@ -294,6 +374,8 @@ function MLPEquityReportContent({
   thesisData: MLPThesisData | null;
 }) {
   const [expandedSections, setExpandedSections] = useState<Set<SectionKey>>(new Set());
+  const [showAnalyticalTensions, setShowAnalyticalTensions] = useState(false);
+  const [showThesisUpdateTriggers, setShowThesisUpdateTriggers] = useState(false);
 
   const toggleSection = (section: SectionKey) => {
     if (expandedSections.has(section)) {
@@ -312,7 +394,7 @@ function MLPEquityReportContent({
         <div className="py-3 px-4">
           {/* Title - Always on top */}
           <div className="text-center lg:text-left mb-3 lg:mb-0">
-            <h2 className="text-base font-semibold text-slate-800">Business Analysis Framework</h2>
+            <h2 className="text-base font-semibold text-slate-800">MLP Analysis Framework</h2>
             <div className="text-xs text-slate-500">
               {multiYearData?.window?.num_years || 5} Years • Filing Year {multiYearData?.window?.start_fy || 'XXXX'}–{multiYearData?.window?.end_fy || 'XXXX'}
             </div>
@@ -425,7 +507,7 @@ function MLPEquityReportContent({
               onClick={() => toggleSection('thesis')}
             >
               <div className="text-center">
-                <div className="font-semibold">Business Thesis</div>
+                <div className="font-semibold">MLP Thesis</div>
                 {!expandedSections.has('thesis') && <div className="text-[10px] opacity-75 mt-1">Tap to View</div>}
               </div>
             </button>
@@ -1425,76 +1507,571 @@ function MLPEquityReportContent({
           <CardHeader className="pb-3">
             <h3 className="text-lg font-semibold text-slate-800 flex items-center gap-2">
               <Building2 className="h-5 w-5 text-orange-600" />
-              MLP Business Thesis
+              Business Thesis & Viability Assessment
             </h3>
           </CardHeader>
           <CardContent className="space-y-8">
             {thesisData ? (
               <>
-                {/* Thesis Statement */}
-                <div className="bg-orange-50 p-6 rounded-lg text-center">
-                  <h4 className="font-semibold mb-4 text-orange-800">Investment Thesis</h4>
-                  <p className="text-lg text-orange-700 italic">{thesisData.thesis_statement}</p>
+                {/* Synopsis and Analysis Alignment Side by Side */}
+                <div className="grid md:grid-cols-2 gap-6">
+                  {/* Synopsis */}
+                  <div className="bg-gradient-to-br from-orange-50 to-yellow-50 p-4 rounded-lg border-l-4 border-yellow-400">
+                    <h4 className="font-semibold mb-2 text-slate-800">Business Thesis Synopsis</h4>
+                    <p className="text-sm text-slate-700">{thesisData.synopsis}</p>
+                  </div>
+
+                  {/* Analysis Alignment */}
+                  <div className="p-4 border rounded-lg bg-blue-50">
+                    <h4 className="font-semibold mb-3 text-blue-800 flex items-center gap-2">
+                      <Gauge className="h-4 w-4" />
+                      Analysis Alignment
+                    </h4>
+                    <div className="space-y-3">
+                      <div className="flex items-center gap-3">
+                        <span className="text-sm font-medium">Consensus Score:</span>
+                        <Badge className="bg-blue-100 text-blue-800">
+                          {(thesisData.agreement.alignment_score * 100).toFixed(0)}%
+                        </Badge>
+                      </div>
+                      <div className="w-full bg-blue-200 rounded-full h-2">
+                        <div 
+                          className="bg-blue-600 h-2 rounded-full" 
+                          style={{ width: `${thesisData.agreement.alignment_score * 100}%` }}
+                        ></div>
+                      </div>
+                      <p className="text-xs text-blue-600">
+                        Agreement across Multi-Year, Management, and Forward-Looking analyses
+                      </p>
+                    </div>
+                  </div>
                 </div>
 
-                {/* Viability Assessment */}
-                <Card className="border-orange-200">
-                  <CardHeader>
-                    <h4 className="font-semibold text-orange-700 flex items-center gap-2">
-                      <Gauge className="h-5 w-5" />
-                      Viability Assessment
+                {/* Business Viability Assessment */}
+                <div className="p-6 border-2 rounded-lg bg-gradient-to-br from-slate-50 to-indigo-50 border-indigo-200">
+                  {/* Header */}
+                  <div className="flex items-center justify-between mb-8">
+                    <h4 className="font-semibold text-lg flex items-center gap-2">
+                      <BarChart3 className="h-5 w-5 text-indigo-600" />
+                      Business Viability Assessment
                     </h4>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="flex items-center justify-center">
-                      <div className={`px-6 py-3 rounded-full text-lg font-semibold ${getGradeColor(thesisData.viability_assessment.tier)}`}>
-                        Viability Tier: {thesisData.viability_assessment.tier}
+                    <Badge className={`text-base px-3 py-1.5 ${
+                      thesisData.viability_assessment.tier === 'VeryStrong' || thesisData.viability_assessment.tier === 'Strong' ? 'bg-green-500 text-white' :
+                      thesisData.viability_assessment.tier === 'Adequate' ? 'bg-yellow-500 text-white' :
+                      'bg-red-500 text-white'
+                    }`}>
+                      {thesisData.viability_assessment.tier} ({thesisData.viability_assessment.composite.toFixed(1)}/10)
+                    </Badge>
+                  </div>
+
+                  <div className="grid md:grid-cols-2 gap-6 mb-6">
+                    {/* Left Column */}
+                    <div className="space-y-6">
+                      <div className="p-3 bg-white rounded-lg border">
+                        <div className="flex justify-between mb-2">
+                          <span className="text-sm font-medium">Durability</span>
+                          <span className="text-sm font-semibold">{thesisData.viability_assessment.subscores.system_durability.toFixed(1)}/10</span>
+                        </div>
+                        <Progress value={thesisData.viability_assessment.subscores.system_durability * 10} className="h-2 [&>div]:bg-black" />
+                      </div>
+
+                      <div className="p-3 bg-white rounded-lg border">
+                        <div className="flex justify-between mb-2">
+                          <span className="text-sm font-medium">Execution Quality</span>
+                          <span className="text-sm font-semibold">{thesisData.viability_assessment.subscores.execution_quality.toFixed(1)}/10</span>
+                        </div>
+                        <Progress value={thesisData.viability_assessment.subscores.execution_quality * 10} className="h-2 [&>div]:bg-black" />
+                      </div>
+
+                      <div className="p-3 bg-white rounded-lg border">
+                        <div className="flex justify-between mb-2">
+                          <span className="text-sm font-medium">Financial Resilience</span>
+                          <span className="text-sm font-semibold">{thesisData.viability_assessment.subscores.financial_resilience.toFixed(1)}/10</span>
+                        </div>
+                        <Progress value={thesisData.viability_assessment.subscores.financial_resilience * 10} className="h-2 [&>div]:bg-black" />
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="space-y-4">
-                        <div>
-                          <div className="flex justify-between mb-2">
-                            <span className="text-sm font-medium">System Durability</span>
-                            <span className="text-sm text-gray-600">{thesisData.viability_assessment.subscores.system_durability}/10</span>
-                          </div>
-                          <Progress value={thesisData.viability_assessment.subscores.system_durability * 10} className="h-2" />
+                    {/* Right Column */}
+                    <div className="space-y-6">
+                      <div className="p-3 bg-white rounded-lg border">
+                        <div className="flex justify-between mb-2">
+                          <span className="text-sm font-medium">Risk Balance</span>
+                          <span className="text-sm font-semibold">{thesisData.viability_assessment.subscores.risk_balance.toFixed(1)}/10</span>
                         </div>
-                        <div>
-                          <div className="flex justify-between mb-2">
-                            <span className="text-sm font-medium">Execution Quality</span>
-                            <span className="text-sm text-gray-600">{thesisData.viability_assessment.subscores.execution_quality}/10</span>
-                          </div>
-                          <Progress value={thesisData.viability_assessment.subscores.execution_quality * 10} className="h-2" />
+                        <Progress value={thesisData.viability_assessment.subscores.risk_balance * 10} className="h-2 [&>div]:bg-black" />
+                      </div>
+
+                      <div className="p-3 bg-white rounded-lg border">
+                        <div className="flex justify-between mb-2">
+                          <span className="text-sm font-medium">Governance Quality</span>
+                          <span className="text-sm font-semibold">{thesisData.viability_assessment.subscores.governance_quality.toFixed(1)}/10</span>
                         </div>
-                        <div>
-                          <div className="flex justify-between mb-2">
-                            <span className="text-sm font-medium">Financial Resilience</span>
-                            <span className="text-sm text-gray-600">{thesisData.viability_assessment.subscores.financial_resilience}/10</span>
+                        <Progress value={thesisData.viability_assessment.subscores.governance_quality * 10} className="h-2 [&>div]:bg-black" />
+                      </div>
+
+                      {/* Analysis Contribution Weights */}
+                      <div className="p-3 bg-indigo-50 rounded-lg border border-indigo-200">
+                        <h6 className="font-medium text-sm text-indigo-800 mb-2">Analysis Contribution Weights</h6>
+                        <div className="space-y-1 text-xs">
+                          <div className="flex justify-between">
+                            <span>Multi-Year Analysis:</span>
+                            <span className="font-medium">{(thesisData.contribution_breakdown.weights.multi_year * 100).toFixed(0)}%</span>
                           </div>
-                          <Progress value={thesisData.viability_assessment.subscores.financial_resilience * 10} className="h-2" />
+                          <div className="flex justify-between">
+                            <span>Management Analysis:</span>
+                            <span className="font-medium">{(thesisData.contribution_breakdown.weights.management * 100).toFixed(0)}%</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span>Forward-Looking Analysis:</span>
+                            <span className="font-medium">{(thesisData.contribution_breakdown.weights.predictive * 100).toFixed(0)}%</span>
+                          </div>
                         </div>
                       </div>
-                      <div className="space-y-4">
-                        <div>
-                          <div className="flex justify-between mb-2">
-                            <span className="text-sm font-medium">Risk Balance</span>
-                            <span className="text-sm text-gray-600">{thesisData.viability_assessment.subscores.risk_balance}/10</span>
-                          </div>
-                          <Progress value={thesisData.viability_assessment.subscores.risk_balance * 10} className="h-2" />
-                        </div>
-                        <div>
-                          <div className="flex justify-between mb-2">
-                            <span className="text-sm font-medium">Governance Quality</span>
-                            <span className="text-sm text-gray-600">{thesisData.viability_assessment.subscores.governance_quality}/10</span>
-                          </div>
-                          <Progress value={thesisData.viability_assessment.subscores.governance_quality * 10} className="h-2" />
-                        </div>
+
+                    </div>
+                  </div>
+
+                  {/* Assessment Rationale */}
+                  <div className="bg-white rounded-lg p-4">
+                    <h6 className="font-medium text-sm mb-2">Assessment Rationale</h6>
+                    <p className="text-sm text-slate-700">{thesisData.viability_assessment.rationale}</p>
+                  </div>
+                </div>
+
+                {/* Consensus Map */}
+                <div>
+                  <h4 className="font-semibold mb-4 flex items-center gap-2">
+                    <GitBranch className="h-5 w-5 text-blue-600" />
+                    Analysis Consensus Map
+                  </h4>
+                  
+                  <div className="space-y-6">
+                    {/* Areas of Agreement and Divergence */}
+                    <div className="grid md:grid-cols-2 gap-6">
+                      {/* Areas of Agreement */}
+                      <div className="p-4 border rounded-lg bg-green-50">
+                        <h5 className="font-semibold mb-3 text-green-800 flex items-center gap-2">
+                          <CheckCircle className="h-4 w-4" />
+                          Areas of Agreement
+                        </h5>
+                        <ul className="space-y-2">
+                          {thesisData.agreement.areas_of_agreement.map((item, index) => (
+                            <li key={index} className="text-sm flex items-start gap-2">
+                              <div className="w-1.5 h-1.5 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
+                              <span className="text-green-700">{item}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+
+                      {/* Areas of Divergence */}
+                      <div className="p-4 border rounded-lg bg-red-50">
+                        <h5 className="font-semibold mb-3 text-red-800 flex items-center gap-2">
+                          <AlertCircle className="h-4 w-4" />
+                          Areas of Divergence
+                        </h5>
+                        <ul className="space-y-2">
+                          {thesisData.agreement.areas_of_divergence.map((item, index) => (
+                            <li key={index} className="text-sm flex items-start gap-2">
+                              <div className="w-1.5 h-1.5 bg-red-500 rounded-full mt-2 flex-shrink-0"></div>
+                              <span className="text-red-700">{item}</span>
+                            </li>
+                          ))}
+                        </ul>
                       </div>
                     </div>
-                  </CardContent>
-                </Card>
+
+                    {/* Analytical Tensions - Collapsible */}
+                    {thesisData.consensus_map.tensions && thesisData.consensus_map.tensions.length > 0 && (
+                      <div className="mt-4">
+                        <button 
+                          onClick={() => setShowAnalyticalTensions(!showAnalyticalTensions)}
+                          className="w-full flex items-center justify-between p-3 bg-amber-50 border border-amber-200 rounded-lg hover:bg-amber-100 transition-colors"
+                        >
+                          <div className="flex items-center gap-2">
+                            <AlertCircle className="h-4 w-4 text-amber-600" />
+                            <h5 className="font-semibold text-amber-800">
+                              Analytical Tensions ({thesisData.consensus_map.tensions.length})
+                            </h5>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span className="text-xs text-amber-600">
+                              {showAnalyticalTensions ? 'Hide details' : 'Show details'}
+                            </span>
+                            <ChevronDown className={`h-4 w-4 text-amber-600 transition-transform ${
+                              showAnalyticalTensions ? 'rotate-180' : ''
+                            }`} />
+                          </div>
+                        </button>
+                        
+                        {showAnalyticalTensions && (
+                          <div className="mt-3 space-y-3">
+                            {thesisData.consensus_map.tensions.map((tension, index) => (
+                              <div key={index} className="p-4 border rounded-lg bg-amber-50">
+                                <h6 className="font-medium text-sm text-amber-800 mb-2">{tension.topic}</h6>
+                                <div className="grid md:grid-cols-3 gap-3 mb-3">
+                                  <div className="text-xs">
+                                    <span className="font-medium text-slate-600">Multi-Year:</span>
+                                    <p className="text-slate-700 mt-1">{tension.positions.multi_year}</p>
+                                  </div>
+                                  <div className="text-xs">
+                                    <span className="font-medium text-slate-600">Management:</span>
+                                    <p className="text-slate-700 mt-1">{tension.positions.management}</p>
+                                  </div>
+                                  <div className="text-xs">
+                                    <span className="font-medium text-slate-600">Forward-Looking:</span>
+                                    <p className="text-slate-700 mt-1">{tension.positions.predictive}</p>
+                                  </div>
+                                </div>
+                                <div className="text-xs bg-amber-100 p-2 rounded">
+                                  <span className="font-medium text-amber-800">Diagnosis:</span>
+                                  <span className="text-amber-700 ml-1">{tension.diagnosis}</span>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Operating Model Profile */}
+                <h4 className="font-semibold mb-4 text-slate-800 flex items-center gap-2">
+                  <Lightbulb className="h-5 w-5 text-purple-600" />
+                  Operating Model Profile
+                </h4>
+                <div className="grid md:grid-cols-2 gap-6">
+                  {/* Throughput Drivers */}
+                  <div className="p-4 border rounded-lg bg-green-50">
+                    <h4 className="font-semibold mb-3 text-green-800 flex items-center gap-2">
+                      Throughput Drivers
+                    </h4>
+                    <ul className="space-y-2">
+                      {thesisData.mlp_thesis.throughput_engine.throughput_drivers.map((driver, index) => (
+                        <li key={index} className="text-sm flex items-start gap-2">
+                          <div className="w-1.5 h-1.5 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
+                          <span className="text-green-700">{driver}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  {/* System Constraints */}
+                  <div className="p-4 border rounded-lg bg-red-50">
+                    <h4 className="font-semibold mb-3 text-red-800 flex items-center gap-2">
+                      System Constraints
+                    </h4>
+                    <ul className="space-y-2">
+                      {thesisData.mlp_thesis.throughput_engine.constraints.map((constraint, index) => (
+                        <li key={index} className="text-sm flex items-start gap-2">
+                          <div className="w-1.5 h-1.5 bg-red-500 rounded-full mt-2 flex-shrink-0"></div>
+                          <span className="text-red-700">{constraint}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+
+                {/* Value Creation & Fragilities */}
+                <div className="grid md:grid-cols-2 gap-6">
+                  {/* Value Creation Drivers */}
+                  <div className="p-4 border rounded-lg bg-blue-50">
+                    <h4 className="font-semibold mb-3 text-blue-800 flex items-center gap-2">
+                      Value Creation Drivers
+                    </h4>
+                    <ul className="space-y-2">
+                      {thesisData.mlp_thesis.value_creation_drivers.map((driver, index) => (
+                        <li key={index} className="text-sm flex items-start gap-2">
+                          <TrendingUp className="h-4 w-4 text-blue-500 mt-0.5 flex-shrink-0" />
+                          <span className="text-blue-700">{driver}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  {/* Fragilities */}
+                    <div className="p-4 border rounded-lg bg-amber-50">
+                      <h4 className="font-semibold mb-3 text-amber-800 flex items-center gap-2">
+                        System Fragilities
+                      </h4>
+                      <ul className="space-y-2">
+                        {thesisData.mlp_thesis.fragilities.map((fragility, index) => (
+                          <li key={index} className="text-sm flex items-start gap-2">
+                            <AlertTriangle className="h-4 w-4 text-amber-500 mt-0.5 flex-shrink-0" />
+                            <span className="text-amber-700">{fragility}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+
+                {/* Structural Position */}
+                <div className="p-4 border rounded-lg bg-slate-50">
+                  <h5 className="font-semibold mb-3 text-slate-800 flex items-center gap-2">
+                    Structural Position Assessment
+                  </h5>
+                  <div className="grid md:grid-cols-3 gap-4 mb-3">
+                    <div className="text-center">
+                      <div className="text-xs text-slate-600 mb-1">Competitive Moat</div>
+                      <Badge className={`${
+                        thesisData.mlp_thesis.structural_position.moat_label === 'Strengthening' ? 'bg-green-100 text-green-800' :
+                        thesisData.mlp_thesis.structural_position.moat_label === 'Stable' ? 'bg-blue-100 text-blue-800' :
+                        thesisData.mlp_thesis.structural_position.moat_label === 'Eroding' ? 'bg-red-100 text-red-800' :
+                        'bg-slate-100 text-slate-800'
+                      }`}>
+                        {thesisData.mlp_thesis.structural_position.moat_label}
+                      </Badge>
+                    </div>
+
+                    <div className="text-center">
+                      <div className="text-xs text-slate-600 mb-1">Switching Costs</div>
+                      <Badge className={`${
+                        thesisData.mlp_thesis.structural_position.switching_costs === 'High' ? 'bg-green-100 text-green-800' :
+                        thesisData.mlp_thesis.structural_position.switching_costs === 'Medium' ? 'bg-yellow-100 text-yellow-800' :
+                        'bg-red-100 text-red-800'
+                      }`}>
+                        {thesisData.mlp_thesis.structural_position.switching_costs}
+                      </Badge>
+                    </div>
+
+                    <div className="text-center">
+                      <div className="text-xs text-slate-600 mb-1">Regulatory Posture</div>
+                      <Badge className={`${
+                        thesisData.mlp_thesis.structural_position.regulatory_posture === 'Favorable' ? 'bg-green-100 text-green-800' :
+                        thesisData.mlp_thesis.structural_position.regulatory_posture === 'Neutral' ? 'bg-blue-100 text-blue-800' :
+                        thesisData.mlp_thesis.structural_position.regulatory_posture === 'Adverse' ? 'bg-red-100 text-red-800' :
+                        'bg-slate-100 text-slate-800'
+                      }`}>
+                        {thesisData.mlp_thesis.structural_position.regulatory_posture}
+                      </Badge>
+                    </div>
+                  </div>
+
+                    {/* Notes */}
+                    {thesisData.mlp_thesis.structural_position.notes && (
+                      <p className="mt-3 text-xs text-slate-600 italic">
+                        {thesisData.mlp_thesis.structural_position.notes}
+                      </p>
+                  )}
+                </div>
+
+                {/* Capital Allocation Model */}
+                <div className="p-4 border rounded-lg bg-slate-50">
+                  <h4 className="font-semibold mb-3 text-slate-800 flex items-center gap-2">
+                    Capital Allocation Model
+                  </h4>
+                  <div className="grid md:grid-cols-3 gap-3">
+                    {/* Growth Capex Discipline */}
+                    <div className="text-center">
+                      <div className="text-xs text-slate-600 mb-1">Growth Capex</div>
+                      <Badge className={`${
+                        thesisData.mlp_thesis.capital_allocation_model.growth_capex_discipline === 'High' ? 'bg-green-100 text-green-800' :
+                        thesisData.mlp_thesis.capital_allocation_model.growth_capex_discipline === 'Medium' ? 'bg-yellow-100 text-yellow-800' :
+                        'bg-red-100 text-red-800'
+                      }`}>
+                        {thesisData.mlp_thesis.capital_allocation_model.growth_capex_discipline}
+                      </Badge>
+                    </div>
+
+                    {/* M&A Selectivity */}
+                    <div className="text-center">
+                      <div className="text-xs text-slate-600 mb-1">M&A Selectivity</div>
+                      <Badge className={`${
+                        thesisData.mlp_thesis.capital_allocation_model.mna_selectivity === 'High' ? 'bg-green-100 text-green-800' :
+                        thesisData.mlp_thesis.capital_allocation_model.mna_selectivity === 'Medium' ? 'bg-yellow-100 text-yellow-800' :
+                        'bg-red-100 text-red-800'
+                      }`}>
+                        {thesisData.mlp_thesis.capital_allocation_model.mna_selectivity}
+                      </Badge>
+                    </div>
+
+                    {/* Dropdowns Usage */}
+                    <div className="text-center">
+                      <div className="text-xs text-slate-600 mb-1">Dropdowns</div>
+                      <Badge className={`${
+                        thesisData.mlp_thesis.capital_allocation_model.dropdowns_usage === 'Active' ? 'bg-green-100 text-green-800' :
+                        thesisData.mlp_thesis.capital_allocation_model.dropdowns_usage === 'Selective' ? 'bg-yellow-100 text-yellow-800' :
+                        'bg-red-100 text-red-800'
+                      }`}>
+                        {thesisData.mlp_thesis.capital_allocation_model.dropdowns_usage}
+                      </Badge>
+                    </div>
+
+                    {/* Leverage Policy */}
+                    <div className="text-center">
+                      <div className="text-xs text-slate-600 mb-1">Leverage</div>
+                      <Badge className={`${
+                        thesisData.mlp_thesis.capital_allocation_model.leverage_policy === 'Conservative' ? 'bg-green-100 text-green-800' :
+                        thesisData.mlp_thesis.capital_allocation_model.leverage_policy === 'Balanced' ? 'bg-yellow-100 text-yellow-800' :
+                        'bg-red-100 text-red-800'
+                      }`}>
+                        {thesisData.mlp_thesis.capital_allocation_model.leverage_policy}
+                      </Badge>
+                    </div>
+
+                    {/* Distribution Sustainability */}
+                    <div className="text-center">
+                      <div className="text-xs text-slate-600 mb-1">Distribution</div>
+                      <Badge className={`${
+                        thesisData.mlp_thesis.capital_allocation_model.distribution_sustainability === 'Strong' ? 'bg-green-100 text-green-800' :
+                        thesisData.mlp_thesis.capital_allocation_model.distribution_sustainability === 'Adequate' ? 'bg-yellow-100 text-yellow-800' :
+                        'bg-red-100 text-red-800'
+                      }`}>
+                        {thesisData.mlp_thesis.capital_allocation_model.distribution_sustainability}
+                      </Badge>
+                    </div>
+                  </div>
+
+                  {/* Notes */}
+                  {thesisData.mlp_thesis.capital_allocation_model.notes && (
+                    <p className="mt-3 text-xs text-slate-600 italic">
+                      {thesisData.mlp_thesis.capital_allocation_model.notes}
+                    </p>
+                  )}
+                </div>
+
+
+
+
+
+                {/* Scenarios Bridge */}
+                <div>
+                  <h4 className="font-semibold mb-4 flex items-center gap-2">
+                    <Activity className="h-5 w-5 text-teal-600" />
+                    Scenario Outlook & Triggers
+                  </h4>
+                  <div className="space-y-4">
+                    {/* Base Path */}
+                    <div className="p-4 border rounded-lg bg-green-50">
+                      <h5 className="font-semibold mb-2 text-green-800">Base Case Expectation</h5>
+                      <p className="text-sm text-green-700">{thesisData.scenarios_bridge.base_path}</p>
+                    </div>
+
+                    <div className="grid md:grid-cols-2 gap-4">
+                      {/* Upside Confirmations */}
+                      <div className="p-4 border rounded-lg bg-green-50">
+                        <h5 className="font-semibold mb-2 text-green-800">Upside Confirmations</h5>
+                        <ul className="space-y-2">
+                          {thesisData.scenarios_bridge.upside_falsifiers.map((falsifier, index) => (
+                            <li key={index} className="text-sm flex items-start gap-2">
+                              <div className="w-1.5 h-1.5 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
+                              <span className="text-green-700">{falsifier}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+
+                      {/* Downside Confirmations */}
+                      <div className="p-4 border rounded-lg bg-red-50">
+                        <h5 className="font-semibold mb-2 text-red-800">Downside Confirmations</h5>
+                        <ul className="space-y-2">
+                          {thesisData.scenarios_bridge.downside_falsifiers.map((falsifier, index) => (
+                            <li key={index} className="text-sm flex items-start gap-2">
+                              <div className="w-1.5 h-1.5 bg-red-500 rounded-full mt-2 flex-shrink-0"></div>
+                              <span className="text-red-700">{falsifier}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Monitoring Dashboard */}
+                <div>
+                  <h4 className="font-semibold mb-4 flex items-center gap-2">
+                    <Eye className="h-5 w-5 text-gray-600" />
+                    Monitoring Dashboard
+                  </h4>
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <div className="p-4 border rounded-lg bg-blue-50">
+                      <h5 className="font-semibold mb-3 text-blue-800">Leading Indicators</h5>
+                      <ul className="space-y-2">
+                        {thesisData.watchlist.leading_indicators.map((indicator, index) => (
+                          <li key={index} className="text-sm flex items-start gap-2">
+                            <div className="w-1.5 h-1.5 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
+                            <span className="text-blue-700">{indicator}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    <div className="p-4 border rounded-lg bg-amber-50">
+                      <h5 className="font-semibold mb-3 text-amber-800">Early Warning Signals</h5>
+                      <ul className="space-y-2">
+                        {thesisData.watchlist.early_warnings.map((warning, index) => (
+                          <li key={index} className="text-sm flex items-start gap-2">
+                            <AlertTriangle className="h-3 w-3 text-amber-600 mt-1 flex-shrink-0" />
+                            <span className="text-amber-700">{warning}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Business Thesis Update Triggers */}
+                <div>
+                  <button 
+                    onClick={() => setShowThesisUpdateTriggers(!showThesisUpdateTriggers)}
+                    className="w-full flex items-center justify-between p-3 bg-yellow-50 border border-yellow-200 rounded-lg hover:bg-yellow-100 transition-colors"
+                  >
+                    <div className="flex items-center gap-2">
+                      <GitBranch className="h-4 w-4 text-yellow-600" />
+                      <h5 className="font-semibold text-yellow-800">
+                        Business Thesis Update Triggers ({thesisData.transition_triggers.length})
+                      </h5>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs text-yellow-600">
+                        {showThesisUpdateTriggers ? 'Hide details' : 'Show details'}
+                      </span>
+                      <ChevronDown className={`h-4 w-4 text-yellow-600 transition-transform ${
+                        showThesisUpdateTriggers ? 'rotate-180' : ''
+                      }`} />
+                    </div>
+                  </button>
+                  
+                  {showThesisUpdateTriggers && (
+                    <div className="mt-3 space-y-3">
+                      {thesisData.transition_triggers.map((trigger, index) => (
+                        <div key={index} className="p-4 border rounded-lg bg-yellow-50">
+                          <div className="flex items-start justify-between mb-2">
+                            <h6 className="font-medium text-sm text-yellow-800">{trigger.event}</h6>
+                            <div className="flex gap-2">
+                              <Badge className={`text-xs ${
+                                trigger.interpretation === 'Positive' ? 'bg-green-100 text-green-800' :
+                                trigger.interpretation === 'Negative' ? 'bg-red-100 text-red-800' :
+                                'bg-slate-100 text-slate-800'
+                              }`}>
+                                {trigger.interpretation}
+                              </Badge>
+                              <Badge variant="outline" className="text-xs">
+                                {trigger.expected_effect}
+                              </Badge>
+                            </div>
+                          </div>
+                          <p className="text-xs text-yellow-700 italic">
+                            <span className="font-medium">Update Rule:</span> {trigger.thesis_update_rule}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Final Disclaimer */}
+                {thesisData.disclaimer && (
+                  <div className="p-4 border rounded-lg bg-slate-100">
+                    <p className="text-xs text-slate-600 italic">{thesisData.disclaimer}</p>
+                  </div>
+                )}
+
+
+
+
               </>
             ) : (
               <div className="text-center py-8 text-muted-foreground">
@@ -1537,7 +2114,7 @@ export default function MLPEquityReport({ report }: MLPReportProps) {
   const hasMultiYear = isValidMLPData(rawMultiYearData, ['company', 'window', 'semantic_themes']);
   const hasManagement = isValidMLPData(rawManagementData, ['company', 'credibility_assessment']);
   const hasPredictive = isValidMLPData(rawPredictiveData, ['company', 'scenarios']);
-  const hasThesis = isValidMLPData(rawThesisData, ['company', 'viability_assessment']);
+  const hasThesis = isValidMLPData(rawThesisData, ['company', 'mlp_thesis', 'viability_assessment']);
 
   const multiYearData = hasMultiYear ? rawMultiYearData as MLPMultiYearData : null;
   const managementData = hasManagement ? rawManagementData as MLPManagementData : null;
