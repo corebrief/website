@@ -19,6 +19,7 @@ import {
   AlertCircle,
   CheckCircle,
   GitBranch,
+  Activity,
   HelpCircle,
   Zap,
   ChevronDown,
@@ -382,6 +383,7 @@ function MLPEquityReportContent({
 }) {
   const [expandedSections, setExpandedSections] = useState<Set<SectionKey>>(new Set());
   const [showAnalyticalTensions, setShowAnalyticalTensions] = useState(false);
+  const [showThesisUpdateTriggers, setShowThesisUpdateTriggers] = useState(false);
 
   const toggleSection = (section: SectionKey) => {
     if (expandedSections.has(section)) {
@@ -400,7 +402,7 @@ function MLPEquityReportContent({
         <div className="py-3 px-4">
           {/* Title - Always on top */}
           <div className="text-center lg:text-left mb-3 lg:mb-0">
-            <h2 className="text-base font-semibold text-slate-800">Business Analysis Framework</h2>
+            <h2 className="text-base font-semibold text-slate-800">MLP Analysis Framework</h2>
             <div className="text-xs text-slate-500">
               {multiYearData?.window?.num_years || 5} Years • Filing Year {multiYearData?.window?.start_fy || 'XXXX'}–{multiYearData?.window?.end_fy || 'XXXX'}
             </div>
@@ -513,7 +515,7 @@ function MLPEquityReportContent({
               onClick={() => toggleSection('thesis')}
             >
               <div className="text-center">
-                <div className="font-semibold">Business Thesis</div>
+                <div className="font-semibold">MLP Thesis</div>
                 {!expandedSections.has('thesis') && <div className="text-[10px] opacity-75 mt-1">Tap to View</div>}
               </div>
             </button>
@@ -1562,10 +1564,9 @@ function MLPEquityReportContent({
                       Business Viability Assessment
                     </h4>
                     <Badge className={`text-base px-3 py-1.5 ${
-                      thesisData.viability_assessment.tier === 'VeryStrong' ? 'bg-emerald-100 text-emerald-800 border border-emerald-300' :
-                      thesisData.viability_assessment.tier === 'Strong' ? 'bg-green-100 text-green-800 border border-green-300' :
-                      thesisData.viability_assessment.tier === 'Adequate' ? 'bg-blue-100 text-blue-800 border border-blue-300' :
-                      'bg-red-100 text-red-800 border border-red-300'
+                      thesisData.viability_assessment.tier === 'VeryStrong' || thesisData.viability_assessment.tier === 'Strong' ? 'bg-green-500 text-white' :
+                      thesisData.viability_assessment.tier === 'Adequate' ? 'bg-yellow-500 text-white' :
+                      'bg-red-500 text-white'
                     }`}>
                       {thesisData.viability_assessment.tier} ({thesisData.viability_assessment.composite.toFixed(1)}/10)
                     </Badge>
@@ -1577,7 +1578,7 @@ function MLPEquityReportContent({
                       <div className="p-3 bg-white rounded-lg border">
                         <div className="flex justify-between mb-2">
                           <span className="text-sm font-medium">Durability</span>
-                          <span className="text-sm">{thesisData.viability_assessment.subscores.system_durability.toFixed(1)}/10</span>
+                          <span className="text-sm font-semibold">{thesisData.viability_assessment.subscores.system_durability.toFixed(1)}/10</span>
                         </div>
                         <Progress value={thesisData.viability_assessment.subscores.system_durability * 10} className="h-2 [&>div]:bg-black" />
                       </div>
@@ -1585,7 +1586,7 @@ function MLPEquityReportContent({
                       <div className="p-3 bg-white rounded-lg border">
                         <div className="flex justify-between mb-2">
                           <span className="text-sm font-medium">Execution Quality</span>
-                          <span className="text-sm">{thesisData.viability_assessment.subscores.execution_quality.toFixed(1)}/10</span>
+                          <span className="text-sm font-semibold">{thesisData.viability_assessment.subscores.execution_quality.toFixed(1)}/10</span>
                         </div>
                         <Progress value={thesisData.viability_assessment.subscores.execution_quality * 10} className="h-2 [&>div]:bg-black" />
                       </div>
@@ -1593,7 +1594,7 @@ function MLPEquityReportContent({
                       <div className="p-3 bg-white rounded-lg border">
                         <div className="flex justify-between mb-2">
                           <span className="text-sm font-medium">Financial Resilience</span>
-                          <span className="text-sm">{thesisData.viability_assessment.subscores.financial_resilience.toFixed(1)}/10</span>
+                          <span className="text-sm font-semibold">{thesisData.viability_assessment.subscores.financial_resilience.toFixed(1)}/10</span>
                         </div>
                         <Progress value={thesisData.viability_assessment.subscores.financial_resilience * 10} className="h-2 [&>div]:bg-black" />
                       </div>
@@ -1604,7 +1605,7 @@ function MLPEquityReportContent({
                       <div className="p-3 bg-white rounded-lg border">
                         <div className="flex justify-between mb-2">
                           <span className="text-sm font-medium">Risk Balance</span>
-                          <span className="text-sm">{thesisData.viability_assessment.subscores.risk_balance.toFixed(1)}/10</span>
+                          <span className="text-sm font-semibold">{thesisData.viability_assessment.subscores.risk_balance.toFixed(1)}/10</span>
                         </div>
                         <Progress value={thesisData.viability_assessment.subscores.risk_balance * 10} className="h-2 [&>div]:bg-black" />
                       </div>
@@ -1612,7 +1613,7 @@ function MLPEquityReportContent({
                       <div className="p-3 bg-white rounded-lg border">
                         <div className="flex justify-between mb-2">
                           <span className="text-sm font-medium">Governance Quality</span>
-                          <span className="text-sm">{thesisData.viability_assessment.subscores.governance_quality.toFixed(1)}/10</span>
+                          <span className="text-sm font-semibold">{thesisData.viability_assessment.subscores.governance_quality.toFixed(1)}/10</span>
                         </div>
                         <Progress value={thesisData.viability_assessment.subscores.governance_quality * 10} className="h-2 [&>div]:bg-black" />
                       </div>
@@ -1620,7 +1621,7 @@ function MLPEquityReportContent({
                       {/* Analysis Contribution Weights */}
                       <div className="p-3 bg-indigo-50 rounded-lg border border-indigo-200">
                         <h6 className="font-medium text-sm text-indigo-800 mb-2">Analysis Contribution Weights</h6>
-                        <div className="space-y-1 text-sm">
+                        <div className="space-y-1 text-xs">
                           <div className="flex justify-between">
                             <span>Multi-Year Analysis:</span>
                             <span className="font-medium">{(thesisData.contribution_breakdown.weights.multi_year * 100).toFixed(0)}%</span>
@@ -1641,8 +1642,8 @@ function MLPEquityReportContent({
 
                   {/* Assessment Rationale */}
                   <div className="bg-white rounded-lg p-4">
-                    <h6 className="font-medium mb-2">Assessment Rationale</h6>
-                    <p className="text-slate-700">{thesisData.viability_assessment.rationale}</p>
+                    <h6 className="font-medium text-sm mb-2">Assessment Rationale</h6>
+                    <p className="text-sm text-slate-700">{thesisData.viability_assessment.rationale}</p>
                   </div>
                 </div>
 
@@ -1766,15 +1767,15 @@ function MLPEquityReportContent({
                   </div>
 
                   {/* System Constraints */}
-                  <div className="p-4 border rounded-lg bg-amber-50">
-                    <h4 className="font-semibold mb-3 text-amber-800 flex items-center gap-2">
+                  <div className="p-4 border rounded-lg bg-red-50">
+                    <h4 className="font-semibold mb-3 text-red-800 flex items-center gap-2">
                       System Constraints
                     </h4>
                     <ul className="space-y-2">
                       {thesisData.mlp_thesis.throughput_engine.constraints.map((constraint, index) => (
                         <li key={index} className="text-sm flex items-start gap-2">
-                          <div className="w-1.5 h-1.5 bg-amber-500 rounded-full mt-2 flex-shrink-0"></div>
-                          <span className="text-amber-700">{constraint}</span>
+                          <div className="w-1.5 h-1.5 bg-red-500 rounded-full mt-2 flex-shrink-0"></div>
+                          <span className="text-red-700">{constraint}</span>
                         </li>
                       ))}
                     </ul>
@@ -1791,7 +1792,7 @@ function MLPEquityReportContent({
                     <ul className="space-y-2">
                       {thesisData.mlp_thesis.value_creation_drivers.map((driver, index) => (
                         <li key={index} className="text-sm flex items-start gap-2">
-                          <div className="w-1.5 h-1.5 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
+                          <TrendingUp className="h-4 w-4 text-blue-500 mt-0.5 flex-shrink-0" />
                           <span className="text-blue-700">{driver}</span>
                         </li>
                       ))}
@@ -1799,15 +1800,15 @@ function MLPEquityReportContent({
                   </div>
 
                   {/* Fragilities */}
-                  <div className="p-4 border rounded-lg bg-red-50">
-                    <h4 className="font-semibold mb-3 text-red-800 flex items-center gap-2">
-                      System Fragilities
-                    </h4>
-                    <ul className="space-y-2">
-                      {thesisData.mlp_thesis.fragilities.map((fragility, index) => (
-                        <li key={index} className="text-sm flex items-start gap-2">
-                          <div className="w-1.5 h-1.5 bg-red-500 rounded-full mt-2 flex-shrink-0"></div>
-                          <span className="text-red-700">{fragility}</span>
+                    <div className="p-4 border rounded-lg bg-amber-50">
+                      <h4 className="font-semibold mb-3 text-amber-800 flex items-center gap-2">
+                        System Fragilities
+                      </h4>
+                      <ul className="space-y-2">
+                        {thesisData.mlp_thesis.fragilities.map((fragility, index) => (
+                          <li key={index} className="text-sm flex items-start gap-2">
+                            <AlertTriangle className="h-4 w-4 text-amber-500 mt-0.5 flex-shrink-0" />
+                            <span className="text-amber-700">{fragility}</span>
                         </li>
                       ))}
                     </ul>
@@ -1817,7 +1818,6 @@ function MLPEquityReportContent({
                 {/* Structural Position */}
                 <div className="p-4 border rounded-lg bg-slate-50">
                   <h5 className="font-semibold mb-3 text-slate-800 flex items-center gap-2">
-                    <Shield className="h-5 w-5 text-slate-600" />
                     Structural Position Assessment
                   </h5>
                   <div className="grid md:grid-cols-3 gap-4 mb-3">
@@ -1857,166 +1857,110 @@ function MLPEquityReportContent({
                     </div>
                   </div>
 
-                  {/* Notes */}
-                  {thesisData.mlp_thesis.structural_position.notes && (
-                    <div className="mt-3 text-sm text-slate-600">
-                      {thesisData.mlp_thesis.structural_position.notes}
-                    </div>
+                    {/* Notes */}
+                    {thesisData.mlp_thesis.structural_position.notes && (
+                      <p className="mt-3 text-xs text-slate-600 italic">
+                        {thesisData.mlp_thesis.structural_position.notes}
+                      </p>
                   )}
                 </div>
 
                 {/* Capital Allocation Model */}
-                <Card className="border-indigo-200">
-                  <CardHeader>
-                    <h4 className="font-semibold text-indigo-800 flex items-center gap-2">
-                      <Building2 className="h-5 w-5" />
-                      Capital Allocation Model
-                    </h4>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="grid md:grid-cols-3 gap-4 mb-6">
-                      {/* Growth Capex Discipline */}
-                      <div className="p-3 border rounded-lg bg-indigo-50">
-                        <div className="text-sm font-medium text-indigo-800 mb-2">Growth Capex Discipline</div>
-                        <Badge className={`${
-                          thesisData.mlp_thesis.capital_allocation_model.growth_capex_discipline === 'High' ? 'bg-green-100 text-green-800' :
-                          thesisData.mlp_thesis.capital_allocation_model.growth_capex_discipline === 'Medium' ? 'bg-yellow-100 text-yellow-800' :
-                          'bg-red-100 text-red-800'
-                        }`}>
-                          {thesisData.mlp_thesis.capital_allocation_model.growth_capex_discipline}
-                        </Badge>
-                      </div>
-
-                      {/* M&A Selectivity */}
-                      <div className="p-3 border rounded-lg bg-indigo-50">
-                        <div className="text-sm font-medium text-indigo-800 mb-2">M&A Selectivity</div>
-                        <Badge className={`${
-                          thesisData.mlp_thesis.capital_allocation_model.mna_selectivity === 'High' ? 'bg-green-100 text-green-800' :
-                          thesisData.mlp_thesis.capital_allocation_model.mna_selectivity === 'Medium' ? 'bg-yellow-100 text-yellow-800' :
-                          'bg-red-100 text-red-800'
-                        }`}>
-                          {thesisData.mlp_thesis.capital_allocation_model.mna_selectivity}
-                        </Badge>
-                      </div>
-
-                      {/* Dropdowns Usage */}
-                      <div className="p-3 border rounded-lg bg-indigo-50">
-                        <div className="text-sm font-medium text-indigo-800 mb-2">Dropdowns Usage</div>
-                        <Badge className={`${
-                          thesisData.mlp_thesis.capital_allocation_model.dropdowns_usage === 'Active' ? 'bg-green-100 text-green-800' :
-                          thesisData.mlp_thesis.capital_allocation_model.dropdowns_usage === 'Selective' ? 'bg-yellow-100 text-yellow-800' :
-                          'bg-red-100 text-red-800'
-                        }`}>
-                          {thesisData.mlp_thesis.capital_allocation_model.dropdowns_usage}
-                        </Badge>
-                      </div>
-
-                      {/* Leverage Policy */}
-                      <div className="p-3 border rounded-lg bg-indigo-50">
-                        <div className="text-sm font-medium text-indigo-800 mb-2">Leverage Policy</div>
-                        <Badge className={`${
-                          thesisData.mlp_thesis.capital_allocation_model.leverage_policy === 'Conservative' ? 'bg-green-100 text-green-800' :
-                          thesisData.mlp_thesis.capital_allocation_model.leverage_policy === 'Balanced' ? 'bg-yellow-100 text-yellow-800' :
-                          'bg-red-100 text-red-800'
-                        }`}>
-                          {thesisData.mlp_thesis.capital_allocation_model.leverage_policy}
-                        </Badge>
-                      </div>
-
-                      {/* Distribution Sustainability */}
-                      <div className="p-3 border rounded-lg bg-indigo-50">
-                        <div className="text-sm font-medium text-indigo-800 mb-2">Distribution Sustainability</div>
-                        <Badge className={`${
-                          thesisData.mlp_thesis.capital_allocation_model.distribution_sustainability === 'Strong' ? 'bg-green-100 text-green-800' :
-                          thesisData.mlp_thesis.capital_allocation_model.distribution_sustainability === 'Adequate' ? 'bg-yellow-100 text-yellow-800' :
-                          'bg-red-100 text-red-800'
-                        }`}>
-                          {thesisData.mlp_thesis.capital_allocation_model.distribution_sustainability}
-                        </Badge>
-                      </div>
-                    </div>
-
-                    {/* Notes */}
-                    {thesisData.mlp_thesis.capital_allocation_model.notes && (
-                      <div className="p-4 border rounded-lg bg-white">
-                        <p className="text-sm text-slate-700">{thesisData.mlp_thesis.capital_allocation_model.notes}</p>
-                      </div>
-                    )}
-                  </CardContent>
-                </Card>
-
-
-
-                {/* Agreement Analysis */}
-                <Card className="border-green-200">
-                  <CardHeader>
-                    <h4 className="font-semibold text-green-800 flex items-center gap-2">
-                      <CheckCircle className="h-5 w-5" />
-                      Analysis Agreement Assessment
-                    </h4>
-                  </CardHeader>
-                  <CardContent>
-                    {/* Alignment Score */}
-                    <div className="flex items-center justify-center mb-6">
-                      <div className={`px-6 py-3 rounded-full text-lg font-semibold ${
-                        thesisData.agreement.alignment_score >= 0.8 ? 'bg-green-100 text-green-800 border-green-300' :
-                        thesisData.agreement.alignment_score >= 0.6 ? 'bg-blue-100 text-blue-800 border-blue-300' :
-                        thesisData.agreement.alignment_score >= 0.4 ? 'bg-yellow-100 text-yellow-800 border-yellow-300' :
-                        'bg-red-100 text-red-800 border-red-300'
+                <div className="p-4 border rounded-lg bg-slate-50">
+                  <h4 className="font-semibold mb-3 text-slate-800 flex items-center gap-2">
+                    Capital Allocation Model
+                  </h4>
+                  <div className="grid md:grid-cols-3 gap-3">
+                    {/* Growth Capex Discipline */}
+                    <div className="text-center">
+                      <div className="text-xs text-slate-600 mb-1">Growth Capex</div>
+                      <Badge className={`${
+                        thesisData.mlp_thesis.capital_allocation_model.growth_capex_discipline === 'High' ? 'bg-green-100 text-green-800' :
+                        thesisData.mlp_thesis.capital_allocation_model.growth_capex_discipline === 'Medium' ? 'bg-yellow-100 text-yellow-800' :
+                        'bg-red-100 text-red-800'
                       }`}>
-                        Alignment Score: {(thesisData.agreement.alignment_score * 100).toFixed(0)}%
-                      </div>
+                        {thesisData.mlp_thesis.capital_allocation_model.growth_capex_discipline}
+                      </Badge>
                     </div>
 
-                    <div className="grid md:grid-cols-2 gap-6">
-                      {/* Areas of Agreement */}
-                      <div className="p-4 border rounded-lg bg-green-50">
-                        <h5 className="font-semibold mb-3 text-green-800">Areas of Agreement</h5>
-                        <ul className="space-y-2">
-                          {thesisData.agreement.areas_of_agreement.map((area, index) => (
-                            <li key={index} className="text-sm flex items-start gap-2">
-                              <div className="w-1.5 h-1.5 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
-                              <span className="text-green-700">{area}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-
-                      {/* Areas of Divergence */}
-                      <div className="p-4 border rounded-lg bg-amber-50">
-                        <h5 className="font-semibold mb-3 text-amber-800">Areas of Divergence</h5>
-                        <ul className="space-y-2">
-                          {thesisData.agreement.areas_of_divergence.map((area, index) => (
-                            <li key={index} className="text-sm flex items-start gap-2">
-                              <div className="w-1.5 h-1.5 bg-amber-500 rounded-full mt-2 flex-shrink-0"></div>
-                              <span className="text-amber-700">{area}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
+                    {/* M&A Selectivity */}
+                    <div className="text-center">
+                      <div className="text-xs text-slate-600 mb-1">M&A Selectivity</div>
+                      <Badge className={`${
+                        thesisData.mlp_thesis.capital_allocation_model.mna_selectivity === 'High' ? 'bg-green-100 text-green-800' :
+                        thesisData.mlp_thesis.capital_allocation_model.mna_selectivity === 'Medium' ? 'bg-yellow-100 text-yellow-800' :
+                        'bg-red-100 text-red-800'
+                      }`}>
+                        {thesisData.mlp_thesis.capital_allocation_model.mna_selectivity}
+                      </Badge>
                     </div>
-                  </CardContent>
-                </Card>
+
+                    {/* Dropdowns Usage */}
+                    <div className="text-center">
+                      <div className="text-xs text-slate-600 mb-1">Dropdowns</div>
+                      <Badge className={`${
+                        thesisData.mlp_thesis.capital_allocation_model.dropdowns_usage === 'Active' ? 'bg-green-100 text-green-800' :
+                        thesisData.mlp_thesis.capital_allocation_model.dropdowns_usage === 'Selective' ? 'bg-yellow-100 text-yellow-800' :
+                        'bg-red-100 text-red-800'
+                      }`}>
+                        {thesisData.mlp_thesis.capital_allocation_model.dropdowns_usage}
+                      </Badge>
+                    </div>
+
+                    {/* Leverage Policy */}
+                    <div className="text-center">
+                      <div className="text-xs text-slate-600 mb-1">Leverage</div>
+                      <Badge className={`${
+                        thesisData.mlp_thesis.capital_allocation_model.leverage_policy === 'Conservative' ? 'bg-green-100 text-green-800' :
+                        thesisData.mlp_thesis.capital_allocation_model.leverage_policy === 'Balanced' ? 'bg-yellow-100 text-yellow-800' :
+                        'bg-red-100 text-red-800'
+                      }`}>
+                        {thesisData.mlp_thesis.capital_allocation_model.leverage_policy}
+                      </Badge>
+                    </div>
+
+                    {/* Distribution Sustainability */}
+                    <div className="text-center">
+                      <div className="text-xs text-slate-600 mb-1">Distribution</div>
+                      <Badge className={`${
+                        thesisData.mlp_thesis.capital_allocation_model.distribution_sustainability === 'Strong' ? 'bg-green-100 text-green-800' :
+                        thesisData.mlp_thesis.capital_allocation_model.distribution_sustainability === 'Adequate' ? 'bg-yellow-100 text-yellow-800' :
+                        'bg-red-100 text-red-800'
+                      }`}>
+                        {thesisData.mlp_thesis.capital_allocation_model.distribution_sustainability}
+                      </Badge>
+                    </div>
+                  </div>
+
+                  {/* Notes */}
+                  {thesisData.mlp_thesis.capital_allocation_model.notes && (
+                    <p className="mt-3 text-xs text-slate-600 italic">
+                      {thesisData.mlp_thesis.capital_allocation_model.notes}
+                    </p>
+                  )}
+                </div>
+
+
+
+
 
                 {/* Scenarios Bridge */}
-                <Card className="border-blue-200">
-                  <CardHeader>
-                    <h4 className="font-semibold text-blue-800 flex items-center gap-2">
-                      <GitBranch className="h-5 w-5" />
-                      Scenarios Bridge Analysis
-                    </h4>
-                  </CardHeader>
-                  <CardContent className="space-y-6">
+                <div>
+                  <h4 className="font-semibold mb-4 flex items-center gap-2">
+                    <Activity className="h-5 w-5 text-teal-600" />
+                    Scenario Outlook & Triggers
+                  </h4>
+                  <div className="space-y-4">
                     {/* Base Path */}
-                    <div className="p-4 border rounded-lg bg-blue-50">
-                      <h5 className="font-semibold mb-3 text-blue-800">Base Case Path</h5>
-                      <p className="text-sm text-blue-700">{thesisData.scenarios_bridge.base_path}</p>
+                    <div className="p-4 border rounded-lg bg-green-50">
+                      <h5 className="font-semibold mb-2 text-green-800">Base Case Expectation</h5>
+                      <p className="text-sm text-green-700">{thesisData.scenarios_bridge.base_path}</p>
                     </div>
 
-                    <div className="grid md:grid-cols-2 gap-6">
-                      {/* Upside Falsifiers */}
+                    <div className="grid md:grid-cols-2 gap-4">
+                      {/* Upside Confirmations */}
                       <div className="p-4 border rounded-lg bg-green-50">
-                        <h5 className="font-semibold mb-3 text-green-800">Upside Falsifiers</h5>
+                        <h5 className="font-semibold mb-2 text-green-800">Upside Confirmations</h5>
                         <ul className="space-y-2">
                           {thesisData.scenarios_bridge.upside_falsifiers.map((falsifier, index) => (
                             <li key={index} className="text-sm flex items-start gap-2">
@@ -2027,9 +1971,9 @@ function MLPEquityReportContent({
                         </ul>
                       </div>
 
-                      {/* Downside Falsifiers */}
+                      {/* Downside Confirmations */}
                       <div className="p-4 border rounded-lg bg-red-50">
-                        <h5 className="font-semibold mb-3 text-red-800">Downside Falsifiers</h5>
+                        <h5 className="font-semibold mb-2 text-red-800">Downside Confirmations</h5>
                         <ul className="space-y-2">
                           {thesisData.scenarios_bridge.downside_falsifiers.map((falsifier, index) => (
                             <li key={index} className="text-sm flex items-start gap-2">
@@ -2040,100 +1984,98 @@ function MLPEquityReportContent({
                         </ul>
                       </div>
                     </div>
-                  </CardContent>
-                </Card>
+                  </div>
+                </div>
 
-                {/* Watchlist */}
-                <Card className="border-purple-200">
-                  <CardHeader>
-                    <h4 className="font-semibold text-purple-800 flex items-center gap-2">
-                      <Eye className="h-5 w-5" />
-                      Monitoring Watchlist
-                    </h4>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="grid md:grid-cols-3 gap-6">
-                      {/* Leading Indicators */}
-                      <div className="p-4 border rounded-lg bg-purple-50">
-                        <h5 className="font-semibold mb-3 text-purple-800">Leading Indicators</h5>
-                        <ul className="space-y-2">
-                          {thesisData.watchlist.leading_indicators.map((indicator, index) => (
-                            <li key={index} className="text-sm flex items-start gap-2">
-                              <div className="w-1.5 h-1.5 bg-purple-500 rounded-full mt-2 flex-shrink-0"></div>
-                              <span className="text-purple-700">{indicator}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-
-                      {/* Early Warnings */}
-                      <div className="p-4 border rounded-lg bg-amber-50">
-                        <h5 className="font-semibold mb-3 text-amber-800">Early Warning Signals</h5>
-                        <ul className="space-y-2">
-                          {thesisData.watchlist.early_warnings.map((warning, index) => (
-                            <li key={index} className="text-sm flex items-start gap-2">
-                              <div className="w-1.5 h-1.5 bg-amber-500 rounded-full mt-2 flex-shrink-0"></div>
-                              <span className="text-amber-700">{warning}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-
-                      {/* Data Gaps */}
-                      <div className="p-4 border rounded-lg bg-slate-50">
-                        <h5 className="font-semibold mb-3 text-slate-800">Data Gaps</h5>
-                        <ul className="space-y-2">
-                          {thesisData.watchlist.data_gaps.map((gap, index) => (
-                            <li key={index} className="text-sm flex items-start gap-2">
-                              <div className="w-1.5 h-1.5 bg-slate-500 rounded-full mt-2 flex-shrink-0"></div>
-                              <span className="text-slate-700">{gap}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
+                {/* Monitoring Dashboard */}
+                <div>
+                  <h4 className="font-semibold mb-4 flex items-center gap-2">
+                    <Eye className="h-5 w-5 text-gray-600" />
+                    Monitoring Dashboard
+                  </h4>
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <div className="p-4 border rounded-lg bg-blue-50">
+                      <h5 className="font-semibold mb-3 text-blue-800">Leading Indicators</h5>
+                      <ul className="space-y-2">
+                        {thesisData.watchlist.leading_indicators.map((indicator, index) => (
+                          <li key={index} className="text-sm flex items-start gap-2">
+                            <div className="w-1.5 h-1.5 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
+                            <span className="text-blue-700">{indicator}</span>
+                          </li>
+                        ))}
+                      </ul>
                     </div>
-                  </CardContent>
-                </Card>
 
-                {/* Transition Triggers */}
-                <Card className="border-indigo-200">
-                  <CardHeader>
-                    <h4 className="font-semibold text-indigo-800 flex items-center gap-2">
-                      <GitBranch className="h-5 w-5" />
-                      Thesis Transition Triggers
-                    </h4>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-4">
+                    <div className="p-4 border rounded-lg bg-amber-50">
+                      <h5 className="font-semibold mb-3 text-amber-800">Early Warning Signals</h5>
+                      <ul className="space-y-2">
+                        {thesisData.watchlist.early_warnings.map((warning, index) => (
+                          <li key={index} className="text-sm flex items-start gap-2">
+                            <AlertTriangle className="h-3 w-3 text-amber-600 mt-1 flex-shrink-0" />
+                            <span className="text-amber-700">{warning}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Business Thesis Update Triggers */}
+                <div>
+                  <button 
+                    onClick={() => setShowThesisUpdateTriggers(!showThesisUpdateTriggers)}
+                    className="w-full flex items-center justify-between p-3 bg-yellow-50 border border-yellow-200 rounded-lg hover:bg-yellow-100 transition-colors"
+                  >
+                    <div className="flex items-center gap-2">
+                      <GitBranch className="h-4 w-4 text-yellow-600" />
+                      <h5 className="font-semibold text-yellow-800">
+                        Business Thesis Update Triggers ({thesisData.transition_triggers.length})
+                      </h5>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs text-yellow-600">
+                        {showThesisUpdateTriggers ? 'Hide details' : 'Show details'}
+                      </span>
+                      <ChevronDown className={`h-4 w-4 text-yellow-600 transition-transform ${
+                        showThesisUpdateTriggers ? 'rotate-180' : ''
+                      }`} />
+                    </div>
+                  </button>
+                  
+                  {showThesisUpdateTriggers && (
+                    <div className="mt-3 space-y-3">
                       {thesisData.transition_triggers.map((trigger, index) => (
-                        <div key={index} className="p-4 border rounded-lg bg-indigo-50">
-                          <div className="flex items-center justify-between mb-3">
-                            <h5 className="font-semibold text-indigo-800">{trigger.event}</h5>
-                            <Badge className={`${
-                              trigger.interpretation === 'Positive' ? 'bg-green-100 text-green-800' :
-                              trigger.interpretation === 'Negative' ? 'bg-red-100 text-red-800' :
-                              'bg-yellow-100 text-yellow-800'
-                            }`}>
-                              {trigger.interpretation}
-                            </Badge>
-                          </div>
-                          <div className="grid md:grid-cols-2 gap-4">
-                            <div>
-                              <div className="text-xs font-medium text-indigo-600 mb-1">Expected Effect</div>
-                              <Badge variant="outline" className="text-indigo-700">
+                        <div key={index} className="p-4 border rounded-lg bg-yellow-50">
+                          <div className="flex items-start justify-between mb-2">
+                            <h6 className="font-medium text-sm text-yellow-800">{trigger.event}</h6>
+                            <div className="flex gap-2">
+                              <Badge className={`text-xs ${
+                                trigger.interpretation === 'Positive' ? 'bg-green-100 text-green-800' :
+                                trigger.interpretation === 'Negative' ? 'bg-red-100 text-red-800' :
+                                'bg-slate-100 text-slate-800'
+                              }`}>
+                                {trigger.interpretation}
+                              </Badge>
+                              <Badge variant="outline" className="text-xs">
                                 {trigger.expected_effect}
                               </Badge>
                             </div>
-                            <div>
-                              <div className="text-xs font-medium text-indigo-600 mb-1">Thesis Update Rule</div>
-                              <p className="text-sm text-indigo-700">{trigger.thesis_update_rule}</p>
-                            </div>
                           </div>
+                          <p className="text-xs text-yellow-700 italic">
+                            <span className="font-medium">Update Rule:</span> {trigger.thesis_update_rule}
+                          </p>
                         </div>
                       ))}
                     </div>
-                  </CardContent>
-                </Card>
+                  )}
+                </div>
+
+                {/* Final Disclaimer */}
+                {thesisData.disclaimer && (
+                  <div className="p-4 border rounded-lg bg-slate-100">
+                    <p className="text-xs text-slate-600 italic">{thesisData.disclaimer}</p>
+                  </div>
+                )}
 
 
 

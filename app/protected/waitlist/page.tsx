@@ -109,7 +109,7 @@ export default async function WaitlistPage() {
               Request Early Access
             </h2>
             <p className="text-sm text-muted-foreground mb-6">
-              Tell us about your investment needs to help us prioritize your early access invitation.
+              Tell us about your research needs to help us prioritize your early access invitation.
             </p>
             <WaitlistForm userId={user.id} />
           </Card>
